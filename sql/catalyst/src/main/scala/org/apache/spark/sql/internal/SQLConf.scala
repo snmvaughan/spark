@@ -4011,6 +4011,20 @@ object SQLConf {
     .intConf
     .createWithDefault(0)
 
+  val SESSION_STATE_BUILDER_CLASS_NAME = buildConf("spark.sql.sessionStateBuilder")
+    .doc("Name of the class used to configure Spark SessionState builder. The class should " +
+      "extend BaseSessionStateBuilder.")
+    .internal()
+    .stringConf
+    .createOptional
+
+  val EXTERNAL_CATALOG_CLASS_NAME = buildConf("spark.sql.externalCatalog")
+    .doc("Name of the class used to configure Spark External Catalog. The class should " +
+      "implement ExternalCatalog interface.")
+    .internal()
+    .stringConf
+    .createOptional
+
   val INFER_NESTED_DICT_AS_STRUCT = buildConf("spark.sql.pyspark.inferNestedDictAsStruct.enabled")
     .doc("PySpark's SparkSession.createDataFrame infers the nested dict as a map by default. " +
       "When it set to true, it infers the nested dict as a struct.")
