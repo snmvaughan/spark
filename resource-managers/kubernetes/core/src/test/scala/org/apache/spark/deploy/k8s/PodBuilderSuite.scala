@@ -86,8 +86,8 @@ abstract class PodBuilderSuite extends SparkFunSuite {
       .set(templateFileConf.key, "template-file.yaml")
     val pod = buildPod(sparkConf, client)
     verifyPod(pod)
-    assert(pod.container.getVolumeMounts.asScala.exists(_.getName == "so_long"))
-    assert(pod.container.getVolumeMounts.asScala.exists(_.getName == "so_long_two"))
+    assert(pod.containers.exists(_.getVolumeMounts.asScala.exists(_.getName == "so_long")))
+    assert(pod.containers.exists(_.getVolumeMounts.asScala.exists(_.getName == "so_long_two")))
   }
 
   test("SPARK-37145: configure a custom test step with base config") {
@@ -290,7 +290,7 @@ class TestStep extends KubernetesFeatureConfigStep {
         .endEnv()
       .addToVolumeMounts(localDirVolumeMounts: _*)
       .build()
-    SparkPod(podWithLocalDirVolumes, containerWithLocalDirVolumeMounts)
+    SparkPod(podWithLocalDirVolumes, List(containerWithLocalDirVolumeMounts))
   }
 }
 
@@ -320,7 +320,7 @@ class TestStepTwo extends KubernetesFeatureConfigStep {
         .endEnv()
       .addToVolumeMounts(localDirVolumeMounts: _*)
       .build()
-    SparkPod(podWithLocalDirVolumes, containerWithLocalDirVolumeMounts)
+    SparkPod(podWithLocalDirVolumes, List(containerWithLocalDirVolumeMounts))
   }
 }
 
@@ -347,6 +347,6 @@ class TestStepWithConf extends KubernetesDriverCustomFeatureConfigStep
         .addToAnnotations("test-features-key", kubernetesConf.get("test-features-key"))
       .endMetadata()
     val k8sPod = k8sPodBuilder.build()
-    SparkPod(k8sPod, pod.container)
+    SparkPod(k8sPod, pod.containers)
   }
 }

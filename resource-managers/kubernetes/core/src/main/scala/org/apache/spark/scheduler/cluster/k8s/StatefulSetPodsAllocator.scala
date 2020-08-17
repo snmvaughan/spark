@@ -121,7 +121,7 @@ class StatefulSetPodsAllocator(
         case s => new PodSpecBuilder(s)
       }
       val podWithAttachedContainer: PodSpec = podSpecBuilder
-        .addToContainers(executorPod.container)
+        .addAllToContainers(executorPod.containers.asJava)
         .build()
 
       val meta = executorPod.pod.getMetadata()

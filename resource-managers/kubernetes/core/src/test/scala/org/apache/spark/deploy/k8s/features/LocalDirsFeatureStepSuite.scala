@@ -37,18 +37,20 @@ class LocalDirsFeatureStepSuite extends SparkFunSuite {
         .withNewEmptyDir()
         .endEmptyDir()
         .build())
-    assert(configuredPod.container.getVolumeMounts.size === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0) ===
-      new VolumeMountBuilder()
-        .withName(s"spark-local-dir-1")
-        .withMountPath(defaultLocalDir)
-        .build())
-    assert(configuredPod.container.getEnv.size === 1)
-    assert(configuredPod.container.getEnv.get(0) ===
-      new EnvVarBuilder()
-        .withName("SPARK_LOCAL_DIRS")
-        .withValue(defaultLocalDir)
-        .build())
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size === 1)
+      assert(container.getVolumeMounts.get(0) ===
+        new VolumeMountBuilder()
+          .withName(s"spark-local-dir-1")
+          .withMountPath(defaultLocalDir)
+          .build())
+      assert(container.getEnv.size === 1)
+      assert(container.getEnv.get(0) ===
+        new EnvVarBuilder()
+          .withName("SPARK_LOCAL_DIRS")
+          .withValue(defaultLocalDir)
+          .build())
+    }
   }
 
   test("Use configured local dirs split on comma if provided.") {
@@ -118,18 +120,20 @@ class LocalDirsFeatureStepSuite extends SparkFunSuite {
           .withMedium("Memory")
         .endEmptyDir()
         .build())
-    assert(configuredPod.container.getVolumeMounts.size === 1)
-    assert(configuredPod.container.getVolumeMounts.get(0) ===
-      new VolumeMountBuilder()
-        .withName(s"spark-local-dir-1")
-        .withMountPath(defaultLocalDir)
-        .build())
-    assert(configuredPod.container.getEnv.size === 1)
-    assert(configuredPod.container.getEnv.get(0) ===
-      new EnvVarBuilder()
-        .withName("SPARK_LOCAL_DIRS")
-        .withValue(defaultLocalDir)
-        .build())
+    configuredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size === 1)
+      assert(container.getVolumeMounts.get(0) ===
+        new VolumeMountBuilder()
+          .withName(s"spark-local-dir-1")
+          .withMountPath(defaultLocalDir)
+          .build())
+      assert(container.getEnv.size === 1)
+     assert(container.getEnv.get(0) ===
+       new EnvVarBuilder()
+         .withName("SPARK_LOCAL_DIRS")
+          .withValue(defaultLocalDir)
+         .build())
+    }
   }
 
   test("local dir on mounted volume") {
@@ -148,13 +152,15 @@ class LocalDirsFeatureStepSuite extends SparkFunSuite {
 
     assert(newConfiguredPod.pod.getSpec.getVolumes.size() === 1)
     assert(newConfiguredPod.pod.getSpec.getVolumes.get(0).getHostPath.getPath === "/hostPath/tmp")
-    assert(newConfiguredPod.container.getVolumeMounts.size() === 1)
-    assert(newConfiguredPod.container.getVolumeMounts.get(0).getMountPath === "/tmp")
-    assert(newConfiguredPod.container.getVolumeMounts.get(0).getName === "spark-local-dir-test")
-    assert(newConfiguredPod.container.getEnv.get(0) ===
-      new EnvVarBuilder()
-        .withName("SPARK_LOCAL_DIRS")
-        .withValue("/tmp")
-        .build())
+    newConfiguredPod.containers.map{ container =>
+      assert(container.getVolumeMounts.size() === 1)
+      assert(container.getVolumeMounts.get(0).getMountPath === "/tmp")
+      assert(container.getVolumeMounts.get(0).getName === "spark-local-dir-test")
+      assert(container.getEnv.get(0) ===
+        new EnvVarBuilder()
+          .withName("SPARK_LOCAL_DIRS")
+          .withValue("/tmp")
+          .build())
+    }
   }
 }

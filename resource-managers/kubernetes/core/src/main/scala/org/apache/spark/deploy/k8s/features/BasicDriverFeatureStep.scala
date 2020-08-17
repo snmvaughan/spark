@@ -100,8 +100,8 @@ private[spark] class BasicDriverFeatureStep(conf: KubernetesDriverConf)
       conf.sparkConf.getInt(BLOCK_MANAGER_PORT.key, DEFAULT_BLOCKMANAGER_PORT)
     )
     val driverUIPort = SparkUI.getUIPort(conf.sparkConf)
-    val driverContainer = new ContainerBuilder(pod.container)
-      .withName(Option(pod.container.getName).getOrElse(DEFAULT_DRIVER_CONTAINER_NAME))
+    val driverContainers = pod.containers.map{ container => new ContainerBuilder(container)
+      .withName(Option(container.getName).getOrElse(DEFAULT_DRIVER_CONTAINER_NAME))
       .withImage(driverContainerImage)
       .withImagePullPolicy(conf.imagePullPolicy)
       .addNewPort()
@@ -138,6 +138,7 @@ private[spark] class BasicDriverFeatureStep(conf: KubernetesDriverConf)
         .addToLimits(driverResourceQuantities.asJava)
         .endResources()
       .build()
+    }
 
     val driverPod = new PodBuilder(pod.pod)
       .editOrNewMetadata()
@@ -157,7 +158,7 @@ private[spark] class BasicDriverFeatureStep(conf: KubernetesDriverConf)
     conf.schedulerName
       .foreach(driverPod.getSpec.setSchedulerName)
 
-    SparkPod(driverPod, driverContainer)
+    SparkPod(driverPod, driverContainers)
   }
 
   override def getAdditionalPodSystemProperties(): Map[String, String] = {

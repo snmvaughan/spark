@@ -85,6 +85,8 @@ private[spark] class BasicExecutorFeatureStep(
     }
   private val executorLimitCores = kubernetesConf.get(KUBERNETES_EXECUTOR_LIMIT_CORES)
 
+  private val externalShuffleService = kubernetesConf.get(SHUFFLE_SERVICE_ENABLED)
+  private val shuffleServicePort = kubernetesConf.get(SHUFFLE_SERVICE_PORT)
   private def buildExecutorResourcesQuantities(
       customResources: Set[ExecutorResourceRequest]): Map[String, Quantity] = {
     customResources.map { request =>
@@ -179,60 +181,94 @@ private[spark] class BasicExecutorFeatureStep(
         }
     } else Nil
 
-    if (!isDefaultProfile) {
-      if (pod.container != null && pod.container.getResources() != null) {
-        logDebug("NOT using the default profile and removing template resources")
-        pod.container.setResources(new ResourceRequirements())
+    val baseContainer = pod.containers.headOption.map { container =>
+      if (!isDefaultProfile) {
+        if (container != null && container.getResources() != null) {
+          logDebug("NOT using the default profile and removing template resources")
+          container.setResources(new ResourceRequirements())
+        }
       }
-    }
-
-    val executorContainer = new ContainerBuilder(pod.container)
-      .withName(Option(pod.container.getName).getOrElse(DEFAULT_EXECUTOR_CONTAINER_NAME))
+      new ContainerBuilder(container)
+      .withName(Option(container.getName).getOrElse(DEFAULT_EXECUTOR_CONTAINER_NAME))
       .withImage(executorContainerImage)
       .withImagePullPolicy(kubernetesConf.imagePullPolicy)
-      .editOrNewResources()
-        .addToRequests("memory", executorMemoryQuantity)
-        .addToLimits("memory", executorMemoryQuantity)
-        .addToRequests("cpu", executorCpuQuantity)
-        .addToLimits(executorResourceQuantities.asJava)
-        .endResources()
       .addNewEnv()
         .withName(ENV_SPARK_USER)
         .withValue(Utils.getCurrentUserName())
         .endEnv()
       .addAllToEnv(executorEnv.asJava)
+      .build()
+    }.head
+
+    // We always make a basic exec container
+    val execContainer = new ContainerBuilder(baseContainer)
+      .withName(Option(baseContainer.getName).getOrElse(DEFAULT_EXECUTOR_CONTAINER_NAME))
       .addAllToPorts(requiredPorts.asJava)
       .addToArgs("executor")
+      .editOrNewResources()
+        .addToRequests("memory", executorMemoryQuantity)
+        .addToLimits("memory", executorMemoryQuantity)
+        .addToRequests("cpu", executorCpuQuantity)
+        .addToLimits(executorResourceQuantities.asJava)
+      .endResources()
       .build()
-    val executorContainerWithConfVolume = if (disableConfigMap) {
-      executorContainer
-    } else {
-      new ContainerBuilder(executorContainer)
-        .addNewVolumeMount()
-          .withName(SPARK_CONF_VOLUME_EXEC)
-          .withMountPath(SPARK_CONF_DIR_INTERNAL)
-          .endVolumeMount()
+
+    // If the shuffle service is enabled
+    val executorContainers = if (externalShuffleService) {
+      val shufflePorts = List(new ContainerPortBuilder()
+        .withName(SHUFFLE_SERVICE_PORT_NAME)
+        .withContainerPort(shuffleServicePort)
+        .build())
+      val shuffleMemoryQuantity = new Quantity("2G")
+      val shuffleCpuQuantity = new Quantity("1")
+      val shuffleContainer = new ContainerBuilder(baseContainer)
+        .withName(SHUFFLE_SERVICE_CONTAINER_NAME)
+        .withPorts(shufflePorts.asJava)
+        .addToArgs("shuffleService")
+        .editOrNewResources()
+          .addToRequests("memory", shuffleMemoryQuantity)
+          .addToLimits("memory", shuffleMemoryQuantity)
+          .addToRequests("cpu", shuffleCpuQuantity)
+        .endResources()
         .build()
+      List(execContainer, shuffleContainer)
+    } else {
+      List(execContainer)
     }
-    val containerWithLimitCores = if (isDefaultProfile) {
+
+    val executorContainersWithConfVolume = if (disableConfigMap) {
+      executorContainers
+    } else {
+      executorContainers.map { container =>
+        new ContainerBuilder(container)
+          .addNewVolumeMount()
+            .withName(SPARK_CONF_VOLUME_EXEC)
+            .withMountPath(SPARK_CONF_DIR_INTERNAL)
+            .endVolumeMount()
+          .build()
+      }
+    }
+    val containersWithLimitCores = if (isDefaultProfile) {
       executorLimitCores.map { limitCores =>
         val executorCpuLimitQuantity = new Quantity(limitCores)
-        new ContainerBuilder(executorContainerWithConfVolume)
-          .editResources()
-          .addToLimits("cpu", executorCpuLimitQuantity)
-          .endResources()
+        executorContainersWithConfVolume.map { container =>
+          new ContainerBuilder(container)
+            .editResources()
+            .addToLimits("cpu", executorCpuLimitQuantity)
+            .endResources()
           .build()
-      }.getOrElse(executorContainerWithConfVolume)
+        }
+      }.getOrElse(executorContainersWithConfVolume)
     } else {
-      executorContainerWithConfVolume
+      executorContainersWithConfVolume
     }
-    val containerWithLifecycle =
+    val containersWithLifecycle =
       if (!kubernetesConf.workerDecommissioning) {
         logInfo("Decommissioning not enabled, skipping shutdown script")
-        containerWithLimitCores
+        containersWithLimitCores
       } else {
         logInfo("Adding decommission script to lifecycle")
-        new ContainerBuilder(containerWithLimitCores).withNewLifecycle()
+        containersWithLimitCores.map { c => new ContainerBuilder(c).withNewLifecycle()
           .withNewPreStop()
             .withNewExec()
               .addToCommand(kubernetesConf.get(DECOMMISSION_SCRIPT))
@@ -240,6 +276,7 @@ private[spark] class BasicExecutorFeatureStep(
           .endPreStop()
           .endLifecycle()
           .build()
+        }
       }
     val ownerReference = kubernetesConf.driverPod.map { pod =>
       new OwnerReferenceBuilder()
@@ -288,6 +325,6 @@ private[spark] class BasicExecutorFeatureStep(
     kubernetesConf.schedulerName
       .foreach(executorPod.getSpec.setSchedulerName)
 
-    SparkPod(executorPod, containerWithLifecycle)
+    SparkPod(executorPod, containersWithLifecycle)
   }
 }

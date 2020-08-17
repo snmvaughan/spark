@@ -118,6 +118,6 @@ class TestStepWithDrvConf extends KubernetesDriverCustomFeatureConfigStep {
       .addToAnnotations("driver-annotation-key", driverConf.get("driver-annotation-key"))
       .endMetadata()
     val k8sPod = k8sPodBuilder.build()
-    SparkPod(k8sPod, pod.container)
+    SparkPod(k8sPod, pod.containers)
   }
 }

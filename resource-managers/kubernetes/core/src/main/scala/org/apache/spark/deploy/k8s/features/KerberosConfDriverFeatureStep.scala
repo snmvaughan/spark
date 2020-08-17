@@ -145,15 +145,16 @@ private[spark] class KerberosConfDriverFeatureStep(kubernetesConf: KubernetesDri
           .endSpec()
         .build()
 
-      val containerWithMount = new ContainerBuilder(pod.container)
+      val containersWithMount = pod.containers.map { container => new ContainerBuilder(container)
         .addNewVolumeMount()
           .withName(KRB_FILE_VOLUME)
           .withMountPath(KRB_FILE_DIR_PATH + "/krb5.conf")
           .withSubPath("krb5.conf")
           .endVolumeMount()
         .build()
+      }
 
-      SparkPod(podWithVolume, containerWithMount)
+      SparkPod(podWithVolume, containersWithMount)
     }.transform {
       case pod if needKeytabUpload =>
         // If keytab is defined and is a submission-local file (not local: URI), then create a
@@ -169,14 +170,15 @@ private[spark] class KerberosConfDriverFeatureStep(kubernetesConf: KubernetesDri
             .endSpec()
           .build()
 
-        val containerWithKeytab = new ContainerBuilder(pod.container)
+        val containersWithKeytab = pod.containers.map { c => new ContainerBuilder(c)
           .addNewVolumeMount()
             .withName(KERBEROS_KEYTAB_VOLUME)
             .withMountPath(KERBEROS_KEYTAB_MOUNT_POINT)
             .endVolumeMount()
           .build()
+        }
 
-        SparkPod(podWitKeytab, containerWithKeytab)
+        SparkPod(podWitKeytab, containersWithKeytab)
 
       case pod if existingSecretName.isDefined | delegationTokens != null =>
         val secretName = existingSecretName.getOrElse(dtSecretName)
@@ -193,7 +195,7 @@ private[spark] class KerberosConfDriverFeatureStep(kubernetesConf: KubernetesDri
             .endSpec()
           .build()
 
-        val containerWithTokens = new ContainerBuilder(pod.container)
+        val containersWithTokens = pod.containers.map { c => new ContainerBuilder(c)
           .addNewVolumeMount()
             .withName(SPARK_APP_HADOOP_SECRET_VOLUME_NAME)
             .withMountPath(SPARK_APP_HADOOP_CREDENTIALS_BASE_DIR)
@@ -203,8 +205,9 @@ private[spark] class KerberosConfDriverFeatureStep(kubernetesConf: KubernetesDri
             .withValue(s"$SPARK_APP_HADOOP_CREDENTIALS_BASE_DIR/$itemKey")
             .endEnv()
           .build()
+        }
 
-        SparkPod(podWithTokens, containerWithTokens)
+        SparkPod(podWithTokens, containersWithTokens)
     }
   }
 

@@ -103,6 +103,16 @@ case "$1" in
       --podName $SPARK_EXECUTOR_POD_NAME
     )
     ;;
+  shuffleService)
+    shift 1
+    CMD=(
+      ${JAVA_HOME}/bin/java
+      "${SPARK_EXECUTOR_JAVA_OPTS[@]}"
+      -cp "$SPARK_CLASSPATH:$SPARK_DIST_CLASSPATH"
+      org.apache.spark.deploy.ExternalShuffleService
+    )
+    ;;
+
 
   *)
     echo "Non-spark-on-k8s command provided, proceeding in pass-through mode..."

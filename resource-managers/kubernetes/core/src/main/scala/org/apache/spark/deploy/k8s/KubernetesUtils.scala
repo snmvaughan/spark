@@ -135,8 +135,8 @@ object KubernetesUtils extends Logging {
             .withContainers(rest.asJava)
             .endSpec()
             .build(),
-          sparkContainer)
-      }.getOrElse(SparkPod(pod, new ContainerBuilder().build()))
+          List(sparkContainer))
+      }.getOrElse(SparkPod(pod, List(new ContainerBuilder().build())))
   }
 
   @Since("2.4.0")

@@ -135,6 +135,7 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
       defaultProfile)
     val executor = step.configurePod(SparkPod.initialPod())
 
+    // For the executor specifically not shuffle service
     assert(executor.container.getResources.getLimits.size() === 3)
     assert(amountAndFormat(executor.container.getResources
       .getLimits.get("memory")) === "1408Mi")
@@ -163,8 +164,10 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
 
     // There is exactly 1 container with 1 volume mount and default memory limits.
     // Default memory limit is 1024M + 384M (minimum overhead constant).
-    assert(executor.container.getImage === EXECUTOR_IMAGE)
-    assert(executor.container.getVolumeMounts.size() == 1)
+    executor.containers.map{ container =>
+      assert(container.getImage === EXECUTOR_IMAGE)
+      assert(container.getVolumeMounts.size() === 1)
+    }
     assert(executor.container.getResources.getLimits.size() === 1)
     assert(amountAndFormat(executor.container.getResources
       .getLimits.get("memory")) === "1408Mi")
@@ -260,7 +263,9 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
       defaultProfile)
     val executor = step.configurePod(SparkPod.initialPod())
     // This is checking that basic executor + executorMemory = 1408 + 42 = 1450
-    assert(amountAndFormat(executor.container.getResources.getRequests.get("memory")) === "1450Mi")
+    assert(
+      amountAndFormat(
+        executor.container.getResources.getRequests.get("memory")) === "1450Mi")
   }
 
   test("auth secret propagation") {
@@ -290,8 +295,10 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
         KubernetesTestConf.createExecutorConf(sparkConf = conf), secMgr, defaultProfile)
 
       val executor = step.configurePod(SparkPod.initialPod())
-      assert(!KubernetesFeaturesTestUtils.containerHasEnvVar(
-        executor.container, SecurityManager.ENV_AUTH_SECRET))
+      executor.containers.map { container =>
+        assert(!KubernetesFeaturesTestUtils.containerHasEnvVar(
+          container, SecurityManager.ENV_AUTH_SECRET))
+      }
     }
   }
 
@@ -304,7 +311,9 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
       defaultProfile)
     val executor = step.configurePod(SparkPod.initialPod())
     // This is checking that basic executor + executorMemory = 1408 + 42 = 1450
-    assert(amountAndFormat(executor.container.getResources.getRequests.get("memory")) === "1450Mi")
+    assert(
+      amountAndFormat(executor.container.getResources.getRequests.get("memory")) ===
+        "1450Mi")
   }
 
   test("basic resourceprofile") {
@@ -343,7 +352,9 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
       .getRequests.get("cpu")) === "2")
 
     assert(executor.container.getResources.getLimits.size() === 2)
-    assert(amountAndFormat(executor.container.getResources.getLimits.get("nvidia.com/gpu")) === "2")
+    assert(
+      amountAndFormat(executor.container.getResources.getLimits.get("nvidia.com/gpu")) ===
+        "2")
   }
 
   test("Verify spark conf dir is mounted as configmap volume on executor pod's container.") {
@@ -555,12 +566,14 @@ class BasicExecutorFeatureStepSuite extends SparkFunSuite with BeforeAndAfter {
       s"$ENV_JAVA_OPT_PREFIX${ind + extraJavaOptsStart}" -> opt
     }.toMap
 
-    val containerEnvs = executorPod.container.getEnv.asScala.map {
-      x => (x.getName, x.getValue)
-    }.toMap
+    executorPod.containers.map { container =>
+      val containerEnvs = container.getEnv.asScala.map {
+        x => (x.getName, x.getValue)
+      }.toMap
 
-    val expectedEnvs = defaultEnvs ++ additionalEnvVars ++ extraJavaOptsEnvs
-    assert(containerEnvs === expectedEnvs)
+      val expectedEnvs = defaultEnvs ++ additionalEnvVars ++ extraJavaOptsEnvs
+      assert(containerEnvs === expectedEnvs)
+    }
   }
 
   private def amountAndFormat(quantity: Quantity): String = quantity.getAmount + quantity.getFormat

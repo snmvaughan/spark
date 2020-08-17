@@ -82,6 +82,6 @@ class TestStepWithExecConf extends KubernetesExecutorCustomFeatureConfigStep {
       .addToAnnotations("executor-annotation-key", executorConf.get("executor-annotation-key"))
       .endMetadata()
     val k8sPod = k8sPodBuilder.build()
-    SparkPod(k8sPod, pod.container)
+    SparkPod(k8sPod, pod.containers)
   }
 }

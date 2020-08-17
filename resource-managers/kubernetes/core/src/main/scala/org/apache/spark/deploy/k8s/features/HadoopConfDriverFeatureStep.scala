@@ -89,7 +89,7 @@ private[spark] class HadoopConfDriverFeatureStep(conf: KubernetesConf)
           .endSpec()
           .build()
 
-      val containerWithMount = new ContainerBuilder(pod.container)
+      val containersWithMount = pod.containers.map{ container => new ContainerBuilder(container)
         .addNewVolumeMount()
           .withName(HADOOP_CONF_VOLUME)
           .withMountPath(HADOOP_CONF_DIR_PATH)
@@ -99,8 +99,9 @@ private[spark] class HadoopConfDriverFeatureStep(conf: KubernetesConf)
           .withValue(HADOOP_CONF_DIR_PATH)
           .endEnv()
         .build()
+      }
 
-      SparkPod(podWithConf, containerWithMount)
+      SparkPod(podWithConf, containersWithMount)
     }
   }
 

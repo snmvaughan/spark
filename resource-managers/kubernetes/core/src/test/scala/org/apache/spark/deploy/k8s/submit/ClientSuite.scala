@@ -67,12 +67,12 @@ class ClientSuite extends SparkFunSuite with BeforeAndAfter {
     new CustomResourceDefinitionBuilder().withNewMetadata().withName("preCRD").endMetadata().build()
   )
   private val BUILT_KUBERNETES_SPEC = KubernetesDriverSpec(
-    SparkPod(BUILT_DRIVER_POD, BUILT_DRIVER_CONTAINER),
+    SparkPod(BUILT_DRIVER_POD, List(BUILT_DRIVER_CONTAINER)),
     Nil,
     ADDITIONAL_RESOURCES,
     RESOLVED_JAVA_OPTIONS)
   private val BUILT_KUBERNETES_SPEC_WITH_PRERES = KubernetesDriverSpec(
-    SparkPod(BUILT_DRIVER_POD, BUILT_DRIVER_CONTAINER),
+    SparkPod(BUILT_DRIVER_POD, List(BUILT_DRIVER_CONTAINER)),
     PRE_RESOURCES,
     ADDITIONAL_RESOURCES,
     RESOLVED_JAVA_OPTIONS)

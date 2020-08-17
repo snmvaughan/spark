@@ -110,7 +110,8 @@ private[spark] class Client(
 
     // The include of the ENV_VAR for "SPARK_CONF_DIR" is to allow for the
     // Spark command builder to pickup on the Java Options present in the ConfigMap
-    val resolvedDriverContainer = new ContainerBuilder(resolvedDriverSpec.pod.container)
+    val resolvedDriverContainers = resolvedDriverSpec.pod.containers.map { container =>
+      new ContainerBuilder(container)
       .addNewEnv()
         .withName(ENV_SPARK_CONF_DIR)
         .withValue(SPARK_CONF_DIR_INTERNAL)
@@ -120,9 +121,10 @@ private[spark] class Client(
         .withMountPath(SPARK_CONF_DIR_INTERNAL)
         .endVolumeMount()
       .build()
+    }
     val resolvedDriverPod = new PodBuilder(resolvedDriverSpec.pod.pod)
       .editSpec()
-        .addToContainers(resolvedDriverContainer)
+        .addAllToContainers(resolvedDriverContainers.asJava)
         .addNewVolume()
           .withName(SPARK_CONF_VOLUME_DRIVER)
           .withNewConfigMap()

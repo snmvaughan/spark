@@ -168,7 +168,7 @@ object ExecutorLifecycleTestUtils {
     val sparkPod = executorPodWithId(executorId, rpId)
     val podWithAttachedContainer = new PodBuilder(sparkPod.pod)
       .editOrNewSpec()
-        .addToContainers(sparkPod.container)
+        .addAllToContainers(sparkPod.containers.asJava)
         .endSpec()
       .build()
     podWithAttachedContainer
@@ -180,7 +180,7 @@ object ExecutorLifecycleTestUtils {
     val sparkPod = executorPodWithIdAndVolume(executorId, rpId)
     val podWithAttachedContainer = new PodBuilder(sparkPod.pod)
       .editOrNewSpec()
-      .addToContainers(sparkPod.container)
+      .addAllToContainers(sparkPod.containers.asJava)
       .endSpec()
       .build()
     podWithAttachedContainer
@@ -203,7 +203,7 @@ object ExecutorLifecycleTestUtils {
       .withName("spark-executor")
       .withImage("k8s-spark")
       .build()
-    SparkPod(pod, container)
+    SparkPod(pod, List(container))
   }
 
   def executorPodWithIdAndVolume(executorId: Long, rpId: Int = DEFAULT_RESOURCE_PROFILE_ID)

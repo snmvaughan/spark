@@ -78,13 +78,14 @@ private[spark] class LocalDirsFeatureStep(
         .addToVolumes(localDirVolumes: _*)
         .endSpec()
       .build()
-    val containerWithLocalDirVolumeMounts = new ContainerBuilder(pod.container)
+    val containersWithLocalDirVolumeMounts = pod.containers.map { c => new ContainerBuilder(c)
       .addNewEnv()
         .withName("SPARK_LOCAL_DIRS")
         .withValue(localDirs.mkString(","))
         .endEnv()
       .addToVolumeMounts(localDirVolumeMounts: _*)
       .build()
-    SparkPod(podWithLocalDirVolumes, containerWithLocalDirVolumeMounts)
+    }
+    SparkPod(podWithLocalDirVolumes, containersWithLocalDirVolumeMounts)
   }
 }

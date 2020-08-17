@@ -68,7 +68,7 @@ private[spark] class VolcanoFeatureStep extends KubernetesDriverCustomFeatureCon
         .addToAnnotations(POD_GROUP_ANNOTATION, podGroupName)
       .endMetadata()
     val k8sPod = k8sPodBuilder.build()
-    SparkPod(k8sPod, pod.container)
+    SparkPod(k8sPod, pod.containers)
   }
 }
 
