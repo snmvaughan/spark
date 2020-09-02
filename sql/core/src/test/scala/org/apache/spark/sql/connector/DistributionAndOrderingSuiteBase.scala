@@ -28,7 +28,7 @@ import org.apache.spark.sql.catalyst.plans.physical
 import org.apache.spark.sql.catalyst.plans.physical._
 import org.apache.spark.sql.connector.catalog.InMemoryCatalog
 import org.apache.spark.sql.execution.adaptive.AdaptiveSparkPlanHelper
-import org.apache.spark.sql.test.SharedSparkSession
+import org.apache.spark.sql.test.{SharedSparkSession, TestSparkSession}
 
 abstract class DistributionAndOrderingSuiteBase
     extends QueryTest with SharedSparkSession with BeforeAndAfter with AdaptiveSparkPlanHelper {
@@ -42,6 +42,10 @@ abstract class DistributionAndOrderingSuiteBase
   override def afterAll(): Unit = {
     spark.sessionState.conf.unsetConf("spark.sql.catalog.testcat")
     super.afterAll()
+  }
+
+  override protected def createSparkSession: TestSparkSession = {
+    new TestSparkSession(sparkConf.set("spark.io.compression.codec", "lz4"))
   }
 
   protected val resolver: Resolver = conf.resolver

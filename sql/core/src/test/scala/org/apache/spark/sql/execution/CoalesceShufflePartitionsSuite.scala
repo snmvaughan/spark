@@ -63,6 +63,7 @@ class CoalesceShufflePartitionsSuite extends SparkFunSuite {
         .setMaster("local[*]")
         .setAppName("test")
         .set(UI_ENABLED, false)
+        .set("spark.io.compression.codec", "lz4")
         .set(IO_ENCRYPTION_ENABLED, enableIOEncryption)
         .set(SQLConf.SHUFFLE_PARTITIONS.key, "5")
         .set(SQLConf.COALESCE_PARTITIONS_INITIAL_PARTITION_NUM.key, "5")
