@@ -459,7 +459,7 @@ private[spark] object Config extends Logging {
       .timeConf(TimeUnit.SECONDS)
       .checkValue(value => value > 0, "Allocation driver readiness timeout must be a positive "
         + "time value.")
-      .createWithDefaultString("1s")
+      .createWithDefaultString("120s")
 
   val KUBERNETES_ALLOCATION_EXECUTOR_TIMEOUT =
     ConfigBuilder("spark.kubernetes.allocation.executor.timeout")

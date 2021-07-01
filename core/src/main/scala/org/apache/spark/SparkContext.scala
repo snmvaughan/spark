@@ -3075,6 +3075,7 @@ object SparkContext extends Logging {
           "org.apache.spark.internal.io.cloud.BindingParquetOutputCommitter")
         conf.setIfMissing("spark.sql.sources.commitProtocolClass",
           "org.apache.spark.internal.io.cloud.PathOutputCommitProtocol")
+        conf.setIfMissing("spark.hadoop.fs.s3a.committer.threads", "64")
       }
     }
   }

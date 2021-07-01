@@ -293,7 +293,7 @@ package object config {
       .doc("The file system schemes to report in executor metrics.")
       .version("3.1.0")
       .stringConf
-      .createWithDefaultString("file,hdfs")
+      .createWithDefaultString("file,hdfs,s3a")
 
   private[spark] val EXECUTOR_JAVA_OPTIONS =
     ConfigBuilder(SparkLauncher.EXECUTOR_EXTRA_JAVA_OPTIONS)
@@ -939,7 +939,7 @@ package object config {
       .version("2.3.0")
       .intConf
       .checkValue(_ > 0, "The capacity of listener bus event queue must be positive")
-      .createWithDefault(10000)
+      .createWithDefault(1000000)
 
   private[spark] val LISTENER_BUS_METRICS_MAX_LISTENER_CLASSES_TIMED =
     ConfigBuilder("spark.scheduler.listenerbus.metrics.maxListenerClassesTimed")
@@ -1728,7 +1728,7 @@ package object config {
     ConfigBuilder("spark.cleaner.periodicGC.interval")
       .version("1.6.0")
       .timeConf(TimeUnit.SECONDS)
-      .createWithDefaultString("30min")
+      .createWithDefaultString("10min")
 
   private[spark] val CLEANER_REFERENCE_TRACKING =
     ConfigBuilder("spark.cleaner.referenceTracking")
@@ -2229,7 +2229,7 @@ package object config {
         "count spark.stage.maxConsecutiveAttempts")
       .version("3.4.0")
       .booleanConf
-      .createWithDefault(false)
+      .createWithDefault(true)
 
   private[spark] val SCHEDULER_MAX_RETAINED_REMOVED_EXECUTORS =
     ConfigBuilder("spark.scheduler.maxRetainedRemovedDecommissionExecutors")

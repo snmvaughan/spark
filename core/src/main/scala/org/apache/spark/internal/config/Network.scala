@@ -85,7 +85,7 @@ private[spark] object Network {
     ConfigBuilder("spark.rpc.message.maxSize")
       .version("2.0.0")
       .intConf
-      .createWithDefault(128)
+      .createWithDefault(256)
 
   private[spark] val RPC_NETTY_DISPATCHER_NUM_THREADS =
     ConfigBuilder("spark.rpc.netty.dispatcher.numThreads")
