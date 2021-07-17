@@ -47,7 +47,7 @@ class Hive_2_1_DDLSuite extends SparkFunSuite with TestHiveSingleton {
       .set(SparkLauncher.SPARK_MASTER, "local")
       .set(WAREHOUSE_PATH.key, warehouse.toURI().toString())
       .set(CATALOG_IMPLEMENTATION.key, "hive")
-      .set(HiveUtils.HIVE_METASTORE_VERSION.key, "2.1")
+      .set(HiveUtils.HIVE_METASTORE_VERSION.key, "2.3.9.4-apple")
       .set(HiveUtils.HIVE_METASTORE_JARS.key, "maven")
 
     val hadoopConf = new Configuration()

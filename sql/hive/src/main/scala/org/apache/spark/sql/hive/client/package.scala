@@ -24,9 +24,8 @@ package object client {
       val extraDeps: Seq[String] = Nil,
       val exclusions: Seq[String] = Nil) extends Ordered[HiveVersion] {
     override def compare(that: HiveVersion): Int = {
-      val thisVersionParts = fullVersion.split('.').map(_.toInt)
-      val thatVersionParts = that.fullVersion.split('.').map(_.toInt)
-      assert(thisVersionParts.length == thatVersionParts.length)
+      val thisVersionParts = fullVersion.replace("-apple", "").split('.').map(_.toInt)
+      val thatVersionParts = that.fullVersion.replace("-apple", "").split('.').map(_.toInt)
       thisVersionParts.zip(thatVersionParts).foreach { case (l, r) =>
         val candidate = l - r
         if (candidate != 0) {
@@ -102,7 +101,7 @@ package object client {
 
     // Since HIVE-23980, calcite-core included in Hive package jar.
     // For spark, only VersionsSuite currently creates a hive materialized view for testing.
-    case object v2_3 extends HiveVersion("2.3.9",
+    case object v2_3 extends HiveVersion("2.3.9.4-apple",
       exclusions = Seq("org.apache.calcite:calcite-core",
         "org.apache.calcite:calcite-druid",
         "org.apache.calcite.avatica:avatica",
