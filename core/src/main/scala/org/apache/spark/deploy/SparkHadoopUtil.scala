@@ -582,6 +582,9 @@ private[spark] object SparkHadoopUtil extends Logging {
       // in other regions at the expense of a HEAD request during fs creation
       hadoopConf.set("fs.s3a.endpoint", "s3.amazonaws.com", setBySpark)
     }
+    if (conf.getOption("spark.hadoop.fs.s3c.impl").isEmpty) {
+      hadoopConf.set("fs.s3c.impl", "org.apache.hadoop.fs.s3c.CachedS3AFileSystem")
+    }
   }
 
   private def appendSparkHiveConfigs(conf: SparkConf, hadoopConf: Configuration): Unit = {
