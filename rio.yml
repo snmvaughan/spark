@@ -1,0 +1,849 @@
+schemaVersion: 2.0
+timeout: 180
+
+notify:
+  email:
+    enabled: false
+  pullRequestComment:
+    postOnSuccess: false
+    postOnFailure: false
+
+machine:
+  baseImage: docker.apple.com/base-images/ubi8/java11-builder
+  env: &base_env
+    NOLINT_ON_COMPILE: "1"
+    SPARK_LOCAL_HOSTNAME: "localhost"
+    SPARK_TEST_HIVE_CLIENT_VERSIONS: "3.1,2.3"
+    SBT_OPTS: "-Xms6g -Xmx6g -Xss128M -XX:MaxMetaspaceSize=2048M"
+
+builds:
+  - name: apple-spark-2.12_3.4.0-snapshot-dependency
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - dev/test-dependencies.sh
+        - dev/mima
+
+  - name: apple-spark-2.12_3.4.0-snapshot-dependency-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - dev/test-dependencies.sh
+        - dev/mima
+
+  - name: apple-spark-2.12_3.4.0-snapshot-common
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-common
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-common-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-common-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-core
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "core/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-core
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-core-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "core/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-core-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-streaming
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "streaming/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-streaming
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-streaming-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "streaming/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-streaming-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-mllib
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-mllib
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-mllib-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-mllib-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-graphx
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "graphx/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-graphx
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-graphx-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "graphx/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-graphx-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-catalyst
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "catalyst/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-catalyst
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-catalyst-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "catalyst/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-catalyst-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-sql-1
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # PythonUDFSuite
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
+        - build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-sql-1
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # PythonUDFSuite
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-sql-1-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # PythonUDFSuite
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
+        - build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-sql-1-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # PythonUDFSuite
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-sql-2
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
+        - build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-sql-2
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-sql-2-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
+        - build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-sql-2-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hadoop-cloud
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hadoop-cloud
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hadoop-cloud-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hadoop-cloud-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-1
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # HiveScriptTransformationSuite
+        - build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-1
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # HiveScriptTransformationSuite
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-1-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # HiveScriptTransformationSuite
+        - build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-1-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # HiveScriptTransformationSuite
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-2
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-2
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - dev/change-scala-version.sh 2.13
+        - PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-2-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-2-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - dev/change-scala-version.sh 2.13
+        - PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-3
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-3
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-3-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-3-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-launcher-repl-tools
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-launcher-repl-tools
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-launcher-repl-tools-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-launcher-repl-tools-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-thriftserver
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-thriftserver
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+
+  - name: apple-spark-2.12_3.4.0-snapshot-hive-thriftserver-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+
+  - name: apple-spark-2.13_3.4.0-snapshot-hive-thriftserver-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+
+  - name: apple-spark-2.12_3.4.0-snapshot-kafka
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-kafka
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-kafka-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-kafka-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-kinesis
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-kinesis
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-kinesis-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-kinesis-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-avro
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 "avro/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-avro
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-avro-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/sbt -Phadoop-3 "avro/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-avro-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-connect
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/sbt -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-connect
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-yarn-k8s
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # YarnClusterSuite needs python3
+        - build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-yarn-k8s
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39 # YarnClusterSuite needs python3
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-yarn-k8s-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # YarnClusterSuite needs python3
+        - build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+
+  - name: apple-spark-2.13_3.4.0-snapshot-yarn-k8s-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39 # YarnClusterSuite needs python3
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+
+  - name: apple-spark-2.12_3.4.0-snapshot-python39
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
+        - build/sbt -Phadoop-3 -Phive test:package
+        - python/run-tests.py --python-executables python3.9 --parallelism 1
+
+  - name: apple-spark-2.13_3.4.0-snapshot-python39
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
+        - python/run-tests.py --python-executables python3.9 --parallelism 1
+
+  - name: apple-spark-2.12_3.4.0-snapshot-python39-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
+        - build/sbt -Phadoop-3 -Phive test:package
+        - python/run-tests.py --python-executables python3.9 --parallelism 1
+
+  - name: apple-spark-2.13_3.4.0-snapshot-python39-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - yum install -q -y python39
+        - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
+        - dev/change-scala-version.sh 2.13
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
+        - python/run-tests.py --python-executables python3.9 --parallelism 1
+
+  - name: apple-spark-2.12_3.4.0-snapshot
+    branchName: branch-3.4.0-apple
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.17"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: true
+        MAVEN_OPTS: "-Xms6g -Xmx6g -Xss128M -XX:MaxMetaspaceSize=3g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
+    package:
+      freeform:
+      - publish:
+        - repo: m2:oss-patched
+
+  - name: apple-spark-2.13_3.4.0-snapshot
+    branchName: branch-3.4.0-apple
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        SCALA_VERSION: "2.13.8"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: true
+        MAVEN_OPTS: "-Xms6g -Xmx6g -Xss128M -XX:MaxMetaspaceSize=3g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
+    package:
+      freeform:
+      - publish:
+        - repo: m2:oss-patched
+
+  - name: apple-spark-2.12_3.4.0-binaries-snapshot
+    branchName: branch-3.4.0-apple
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.17"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: false
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
+        - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
+    package:
+      freeform:
+      - publish:
+        - repo: oss-patched-binaries-local
+
+  - name: apple-spark-2.13_3.4.0-binaries-snapshot
+    branchName: branch-3.4.0-apple
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        SCALA_VERSION: "2.13.8"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: false
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION}
+        - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
+    package:
+      freeform:
+      - publish:
+        - repo: oss-patched-binaries-local
+
+  - name: apple-spark-2.12_3.4.0-release
+    branchName: branch-3.4.0-apple-release
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.17"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: true
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+    package:
+      release: true
+      freeform:
+      - publish:
+        - repo: m2:oss-patched
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.12/3.4.0.1-apple"
+
+  - name: apple-spark-2.13_3.4.0-release
+    branchName: branch-3.4.0-apple-release
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        SCALA_VERSION: "2.13.8"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: true
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
+    package:
+      release: true
+      freeform:
+      - publish:
+        - repo: m2:oss-patched
+    finally:
+      tag:
+        enabled: true
+        expression: "releases_2.13/3.4.0.1-apple"
+
+  - name: apple-spark-2.12_3.4.0-binaries-release
+    branchName: branch-3.4.0-apple-release
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        SCALA_VERSION: "2.12.17"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: false
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
+        - ci stage-lib ".dist/local-repo/**/*.tgz"
+    package:
+      freeform:
+      - publish:
+        - repo: oss-patched-binaries-local
+
+  - name: apple-spark-2.13_3.4.0-binaries-release
+    branchName: branch-3.4.0-apple-release
+    timeout: 120
+    machine:
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        SCALA_VERSION: "2.13.8"
+        HADOOP_BINARY_VERSION: "3"
+        PUBLISH_JARS: false
+        MAVEN_OPTS: "-Xms12g -Xmx12g -Xss128M -XX:MaxMetaspaceSize=4g"
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - dev/change-scala-version.sh 2.13
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION}
+        - ci stage-lib ".dist/local-repo/**/*.tgz"
+    package:
+      freeform:
+      - publish:
+        - repo: oss-patched-binaries-local
