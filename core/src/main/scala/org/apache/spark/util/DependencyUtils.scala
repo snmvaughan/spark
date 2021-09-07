@@ -150,11 +150,15 @@ private[spark] object DependencyUtils extends Logging {
 
     val (transitive, exclusionList) = parseQueryParams(uri)
 
+    var repos = "https://artifacts.apple.com/libs-release/"
+    if (ivyProperties.repositories != null) {
+      repos += "," + ivyProperties.repositories
+    }
     resolveMavenDependencies(
       transitive,
       exclusionList,
       authority,
-      ivyProperties.repositories,
+      repos,
       ivyProperties.ivyRepoPath,
       Option(ivyProperties.ivySettingsPath)
     )
