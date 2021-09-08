@@ -39,6 +39,10 @@ package object config {
   private[spark] val SPARK_TASK_PREFIX = "spark.task"
   private[spark] val LISTENER_BUS_EVENT_QUEUE_PREFIX = "spark.scheduler.listenerbus.eventqueue"
 
+  private[spark] val SPARK_CALL_HOME_LISTENER_CLASS =
+    "com.apple.spark.callhome.listener.SparkCallHomeListenerV2"
+  private[spark] val SPARK_ACS_QUEUE_NAME = "sparkRuntimeQueue"
+
   private[spark] val RESOURCES_DISCOVERY_PLUGIN =
     ConfigBuilder("spark.resources.discoveryPlugin")
       .doc("Comma-separated list of class names implementing" +
@@ -2209,6 +2213,11 @@ package object config {
         "application completes. If set to true, the client process will stay alive polling " +
         "the driver's status. Otherwise, the client process will exit after submission.")
       .version("3.1.0")
+      .booleanConf
+      .createWithDefault(false)
+
+  private[spark] val SPARK_CALL_HOME_ENABLED =
+    ConfigBuilder("spark.aci.callhome.enabled")
       .booleanConf
       .createWithDefault(false)
 
