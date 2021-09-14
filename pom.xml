@@ -352,6 +352,10 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>apple</id>
+      <url>https://artifacts.apple.com/libs-release</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>

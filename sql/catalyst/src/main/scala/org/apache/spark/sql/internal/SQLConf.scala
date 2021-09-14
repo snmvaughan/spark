@@ -3631,6 +3631,7 @@ object SQLConf {
       .version("3.0.0")
       .stringConf
       .createWithDefault(
+        "https://artifacts.apple.com/libs-release/," +
         sys.env.getOrElse("DEFAULT_ARTIFACT_REPOSITORY",
           "https://maven-central.storage-download.googleapis.com/maven2/"))
 
