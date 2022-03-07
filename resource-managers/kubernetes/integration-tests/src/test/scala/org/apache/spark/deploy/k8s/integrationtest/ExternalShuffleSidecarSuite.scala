@@ -43,7 +43,6 @@ private[spark] trait ExternalShuffleSidecarSuite { k8sSuite: KubernetesSuite =>
       appArgs = Array.empty[String],
       driverPodChecker = doBasicDriverPyPodCheck,
       executorPodChecker = checkESSIsLaunchedAndUsed,
-      appLocator = appLocator,
       isJVM = false,
       pyFiles = None,
       executorPatience = None,
