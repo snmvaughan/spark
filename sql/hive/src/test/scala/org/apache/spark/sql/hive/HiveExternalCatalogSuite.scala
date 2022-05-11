@@ -31,7 +31,7 @@ import org.apache.spark.sql.types.StructType
  */
 class HiveExternalCatalogSuite extends ExternalCatalogSuite {
 
-  private val externalCatalog: HiveExternalCatalog = {
+  lazy val externalCatalog: HiveExternalCatalog = {
     val catalog = new HiveExternalCatalog(new SparkConf, new Configuration)
     catalog.client.reset()
     catalog
@@ -214,5 +214,15 @@ class HiveExternalCatalogSuite extends ExternalCatalogSuite {
 
     assert(HiveExternalCatalog.toAbsoluteURI(tableLocation2, Some(dbLocation))
       .equals(tableLocation2))
+  }
+}
+
+// To make it sure that we do not break other fields
+class QuotedHiveExternalCatalogSuite extends HiveExternalCatalogSuite {
+  override lazy val externalCatalog: HiveExternalCatalog = {
+    val conf = new SparkConf().set("spark.sql.hive.metastorePartitionQuoting", "true")
+    val catalog = new HiveExternalCatalog(conf, new Configuration)
+    catalog.client.reset()
+    catalog
   }
 }
