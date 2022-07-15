@@ -15,36 +15,27 @@
  * limitations under the License.
  */
 
-package org.apache.spark.security
+package org.apache.spark.deploy.security.cloud
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.security.Credentials
 
 import org.apache.spark.SparkConf
 import org.apache.spark.annotation.DeveloperApi
+import org.apache.spark.security.ServiceCredentialsProvider
 
 /**
  * ::DeveloperApi::
- * Hadoop delegation token provider.
+ * Hadoop cloud credentials provider.
  */
 @DeveloperApi
-trait HadoopDelegationTokenProvider extends ServiceCredentialsProvider{
+trait CloudCredentialsProvider extends ServiceCredentialsProvider {
 
   /**
-   * Returns true if delegation tokens are required for this service. By default, it is based on
-   * whether Hadoop security is enabled.
-   */
-  def delegationTokensRequired(sparkConf: SparkConf, hadoopConf: Configuration): Boolean
-
-  /**
-   * Obtain delegation tokens for this service and get the time of the next renewal.
+   * Obtain credentials for this service and get the time of the next renewal.
    * @param hadoopConf Configuration of current Hadoop Compatible system.
-   * @param creds Credentials to add tokens and security keys to.
-   * @return If the returned tokens are renewable and can be renewed, return the time of the next
-   *         renewal, otherwise None should be returned.
+   * @return  a CloudCredentials object with the credentials and expiry time set
    */
-  def obtainDelegationTokens(
+  def obtainCredentials(
     hadoopConf: Configuration,
-    sparkConf: SparkConf,
-    creds: Credentials): Option[Long]
+    sparkConf: SparkConf): Option[CloudCredentials]
 }

@@ -29,6 +29,7 @@ import org.apache.hadoop.security.UserGroupInformation
 import org.apache.spark.{ExecutorAllocationClient, SparkEnv, TaskState}
 import org.apache.spark.deploy.SparkHadoopUtil
 import org.apache.spark.deploy.security.HadoopDelegationTokenManager
+import org.apache.spark.deploy.security.cloud.CloudCredentialsManager
 import org.apache.spark.errors.SparkCoreErrors
 import org.apache.spark.executor.ExecutorLogUrlHandler
 import org.apache.spark.internal.Logging
@@ -119,6 +120,9 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
   // The token manager used to create security tokens.
   private var delegationTokenManager: Option[HadoopDelegationTokenManager] = None
 
+  // cloud credentials manager
+  private var cloudCredentialsManager: Option[CloudCredentialsManager] = None
+
   private val reviveThread =
     ThreadUtils.newDaemonSingleThreadScheduledExecutor("driver-revive-thread")
 
@@ -204,6 +208,9 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
 
       case UpdateDelegationTokens(newDelegationTokens) =>
         updateDelegationTokens(newDelegationTokens)
+
+      case UpdateCloudCredentials(credentials) =>
+        updateCloudCredentials(credentials)
 
       case RemoveExecutor(executorId, reason) =>
         // We will remove the executor's state and cannot restore it. However, the connection
@@ -598,6 +605,12 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
         }
       }
     }
+    if (conf.get(CLOUD_CREDENTIALS_SHARING)) {
+      cloudCredentialsManager = createCloudCredentialsManager()
+      cloudCredentialsManager.foreach { cm =>
+        cm.start()
+      }
+    }
   }
 
   protected def createDriverEndpoint(): DriverEndpoint = new DriverEndpoint()
@@ -618,6 +631,7 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
     reviveThread.shutdownNow()
     cleanupService.foreach(_.shutdownNow())
     stopExecutors()
+    cloudCredentialsManager.foreach(_.stop())
     delegationTokenManager.foreach(_.stop())
     try {
       if (driverEndpoint != null) {
@@ -1017,6 +1031,25 @@ class CoarseGrainedSchedulerBackend(scheduler: TaskSchedulerImpl, val rpcEnv: Rp
   }
 
   protected def currentDelegationTokens: Array[Byte] = delegationTokens.get()
+
+  /**
+   * Create the cloud credentials manager to be used for the application.
+   */
+  protected def createCloudCredentialsManager(): Option[CloudCredentialsManager] = {
+    Some(new CloudCredentialsManager(conf, scheduler.sc.hadoopConfiguration, driverEndpoint))
+  }
+  /**
+   * Called when a new set of cloud credentials is sent to the driver. Child classes can override
+   * this method but should always call this implementation, which handles credentials distribution
+   * to executors.
+   */
+  protected def updateCloudCredentials(credentials: Array[Byte]): Unit = {
+    SparkHadoopUtil.get.updateCloudCredentials(credentials, conf)
+    logInfo(s"Updating cloud credentials for ${executorDataMap.size} executors")
+    executorDataMap.values.foreach { ed =>
+      ed.executorEndpoint.send(UpdateCloudCredentials(credentials))
+    }
+  }
 
   /**
    * Checks whether the executor is excluded due to failure(s). This is called when the executor
