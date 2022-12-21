@@ -34,6 +34,12 @@
   stroke-width: 1px;
 }
 
+#plan-viz-graph svg g.node-boson rect {
+  fill: #FFDEAD;
+  stroke: #3EC0FF;
+  stroke-width: 1px;
+}
+
 /* Highlight the SparkPlan node name */
 #plan-viz-graph svg text :first-child:not(.stageId-and-taskId-metrics) {
   font-weight: bold;
