@@ -37,6 +37,8 @@ object PartitionedFileUtil {
       if (path.startsWith("s3a") && sparkSession.sessionState.conf.filesS3CEnabled) {
         // S3C is a file-format-aware cache layer. No need to check the file types.
         path = path.replaceFirst("s3a", "s3c")
+      } else if (path.startsWith("blob") && sparkSession.sessionState.conf.filesBlobcEnabled) {
+        path = path.replaceFirst("blob", "blobc")
       }
       (0L until file.getLen by maxSplitBytes).map { offset =>
         val remaining = file.getLen - offset
