@@ -381,6 +381,10 @@
       <artifactId>spark-call-home-listener_${scala.binary.version}_spark3.3.0</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.parquet</groupId>
+      <artifactId>parquet-kms-apple</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <scope>test</scope>

@@ -91,6 +91,59 @@ class ParquetEncryptionSuite extends QueryTest with TestHiveSingleton {
     }
   }
 
+  test("Native uniform encryption") {
+    withTempDir { dir =>
+      withSQLConf(
+        "parquet.crypto.factory.class" ->
+          "com.apple.parquet.crypto.keytools.AppleCryptoFactory",
+        "parquet.encryption.kms.client.class" ->
+          "com.apple.parquet.crypto.keytools.CustomerKmsBridge",
+        "parquet.encryption.key.list" ->
+          s"footerKey: ${footerKey}") {
+
+        val inputDF = Seq((1, 22, 333)).toDF("a", "b", "c")
+        val parquetDir = new File(dir, "parquet").getCanonicalPath
+        inputDF.write
+          .option("parquet.encryption.uniform.key", "footerKey")
+          .parquet(parquetDir)
+
+        verifyParquetEncrypted(parquetDir)
+
+        val parquetDF = spark.read.parquet(parquetDir)
+        assert(parquetDF.inputFiles.nonEmpty)
+        val readDataset = parquetDF.select("a", "b", "c")
+        checkAnswer(readDataset, inputDF)
+      }
+    }
+  }
+
+  test("Old uniform encryption") {
+    withTempDir { dir =>
+      withSQLConf(
+        "parquet.crypto.factory.class" ->
+          "com.apple.parquet.crypto.keytools.AppleCryptoFactory",
+        "parquet.encryption.kms.client.class" ->
+          "com.apple.parquet.crypto.keytools.CustomerKmsBridge",
+        "parquet.encryption.key.list" ->
+          s"footerKey: ${footerKey}") {
+
+        val inputDF = Seq((1, 22, 333)).toDF("a", "b", "c")
+        val parquetDir = new File(dir, "parquet").getCanonicalPath
+        inputDF.write
+          .option("parquet.encryption.footer.key", "footerKey")
+          .option("parquet.uniform.encryption", "true")
+          .parquet(parquetDir)
+
+        verifyParquetEncrypted(parquetDir)
+
+        val parquetDF = spark.read.parquet(parquetDir)
+        assert(parquetDF.inputFiles.nonEmpty)
+        val readDataset = parquetDF.select("a", "b", "c")
+        checkAnswer(readDataset, inputDF)
+      }
+    }
+  }
+
   test("SPARK-42114: Test of uniform parquet encryption") {
     withTempDir { dir =>
       withSQLConf(
