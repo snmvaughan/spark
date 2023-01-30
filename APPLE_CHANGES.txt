@@ -1,0 +1,27 @@
+# Internal Patches
+MINOR            Add rio.yml and dev scripts
+MINOR            Adjust test cases for RIO
+MINOR            Bump to 3.4.0.1-apple-SNAPSHOT
+SPARK-17767      Support user-provided ExternalCatalog and SessionBuilder
+rdar://64257964  Add back http support so it works without hadoop configuration
+rdar://68926116  Add alternative conf name `spark.FsUrlStreamHandlerFactory.enabled`
+rdar://66576657  Add spark-avro to the tgz build to simplify kernels
+rdar://82806227  Support Apple repo in DependencyUtils for Ivy
+rdar://82183532  Support CachedS3AFileSystem for S3
+rdar://82423473  Support `spark.sql.files.s3c.enabled` conf
+rdar://89567863  Add parquet footer cache feature in SMC
+rdar://104445096 Apply internal configurations
+rdar://72552554  Increase DEFAULT_MAX_CONSECUTIVE_STAGE_ATTEMPTS from 4 to 6
+MINOR            Use zstd as default compression codec
+MINOR            Support JarvisSparkHadoopUtil
+MINOR            Use Utils.localHostName() for bindAddress
+rdar://71819374  Bridge in LZO codec family
+rdar://91548932  Update log4j1 dependency detection for log4j2 2.17.2
+rdar://90787805  Make spark driver endpoints extensible to be used by awsappleconnect-spark-utils
+rdar://103524012 Adding color from spark plan UI block depending on inner text
+rdar://100580258 Upgrade Hive to 2.3.9.4-apple
+rdar://70562690  Update kubernetes Dockerfile to AppleJDK
+rdar://82095645  Integrate ACI spark call home service listener
+MINOR            Forward port multiple containers and shuffle service from ACS 3.0
+rdar://99714991  Support configuring version of the PME Key to use for writing
+rdar://101964650 Enable Dependency Test
