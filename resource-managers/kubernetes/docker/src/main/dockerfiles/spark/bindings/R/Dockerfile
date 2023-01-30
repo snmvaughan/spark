@@ -27,7 +27,7 @@ RUN mkdir ${SPARK_HOME}/R
 
 # Install R 4.1.2 (http://cloud.r-project.org/bin/linux/debian/)
 RUN \
-  apt-get update && \
+  apt-get update -o Acquire::https::artifacts.apple.com::Verify-Peer=false && \
   apt install -y r-base r-base-dev && \
   rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/*
 

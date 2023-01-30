@@ -24,9 +24,11 @@ WORKDIR /
 USER 0
 
 RUN mkdir ${SPARK_HOME}/python
-RUN apt-get update && \
+RUN apt-get update -o Acquire::https::artifacts.apple.com::Verify-Peer=false && \
     apt install -y python3 python3-pip && \
     pip3 install --upgrade pip setuptools && \
+    pip3 install recertifi --index https://pypi.apple.com/simple && \
+    pip3 install awsappleconnect --index https://pypi.apple.com/simple && \
     # Removed the .cache to save space
     rm -rf /root/.cache && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/*
 
