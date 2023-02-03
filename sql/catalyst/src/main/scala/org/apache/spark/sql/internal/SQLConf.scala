@@ -556,7 +556,7 @@ object SQLConf {
       "the files of data.")
     .version("1.1.0")
     .bytesConf(ByteUnit.BYTE)
-    .createWithDefaultString("10MB")
+    .createWithDefaultString("100MB")
 
   val SHUFFLE_HASH_JOIN_FACTOR = buildConf("spark.sql.shuffledHashJoinFactor")
     .doc("The shuffle hash join can be selected if the data size of small" +
