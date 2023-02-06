@@ -1,3 +1,5 @@
+# From 3.4.0 (Ignore until the official Apache Spark 3.4.0 release)
+
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
 MINOR            Adjust test cases for RIO
@@ -25,3 +27,5 @@ rdar://82095645  Integrate ACI spark call home service listener
 MINOR            Forward port multiple containers and shuffle service from ACS 3.0
 rdar://99714991  Support configuring version of the PME Key to use for writing
 rdar://101964650 Enable Dependency Test
+rdar://105024624 Set `spark.sql.autoBroadcastJoinThreshold` to 100MB
+rdar://104835338 Add bump-version.sh (#1670)
