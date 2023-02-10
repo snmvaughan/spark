@@ -464,6 +464,8 @@ class SecurityManagerSuite extends SparkFunSuite with ResetSystemProperties {
     ("local[1, 2]", UGI),
     ("k8s://127.0.0.1", AUTO),
     ("k8s://127.0.1.1", FILE),
+    ("aci-k8s://127.0.0.1", AUTO),
+    ("aci-k8s://127.0.1.1", FILE),
     ("local-cluster[2, 1, 1024]", MANUAL),
     ("invalid", MANUAL)
   ).foreach { case (master, secretType) =>

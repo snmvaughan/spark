@@ -3145,7 +3145,7 @@ private object SparkMasterRegex {
   // Regular expression for connecting to Spark deploy clusters
   val SPARK_REGEX = """spark://(.*)""".r
   // Regular expression for connecting to kubernetes clusters
-  val KUBERNETES_REGEX = """k8s://(.*)""".r
+  val KUBERNETES_REGEX = """(?:aci-)?k8s://(.*)""".r
 }
 
 /**
