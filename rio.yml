@@ -774,7 +774,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.12/3.4.0.3-apple"
+        expression: "releases_2.12/3.4.0.4-apple"
 
   - name: apple-spark-2.13_3.4.0-release
     branchName: branch-3.4.0-apple-release
@@ -801,7 +801,7 @@ builds:
     finally:
       tag:
         enabled: true
-        expression: "releases_2.13/3.4.0.3-apple"
+        expression: "releases_2.13/3.4.0.4-apple"
 
   - name: apple-spark-2.12_3.4.0-binaries-release
     branchName: branch-3.4.0-apple-release
