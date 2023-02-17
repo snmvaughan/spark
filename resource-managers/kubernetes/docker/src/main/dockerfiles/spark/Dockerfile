@@ -16,7 +16,9 @@
 #
 ARG java_image_tag=17-jre
 
-FROM debian:bullseye-slim
+FROM ubuntu:jammy
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
 
 ARG spark_uid=185
 
@@ -45,7 +47,6 @@ RUN set -ex && \
     touch /opt/spark/RELEASE && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
-    ln -s /usr/bin/java /bin/java && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
     rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/*
