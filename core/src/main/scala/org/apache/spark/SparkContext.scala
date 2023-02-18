@@ -3115,8 +3115,6 @@ object SparkContext extends Logging {
     }
     supplement(DRIVER_JAVA_OPTIONS)
     supplement(EXECUTOR_JAVA_OPTIONS)
-    conf.set(EXECUTOR_JAVA_OPTIONS.key, "-XX:+UseParallelGC -XX:InitiatingHeapOccupancyPercent=70 "
-      + conf.get(EXECUTOR_JAVA_OPTIONS).get)
   }
 
   private def supplementJavaIPv6Options(conf: SparkConf): Unit = {
