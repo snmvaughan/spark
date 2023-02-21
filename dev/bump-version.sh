@@ -88,6 +88,7 @@ NEW_RELEASE_VERSION=${NEW_VERSION%-SNAPSHOT}
 $MVN versions:set -DnewVersion="$NEW_VERSION" | grep -v "no value"
 
 sed -i '' 's/'"$OLD_RELEASE_VERSION"'/'"$NEW_RELEASE_VERSION"'/' rio.y*ml
+sed -i '' 's/'"${OLD_RELEASE_VERSION%-apple}"'/'"${NEW_RELEASE_VERSION%-apple}"'/' python/pyspark/version.py
 
 git commit -a -m "Bump to $NEW_VERSION after $OLD_RELEASE_VERSION release"
 

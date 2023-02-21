@@ -719,8 +719,9 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
+        - yum install -q -y python39
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
-        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
+        - ./dev/make-distribution.sh --tgz --pip --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
     package:
       freeform:
@@ -817,8 +818,9 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
+        - yum install -q -y python39
         - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
-        - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
+        - ./dev/make-distribution.sh --tgz --pip --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz"
     package:
       freeform:

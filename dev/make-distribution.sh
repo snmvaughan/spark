@@ -333,6 +333,12 @@ if [ "$MAKE_TGZ" == "true" ]; then
   if [[ $(uname) != "Darwin" ]]; then
     "$MVN" deploy:deploy-file -DgroupId="org.apache.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="${SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME}" -Durl="${LOCAL_REPO}" -Dclassifier=yarn-archive
   fi
+  if [ "$MAKE_PIP" == "true" ]; then
+    # PEP 440
+    PYSPARK_VERSION=${VERSION%%-*}
+    mv python/dist/pyspark-$PYSPARK_VERSION.tar.gz pyspark-$PYSPARK_VERSION.tgz
+    "$MVN" deploy:deploy-file -DgroupId="org.apache.spark" -DartifactId="spark-distribution_${SCALA_VERSION}" -Dversion="${TGZ_VERSION}" -Dfile="pyspark-$PYSPARK_VERSION.tgz" -Durl="${LOCAL_REPO}" -Dclassifier=pyspark
+  fi
 fi
 
 if [[ "$TGZ_VERSION" == *-SNAPSHOT ]]; then
