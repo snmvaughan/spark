@@ -34,3 +34,4 @@ rdar://104835338 Add bump-version.sh (#1670)
 rdar://79590736  Extend 'k8sRegex' to accept 'aci-k8s'
 MINOR            Fix ExternalShuffleSidecarSuite compilation error
 rdar://105590919 Use ubuntu:jammy in Dockerfile
+rdar://105739324 Build PySpark Package
