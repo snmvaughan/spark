@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.4.0-rc1`
+This contains the changes after creating `v3.4.0-rc2`
 
 # From 3.4.0
 
@@ -35,3 +35,4 @@ rdar://79590736  Extend 'k8sRegex' to accept 'aci-k8s'
 MINOR            Fix ExternalShuffleSidecarSuite compilation error
 rdar://105590919 Use ubuntu:jammy in Dockerfile
 rdar://105739324 Build PySpark Package
+rdar://106124632 Enable hive profile for `connect` module test
