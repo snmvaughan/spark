@@ -574,7 +574,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+        - build/sbt -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-connect
     branchName: branch-3.4.0-apple
@@ -582,7 +582,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-yarn-k8s
     branchName: branch-3.4.0-apple
