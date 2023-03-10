@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.4.0-rc2`
+This contains the changes after creating `v3.4.0-rc4`
 
 # From 3.4.0
 
@@ -36,3 +36,4 @@ MINOR            Fix ExternalShuffleSidecarSuite compilation error
 rdar://105590919 Use ubuntu:jammy in Dockerfile
 rdar://105739324 Build PySpark Package
 rdar://106124632 Enable hive profile for `connect` module test
+rdar://106365381 Bump Parquet to 1.12.3.3-apple
