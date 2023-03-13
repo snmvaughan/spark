@@ -55,6 +55,7 @@ private[spark] object Constants {
   val SHUFFLE_SERVICE_PORT_NAME = "shuffle-port"
 
   // Environment Variables
+  val ENV_DRIVER_POD_IP = "SPARK_DRIVER_POD_IP"
   val ENV_DRIVER_URL = "SPARK_DRIVER_URL"
   val ENV_EXECUTOR_CORES = "SPARK_EXECUTOR_CORES"
   val ENV_EXECUTOR_MEMORY = "SPARK_EXECUTOR_MEMORY"
