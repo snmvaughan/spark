@@ -1774,6 +1774,8 @@ trait HasPartitionExpressions extends SQLConfHelper {
 
   def optNumPartitions: Option[Int]
 
+  def optAdvisoryPartitionSize: Option[Long]
+
   protected def partitioning: Partitioning = if (partitionExpressions.isEmpty) {
     RoundRobinPartitioning(numPartitions)
   } else {
@@ -1804,7 +1806,11 @@ trait HasPartitionExpressions extends SQLConfHelper {
 case class RepartitionByExpression(
     partitionExpressions: Seq[Expression],
     child: LogicalPlan,
-    optNumPartitions: Option[Int]) extends RepartitionOperation with HasPartitionExpressions {
+    optNumPartitions: Option[Int],
+    optAdvisoryPartitionSize: Option[Long] = None)
+  extends RepartitionOperation with HasPartitionExpressions {
+
+  require(optNumPartitions.isEmpty || optAdvisoryPartitionSize.isEmpty)
 
   override val partitioning: Partitioning = {
     if (numPartitions == 1) {
@@ -1841,7 +1847,11 @@ object RepartitionByExpression {
 case class RebalancePartitions(
     partitionExpressions: Seq[Expression],
     child: LogicalPlan,
-    optNumPartitions: Option[Int] = None) extends UnaryNode with HasPartitionExpressions {
+    optNumPartitions: Option[Int] = None,
+    optAdvisoryPartitionSize: Option[Long] = None) extends UnaryNode with HasPartitionExpressions {
+
+  require(optNumPartitions.isEmpty || optAdvisoryPartitionSize.isEmpty)
+
   override def maxRows: Option[Long] = child.maxRows
   override def output: Seq[Attribute] = child.output
   override val nodePatterns: Seq[TreePattern] = Seq(REBALANCE_PARTITIONS)
