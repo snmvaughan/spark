@@ -1,5 +1,18 @@
 This contains the changes after creating `v3.4.0-rc4`
 
+# From 3.5.0
+SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
+SPARK-42536      Upgrade log4j2 to 2.20.0
+SPARK-42718      Upgrade rocksdbjni to 7.10.2
+SPARK-42761      Upgrade `kubernetes-client` to 6.5.0
+SPARK-42764      Parameterize the max number of attempts for driver props fetcher in KubernetesExecutorBackend
+SPARK-42769      Add `SPARK_DRIVER_POD_IP` env variable to executor pods
+SPARK-42779      Allow V2 writes to indicate advisory shuffle partition size
+SPARK-42794      Increase the lockAcquireTimeoutMs to 2 minutes for acquiring the RocksDB state store in Structure Streaming
+SPARK-42808      Avoid getting availableProcessors every time in `MapOutputTrackerMaster#getStatistics`
+SPARK-42833      Refactor `applyExtensions` in `SparkSession`
+SPARK-42885      Upgrade `kubernetes-client` to 6.5.1
+
 # From 3.4.0
 
 # Internal Patches
@@ -37,3 +50,5 @@ rdar://105590919 Use ubuntu:jammy in Dockerfile
 rdar://105739324 Build PySpark Package
 rdar://106124632 Enable hive profile for `connect` module test
 rdar://106365381 Bump Parquet to 1.12.3.3-apple
+rdar://106150608 Bump Hadoop to 3.3.4.3-apple (#1697)
+rdar://106670519 Add Boson version 0.3.0 in Spark-3.4 (#1714)
