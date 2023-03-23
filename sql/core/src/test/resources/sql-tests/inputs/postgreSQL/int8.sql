@@ -1,6 +1,10 @@
 --
 -- Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
 --
+
+-- Disable Boson exec due to different overflow exception type and message
+--SET spark.boson.exec.enabled = false
+
 --
 -- INT8
 -- Test int8 64-bit integers.

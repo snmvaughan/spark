@@ -40,16 +40,20 @@ abstract class RemoveRedundantProjectsSuiteBase
   }
 
   private def assertProjectExec(query: String, enabled: Int, disabled: Int): Unit = {
-    val df = sql(query)
-    // When enabling AQE, the DPP subquery filters is replaced in runtime.
-    df.collect()
-    assertProjectExecCount(df, enabled)
-    val result = df.collect()
-    withSQLConf(SQLConf.REMOVE_REDUNDANT_PROJECTS_ENABLED.key -> "false") {
-      val df2 = sql(query)
-      df2.collect()
-      assertProjectExecCount(df2, disabled)
-      checkAnswer(df2, result)
+    // Disable BosonExec because BosonExec wraps ProjectExec; it can't be collected in
+    // the above assertProjectExecCount method
+    withSQLConf("spark.boson.exec.enabled" -> "false") {
+      val df = sql(query)
+      // When enabling AQE, the DPP subquery filters is replaced in runtime.
+      df.collect()
+      assertProjectExecCount(df, enabled)
+      val result = df.collect()
+      withSQLConf(SQLConf.REMOVE_REDUNDANT_PROJECTS_ENABLED.key -> "false") {
+        val df2 = sql(query)
+        df2.collect()
+        assertProjectExecCount(df2, disabled)
+        checkAnswer(df2, result)
+      }
     }
   }
 

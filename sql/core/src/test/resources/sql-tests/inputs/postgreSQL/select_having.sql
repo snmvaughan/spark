@@ -1,6 +1,10 @@
 --
 -- Portions Copyright (c) 1996-2019, PostgreSQL Global Development Group
 --
+
+-- Disable Boson exec due to different divide by zero exception type and message
+--SET spark.boson.exec.enabled = false
+
 --
 -- SELECT_HAVING
 -- https://github.com/postgres/postgres/blob/REL_12_BETA2/src/test/regress/sql/select_having.sql

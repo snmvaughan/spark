@@ -26,6 +26,8 @@ import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NonFatal
 
+import com.apple.boson.BosonConf
+
 import org.apache.spark.{SPARK_VERSION, SparkConf, SparkContext, SparkException, TaskContext}
 import org.apache.spark.annotation.{DeveloperApi, Experimental, Stable, Unstable}
 import org.apache.spark.api.java.JavaRDD
@@ -1288,6 +1290,14 @@ object SparkSession extends Logging {
     }
   }
 
+  private def loadBosonExtension(sparkContext: SparkContext): Seq[String] = {
+    if (sparkContext.getConf.getBoolean(BosonConf.BOSON_ENABLED.key, false)) {
+      Seq("com.apple.boson.BosonSparkSessionExtensions")
+    } else {
+      Seq.empty
+    }
+  }
+
   /**
    * Initialize extensions specified in [[StaticSQLConf]]. The classes will be applied to the
    * extensions passed into this function.
@@ -1296,7 +1306,7 @@ object SparkSession extends Logging {
       sparkContext: SparkContext,
       extensions: SparkSessionExtensions): SparkSessionExtensions = {
     val extensionConfClassNames = sparkContext.getConf.get(StaticSQLConf.SPARK_SESSION_EXTENSIONS)
-      .getOrElse(Seq.empty)
+      .getOrElse(Seq.empty) ++ loadBosonExtension(sparkContext)
     extensionConfClassNames.foreach { extensionConfClassName =>
       try {
         val extensionConfClass = Utils.classForName(extensionConfClassName)

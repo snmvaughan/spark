@@ -17,6 +17,7 @@
 
 package org.apache.spark.sql.execution.python
 
+import org.apache.spark.sql.boson.{BosonBatchScanExec, BosonScanExec}
 import org.apache.spark.sql.catalyst.plans.logical.{ArrowEvalPython, BatchEvalPython, Limit, LocalLimit}
 import org.apache.spark.sql.execution.{FileSourceScanExec, SparkPlan, SparkPlanTest}
 import org.apache.spark.sql.execution.datasources.v2.BatchScanExec
@@ -108,6 +109,7 @@ class ExtractPythonUDFsSuite extends SparkPlanTest with SharedSparkSession {
 
           val scanNodes = query.queryExecution.executedPlan.collect {
             case scan: FileSourceScanExec => scan
+            case scan: BosonScanExec => scan
           }
           assert(scanNodes.length == 1)
           assert(scanNodes.head.output.map(_.name) == Seq("a"))
@@ -120,11 +122,16 @@ class ExtractPythonUDFsSuite extends SparkPlanTest with SharedSparkSession {
 
           val scanNodes = query.queryExecution.executedPlan.collect {
             case scan: FileSourceScanExec => scan
+            case scan: BosonScanExec => scan
           }
           assert(scanNodes.length == 1)
           // $"a" is not null and $"a" > 1
-          assert(scanNodes.head.dataFilters.length == 2)
-          assert(scanNodes.head.dataFilters.flatMap(_.references.map(_.name)).distinct == Seq("a"))
+          val dataFilters = scanNodes.head match {
+            case scan: FileSourceScanExec => scan.dataFilters
+            case scan: BosonScanExec => scan.dataFilters
+          }
+          assert(dataFilters.length == 2)
+          assert(dataFilters.flatMap(_.references.map(_.name)).distinct == Seq("a"))
         }
       }
     }
@@ -145,6 +152,7 @@ class ExtractPythonUDFsSuite extends SparkPlanTest with SharedSparkSession {
 
           val scanNodes = query.queryExecution.executedPlan.collect {
             case scan: BatchScanExec => scan
+            case scan: BosonBatchScanExec => scan
           }
           assert(scanNodes.length == 1)
           assert(scanNodes.head.output.map(_.name) == Seq("a"))
@@ -157,6 +165,7 @@ class ExtractPythonUDFsSuite extends SparkPlanTest with SharedSparkSession {
 
           val scanNodes = query.queryExecution.executedPlan.collect {
             case scan: BatchScanExec => scan
+            case scan: BosonBatchScanExec => scan
           }
           assert(scanNodes.length == 1)
           // $"a" is not null and $"a" > 1

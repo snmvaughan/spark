@@ -19,6 +19,7 @@ package org.apache.spark.sql
 
 import org.scalatest.GivenWhenThen
 
+import org.apache.spark.sql.boson.BosonScanExec
 import org.apache.spark.sql.catalyst.expressions.{DynamicPruningExpression, Expression}
 import org.apache.spark.sql.catalyst.expressions.CodegenObjectFactoryMode._
 import org.apache.spark.sql.catalyst.plans.ExistenceJoin
@@ -256,6 +257,9 @@ abstract class DynamicPartitionPruningSuiteBase
    */
   protected def collectDynamicPruningExpressions(plan: SparkPlan): Seq[Expression] = {
     flatMap(plan) {
+      case s: BosonScanExec => s.partitionFilters.collect {
+        case d: DynamicPruningExpression => d.child
+      }
       case s: FileSourceScanExec => s.partitionFilters.collect {
         case d: DynamicPruningExpression => d.child
       }
@@ -1729,6 +1733,8 @@ abstract class DynamicPartitionPruningV1Suite extends DynamicPartitionPruningDat
               case s: BatchScanExec =>
                 // we use f1 col for v2 tables due to schema pruning
                 s.output.exists(_.exists(_.argString(maxFields = 100).contains("f1")))
+              case s: BosonScanExec =>
+                s.output.exists(_.exists(_.argString(maxFields = 100).contains("fid")))
               case _ => false
             }
           assert(scanOption.isDefined)

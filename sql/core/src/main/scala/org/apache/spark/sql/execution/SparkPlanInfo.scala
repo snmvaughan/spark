@@ -18,6 +18,7 @@
 package org.apache.spark.sql.execution
 
 import org.apache.spark.annotation.DeveloperApi
+import org.apache.spark.sql.boson.BosonScanExec
 import org.apache.spark.sql.execution.adaptive.{AdaptiveSparkPlanExec, QueryStageExec}
 import org.apache.spark.sql.execution.columnar.InMemoryTableScanExec
 import org.apache.spark.sql.execution.exchange.ReusedExchangeExec
@@ -67,6 +68,7 @@ private[execution] object SparkPlanInfo {
     // dump the file scan metadata (e.g file path) to event log
     val metadata = plan match {
       case fileScan: FileSourceScanExec => fileScan.metadata
+      case scan: BosonScanExec => scan.metadata
       case _ => Map[String, String]()
     }
     new SparkPlanInfo(

@@ -39,6 +39,7 @@ class ParquetHadoopFsRelationSuite extends HadoopFsRelationTest {
   override protected def supportsDataType(dataType: DataType): Boolean = dataType match {
     case _: NullType => false
     case _: CalendarIntervalType => false
+    case _: DateType | _: TimestampType | _: TimestampNTZType => !isBosonEnabled
     case _ => true
   }
 

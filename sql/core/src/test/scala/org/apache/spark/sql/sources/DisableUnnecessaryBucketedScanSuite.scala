@@ -18,6 +18,7 @@
 package org.apache.spark.sql.sources
 
 import org.apache.spark.sql.QueryTest
+import org.apache.spark.sql.boson.BosonScanExec
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.catalyst.plans.physical.HashPartitioning
 import org.apache.spark.sql.execution.FileSourceScanExec
@@ -68,7 +69,10 @@ abstract class DisableUnnecessaryBucketedScanSuite
 
     def checkNumBucketedScan(query: String, expectedNumBucketedScan: Int): Unit = {
       val plan = sql(query).queryExecution.executedPlan
-      val bucketedScan = collect(plan) { case s: FileSourceScanExec if s.bucketedScan => s }
+      val bucketedScan = collect(plan) {
+        case s: FileSourceScanExec if s.bucketedScan => s
+        case s: BosonScanExec if s.bucketedScan => s
+      }
       assert(bucketedScan.length == expectedNumBucketedScan)
     }
 

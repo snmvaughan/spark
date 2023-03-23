@@ -18,6 +18,7 @@
 package org.apache.spark.sql.hive
 
 import org.apache.spark.sql._
+import org.apache.spark.sql.boson.BosonScanExec
 import org.apache.spark.sql.catalyst.expressions.{DynamicPruningExpression, Expression}
 import org.apache.spark.sql.execution._
 import org.apache.spark.sql.execution.adaptive.{DisableAdaptiveExecutionSuite, EnableAdaptiveExecutionSuite}
@@ -32,6 +33,9 @@ abstract class DynamicPartitionPruningHiveScanSuiteBase
 
   override protected def collectDynamicPruningExpressions(plan: SparkPlan): Seq[Expression] = {
     flatMap(plan) {
+      case s: BosonScanExec => s.partitionFilters.collect {
+        case d: DynamicPruningExpression => d.child
+      }
       case s: FileSourceScanExec => s.partitionFilters.collect {
         case d: DynamicPruningExpression => d.child
       }

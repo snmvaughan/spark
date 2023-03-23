@@ -33,6 +33,7 @@ import org.apache.spark.internal.io.FileCommitProtocol
 import org.apache.spark.paths.SparkPath
 import org.apache.spark.scheduler.{SparkListener, SparkListenerTaskEnd}
 import org.apache.spark.sql.{AnalysisException, DataFrame}
+import org.apache.spark.sql.boson.BosonBatchScanExec
 import org.apache.spark.sql.catalyst.util.stringToFile
 import org.apache.spark.sql.execution.DataSourceScanExec
 import org.apache.spark.sql.execution.datasources._
@@ -744,6 +745,8 @@ class FileStreamSinkV2Suite extends FileStreamSinkSuite {
     def checkFileScanPartitions(df: DataFrame)(func: Seq[FilePartition] => Unit): Unit = {
       val fileScan = df.queryExecution.executedPlan.collect {
         case batch: BatchScanExec if batch.scan.isInstanceOf[FileScan] =>
+          batch.scan.asInstanceOf[FileScan]
+        case batch: BosonBatchScanExec if batch.scan.isInstanceOf[FileScan] =>
           batch.scan.asInstanceOf[FileScan]
       }.headOption.getOrElse {
         fail(s"No FileScan in query\n${df.queryExecution}")

@@ -74,6 +74,18 @@ trait SharedSparkSessionBase
       // this rule may potentially block testing of other optimization rules such as
       // ConstantPropagation etc.
       .set(SQLConf.OPTIMIZER_EXCLUDED_RULES.key, ConvertToLocalRelation.ruleName)
+    // Enable Boson if BOSON environment variable is set
+    if (isBosonEnabled) {
+      conf
+        .set("spark.sql.extensions", "com.apple.boson.BosonSparkSessionExtensions")
+        .set("spark.boson.enabled", "true")
+
+      if (!isBosonScanOnly) {
+        conf
+          .set("spark.boson.exec.enabled", "true")
+          .set("spark.boson.exec.all.enabled", "true")
+      }
+    }
     conf.set(
       StaticSQLConf.WAREHOUSE_PATH,
       conf.get(StaticSQLConf.WAREHOUSE_PATH) + "/" + getClass.getCanonicalName)

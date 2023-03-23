@@ -8,6 +8,9 @@
 -- avoid bit-exact output here because operations may not be bit-exact.
 -- SET extra_float_digits = 0;
 
+-- Disable Boson exec due to floating point precision difference
+--SET spark.boson.exec.enabled = false
+
 -- Test aggregate operator with codegen on and off.
 --CONFIG_DIM1 spark.sql.codegen.wholeStage=true
 --CONFIG_DIM1 spark.sql.codegen.wholeStage=false,spark.sql.codegen.factoryMode=CODEGEN_ONLY

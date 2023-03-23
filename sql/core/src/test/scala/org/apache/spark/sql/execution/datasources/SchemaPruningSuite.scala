@@ -23,6 +23,7 @@ import org.scalactic.Equality
 
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, QueryTest, Row}
+import org.apache.spark.sql.boson.BosonScanExec
 import org.apache.spark.sql.catalyst.SchemaPruningTest
 import org.apache.spark.sql.catalyst.expressions.Concat
 import org.apache.spark.sql.catalyst.parser.CatalystSqlParser
@@ -867,6 +868,7 @@ abstract class SchemaPruningSuite
     val fileSourceScanSchemata =
       collect(df.queryExecution.executedPlan) {
         case scan: FileSourceScanExec => scan.requiredSchema
+        case scan: BosonScanExec => scan.requiredSchema
       }
     assert(fileSourceScanSchemata.size === expectedSchemaCatalogStrings.size,
       s"Found ${fileSourceScanSchemata.size} file sources in dataframe, " +

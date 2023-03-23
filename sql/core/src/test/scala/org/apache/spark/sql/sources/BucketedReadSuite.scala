@@ -20,6 +20,7 @@ package org.apache.spark.sql.sources
 import scala.util.Random
 
 import org.apache.spark.sql._
+import org.apache.spark.sql.boson.{BosonExec, BosonScanExec}
 import org.apache.spark.sql.catalyst.catalog.BucketSpec
 import org.apache.spark.sql.catalyst.expressions
 import org.apache.spark.sql.catalyst.expressions._
@@ -99,10 +100,18 @@ abstract class BucketedReadSuite extends QueryTest with SQLTestUtils with Adapti
     }
   }
 
-  private def getFileScan(plan: SparkPlan): FileSourceScanExec = {
-    val fileScan = collect(plan) { case f: FileSourceScanExec => f }
+  private def getFileScan(plan: SparkPlan): SparkPlan = {
+    val fileScan = collect(plan) {
+      case f: FileSourceScanExec => f
+      case b: BosonScanExec => b
+    }
     assert(fileScan.nonEmpty, plan)
     fileScan.head
+  }
+
+  private def getBucketScan(plan: SparkPlan): Boolean = getFileScan(plan) match {
+    case fs: FileSourceScanExec => fs.bucketedScan
+    case bs: BosonScanExec => bs.bucketedScan
   }
 
   // To verify if the bucket pruning works, this function checks two conditions:
@@ -153,7 +162,8 @@ abstract class BucketedReadSuite extends QueryTest with SQLTestUtils with Adapti
           val planWithoutBucketedScan = bucketedDataFrame.filter(filterCondition)
             .queryExecution.executedPlan
           val fileScan = getFileScan(planWithoutBucketedScan)
-          assert(!fileScan.bucketedScan, s"except no bucketed scan but found\n$fileScan")
+          val bucketedScan = getBucketScan(planWithoutBucketedScan)
+          assert(!bucketedScan, s"except no bucketed scan but found\n$fileScan")
 
           val bucketColumnType = bucketedDataFrame.schema.apply(bucketColumnIndex).dataType
           val rowsWithInvalidBuckets = fileScan.execute().filter(row => {
@@ -459,18 +469,28 @@ abstract class BucketedReadSuite extends QueryTest with SQLTestUtils with Adapti
 
         // check existence of shuffle
         assert(
-          joinOperator.left.exists(_.isInstanceOf[ShuffleExchangeExec]) == shuffleLeft,
+          joinOperator.left.find { op =>
+            op.isInstanceOf[SortExec] ||
+              (op.isInstanceOf[BosonExec] &&
+                op.asInstanceOf[BosonExec].originalPlan.find(_.isInstanceOf[SortExec]).isDefined)
+          }.isDefined == sortLeft,
           s"expected shuffle in plan to be $shuffleLeft but found\n${joinOperator.left}")
         assert(
-          joinOperator.right.exists(_.isInstanceOf[ShuffleExchangeExec]) == shuffleRight,
+          joinOperator.right.find { op =>
+            op.isInstanceOf[SortExec] ||
+              (op.isInstanceOf[BosonExec] &&
+                op.asInstanceOf[BosonExec].originalPlan.find(_.isInstanceOf[SortExec]).isDefined)
+          }.isDefined == sortRight,
           s"expected shuffle in plan to be $shuffleRight but found\n${joinOperator.right}")
 
         // check existence of sort
         assert(
-          joinOperator.left.exists(_.isInstanceOf[SortExec]) == sortLeft,
+          joinOperator.left.exists(op => op.isInstanceOf[SortExec] || op.isInstanceOf[BosonExec] &&
+            op.asInstanceOf[BosonExec].originalPlan.isInstanceOf[SortExec]) == sortLeft,
           s"expected sort in the left child to be $sortLeft but found\n${joinOperator.left}")
         assert(
-          joinOperator.right.exists(_.isInstanceOf[SortExec]) == sortRight,
+          joinOperator.right.exists(op => op.isInstanceOf[SortExec] || op.isInstanceOf[BosonExec] &&
+            op.asInstanceOf[BosonExec].originalPlan.isInstanceOf[SortExec]) == sortRight,
           s"expected sort in the right child to be $sortRight but found\n${joinOperator.right}")
 
         // check the output partitioning
@@ -833,11 +853,11 @@ abstract class BucketedReadSuite extends QueryTest with SQLTestUtils with Adapti
       df1.write.format("parquet").bucketBy(8, "i").saveAsTable("bucketed_table")
 
       val scanDF = spark.table("bucketed_table").select("j")
-      assert(!getFileScan(scanDF.queryExecution.executedPlan).bucketedScan)
+      assert(!getBucketScan(scanDF.queryExecution.executedPlan))
       checkAnswer(scanDF, df1.select("j"))
 
       val aggDF = spark.table("bucketed_table").groupBy("j").agg(max("k"))
-      assert(!getFileScan(aggDF.queryExecution.executedPlan).bucketedScan)
+      assert(!getBucketScan(aggDF.queryExecution.executedPlan))
       checkAnswer(aggDF, df1.groupBy("j").agg(max("k")))
     }
   }
@@ -1029,10 +1049,16 @@ abstract class BucketedReadSuite extends QueryTest with SQLTestUtils with Adapti
 
           val scans = plan.collect {
             case f: FileSourceScanExec if f.optionalNumCoalescedBuckets.isDefined => f
+            case b: BosonScanExec if b.optionalNumCoalescedBuckets.isDefined => b
           }
           if (expectedCoalescedNumBuckets.isDefined) {
             assert(scans.length == 1)
-            assert(scans.head.optionalNumCoalescedBuckets == expectedCoalescedNumBuckets)
+            scans.head match {
+              case f: FileSourceScanExec =>
+                assert(f.optionalNumCoalescedBuckets == expectedCoalescedNumBuckets)
+              case b: BosonScanExec =>
+                assert(b.optionalNumCoalescedBuckets == expectedCoalescedNumBuckets)
+            }
           } else {
             assert(scans.isEmpty)
           }

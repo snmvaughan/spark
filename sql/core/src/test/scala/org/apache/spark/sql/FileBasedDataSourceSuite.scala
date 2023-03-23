@@ -30,6 +30,7 @@ import org.apache.hadoop.fs.{LocalFileSystem, Path}
 import org.apache.spark.SparkException
 import org.apache.spark.scheduler.{SparkListener, SparkListenerTaskEnd}
 import org.apache.spark.sql.TestingUDT.{IntervalUDT, NullData, NullUDT}
+import org.apache.spark.sql.boson.{BosonBatchScanExec, BosonScanExec}
 import org.apache.spark.sql.catalyst.expressions.{AttributeReference, GreaterThan, Literal}
 import org.apache.spark.sql.catalyst.expressions.IntegralLiteralTestUtils.{negativeInt, positiveInt}
 import org.apache.spark.sql.catalyst.plans.logical.Filter
@@ -875,6 +876,7 @@ class FileBasedDataSourceSuite extends QueryTest
 
           val fileScan = df.queryExecution.executedPlan collectFirst {
             case BatchScanExec(_, f: FileScan, _, _, _, _, _, _, _) => f
+            case BosonBatchScanExec(BatchScanExec(_, f: FileScan, _, _, _, _, _, _, _)) => f
           }
           assert(fileScan.nonEmpty)
           assert(fileScan.get.partitionFilters.nonEmpty)
@@ -916,6 +918,7 @@ class FileBasedDataSourceSuite extends QueryTest
 
           val fileScan = df.queryExecution.executedPlan collectFirst {
             case BatchScanExec(_, f: FileScan, _, _, _, _, _, _, _) => f
+            case BosonBatchScanExec(BatchScanExec(_, f: FileScan, _, _, _, _, _, _, _)) => f
           }
           assert(fileScan.nonEmpty)
           assert(fileScan.get.partitionFilters.isEmpty)
@@ -1100,6 +1103,8 @@ class FileBasedDataSourceSuite extends QueryTest
           val filters = df.queryExecution.executedPlan.collect {
             case f: FileSourceScanLike => f.dataFilters
             case b: BatchScanExec => b.scan.asInstanceOf[FileScan].dataFilters
+            case b: BosonScanExec => b.dataFilters
+            case b: BosonBatchScanExec => b.scan.asInstanceOf[FileScan].dataFilters
           }.flatten
           assert(filters.contains(GreaterThan(scan.logicalPlan.output.head, Literal(5L))))
         }

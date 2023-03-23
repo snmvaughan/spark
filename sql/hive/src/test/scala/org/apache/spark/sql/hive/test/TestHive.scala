@@ -55,7 +55,8 @@ object TestHive
     new SparkContext(
       System.getProperty("spark.sql.test.master", "local[1]"),
       "TestSQLContext",
-      new SparkConf()
+      {
+       val conf = new SparkConf()
         .set("spark.sql.test", "")
         .set(SQLConf.CODEGEN_FALLBACK.key, "false")
         .set(SQLConf.CODEGEN_FACTORY_MODE.key, CodegenObjectFactoryMode.CODEGEN_ONLY.toString)
@@ -72,7 +73,25 @@ object TestHive
         // LocalRelation will exercise the optimization rules better by disabling it as
         // this rule may potentially block testing of other optimization rules such as
         // ConstantPropagation etc.
-        .set(SQLConf.OPTIMIZER_EXCLUDED_RULES.key, ConvertToLocalRelation.ruleName)))
+        .set(SQLConf.OPTIMIZER_EXCLUDED_RULES.key, ConvertToLocalRelation.ruleName)
+
+        val v = System.getenv("BOSON")
+        if (v != null && v.toBoolean) {
+          conf
+            .set("spark.sql.extensions", "com.apple.boson.BosonSparkSessionExtensions")
+            .set("spark.boson.enabled", "true")
+
+          val v = System.getenv("BOSON_SCAN_ONLY")
+          if (v == null || !v.toBoolean) {
+            conf
+              .set("spark.boson.exec.enabled", "true")
+              .set("spark.boson.exec.all.enabled", "true")
+          }
+        }
+
+        conf
+      }
+    ))
 
 
 case class TestHiveVersion(hiveClient: HiveClient)
