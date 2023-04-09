@@ -12,7 +12,7 @@ SPARK-42794      Increase the lockAcquireTimeoutMs to 2 minutes for acquiring th
 SPARK-42808      Avoid getting availableProcessors every time in `MapOutputTrackerMaster#getStatistics`
 SPARK-42833      Refactor `applyExtensions` in `SparkSession`
 SPARK-42885      Upgrade `kubernetes-client` to 6.5.1
-SPARK-42913      Upgrade Hadoop to 3.3.5
+SPARK-43070      Upgrade `sbt-unidoc` to 0.5.0
 
 # From 3.4.0
 
