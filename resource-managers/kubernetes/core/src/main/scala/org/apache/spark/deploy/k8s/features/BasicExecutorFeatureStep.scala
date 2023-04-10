@@ -85,7 +85,7 @@ private[spark] class BasicExecutorFeatureStep(
     }
   private val executorLimitCores = kubernetesConf.get(KUBERNETES_EXECUTOR_LIMIT_CORES)
 
-  private val externalShuffleService = kubernetesConf.get(SHUFFLE_SERVICE_ENABLED)
+  private val externalShuffleService = false
   private val shuffleServicePort = kubernetesConf.get(SHUFFLE_SERVICE_PORT)
   private def buildExecutorResourcesQuantities(
       customResources: Set[ExecutorResourceRequest]): Map[String, Quantity] = {
