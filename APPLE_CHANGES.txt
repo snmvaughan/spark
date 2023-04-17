@@ -13,8 +13,21 @@ SPARK-42808      Avoid getting availableProcessors every time in `MapOutputTrack
 SPARK-42833      Refactor `applyExtensions` in `SparkSession`
 SPARK-42885      Upgrade `kubernetes-client` to 6.5.1
 SPARK-43070      Upgrade `sbt-unidoc` to 0.5.0
+SPARK-42382      Upgrade cyclonedx-maven-plugin to 2.7.5
 
 # From 3.4.0
+SPARK-43067      Correct the location of error class resource file in Kafka connector
+SPARK-43075      Change gRPC to grpcio when it is not installed.
+MINOR            Tests in SubquerySuite should not drop view created in `beforeAll`
+SPARK-43072      Include TIMESTAMP_NTZ type in ANSI Compliance doc
+SPARK-43071      Support SELECT DEFAULT with ORDER BY, LIMIT, OFFSET for INSERT source relation
+SPARK-43083      Mark *StateStoreSuite as ExtendedSQLTest
+SPARK-43085      Support column DEFAULT assignment for multi-part table names
+SPARK-43126      Mark two Hive UDF expressions as stateful
+SPARK-43125      Fix Connect Server Can't Handle Exception With Null Message
+SPARK-43050      Fix construct aggregate expressions by replacing grouping functions
+SPARK-43139      Fix incorrect column names in sql-ref-syntax-dml-insert-table.md
+SPARK-42475      Fix PySpark connect Quickstart binder link
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -55,3 +68,5 @@ rdar://106150608 Bump Hadoop to 3.3.4.3-apple (#1697)
 rdar://106670519 Add Boson version 0.3.0 in Spark-3.4 (#1714)
 rdar://107596423 Add BosonSort handling in JoinSuite (#1725)
 rdar://92996732  Use quoted identifier for column name 'date' before pushing filter to UC (#1412)
+rdar://107856276 Disable shuffle service sidecar feature
+rdar://107970457 Bump Boson to 0.3.1 (#1733)
