@@ -34,6 +34,8 @@ import org.scalatest.concurrent.Eventually
 
 import org.apache.spark.SparkFunSuite
 import org.apache.spark.sql._
+import org.apache.spark.sql.boson.BosonExec
+import org.apache.spark.sql.boson.BosonFilter
 import org.apache.spark.sql.catalyst.FunctionIdentifier
 import org.apache.spark.sql.catalyst.analysis.NoSuchTableException
 import org.apache.spark.sql.catalyst.catalog.SessionCatalog.DEFAULT_DATABASE
@@ -455,6 +457,7 @@ private[sql] trait SQLTestUtilsBase
     val schema = df.schema
     val withoutFilters = df.queryExecution.executedPlan.transform {
       case FilterExec(_, child) => child
+      case BosonExec(_, _, _, BosonFilter(_, _, child, _)) => child
     }
 
     spark.internalCreateDataFrame(withoutFilters.execute(), schema)
