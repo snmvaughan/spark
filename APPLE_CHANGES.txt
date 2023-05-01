@@ -37,6 +37,7 @@ SPARK-37829      Dataframe.joinWith outer-join should return a null value for un
 MINOR            Fix the doc of parameter `num` in `DataFrame.offset`
 SPARK-43113      Add comment about copying steam-side variables
 SPARK-43249      Fix missing stats for SQL Command
+SPARK-43293     __qualified_access_only should be ignored in normal columns
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -80,3 +81,4 @@ rdar://92996732  Use quoted identifier for column name 'date' before pushing fil
 rdar://107856276 Disable shuffle service sidecar feature
 rdar://107970457 Bump Boson to 0.3.1 (#1733)
 rdar://108296516 [Boson] handle BosonFilter in stripSparkFilter
+rdar://108592695 [Boson] Bump Boson version to 0.3.2 in Spark
