@@ -320,10 +320,14 @@ if [ "$MAKE_TGZ" == "true" ]; then
   TARDIR="$SPARK_HOME/$TARDIR_NAME"
   rm -rf "$TARDIR"
   cp -r "$DISTDIR" "$TARDIR"
-  tar czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
+  TAR="tar"
+  if [ "$(uname -s)" = "Darwin" ]; then
+    TAR="tar --no-mac-metadata --no-xattrs --no-fflags"
+  fi
+  $TAR czf "$SPARK_DISTRIBUTION_FILE_NAME" -C "$SPARK_HOME" "$TARDIR_NAME"
   if [[ $(uname) != "Darwin" ]]; then
     SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME="spark-distribution_$SCALA_VERSION-$TGZ_VERSION-yarn-archive.tgz"
-    tar czf "$SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME" --xform s:^.*/:: -C "$SPARK_HOME" $TARDIR_NAME/jars/*.jar
+    $TAR czf "$SPARK_DISTRIBUTION_YARN_ARCHIVE_FILE_NAME" --xform s:^.*/:: -C "$SPARK_HOME" $TARDIR_NAME/jars/*.jar
   fi
   rm -rf "$TARDIR"
   LOCAL_REPO_DIR="$SPARK_HOME/.dist/local-repo"
