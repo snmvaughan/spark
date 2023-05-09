@@ -38,6 +38,19 @@ MINOR            Fix the doc of parameter `num` in `DataFrame.offset`
 SPARK-43113      Add comment about copying steam-side variables
 SPARK-43249      Fix missing stats for SQL Command
 SPARK-43293     __qualified_access_only should be ignored in normal columns
+SPARK-43414      Fix flakiness in Kafka RDD suites due to port binding configuration issue
+SPARK-43410      Improve vectorized loop for Packed skipValues
+SPARK-43342      Revert SPARK-39006 Show a directional error message for executor PVC dynamic allocation failure
+SPARK-43395      Exclude macOS tar extended metadata in make-distribution.sh
+SPARK-43374      Move protobuf-java to BSD 3-clause group and update the license copy
+SPARK-43340      Handle missing stack-trace field in eventlogs
+SPARK-43337      Asc/desc arrow icons for sorting column does not get displayed in the table column
+SPARK-43284      Return URI encoded path, and add a test
+SPARK-43284      back to url-encoded strings
+SPARK-43378      Properly close stream objects in deserializeFromChunkedBuffer
+SPARK-43313      Adding missing column DEFAULT values for MERGE INSERT actions
+SPARK-43336      Casting between Timestamp and TimestampNTZ requires timezone
+SPARK-43156      Fix `COUNT(*) is null` bug in correlated scalar subquery
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
