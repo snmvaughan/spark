@@ -1305,7 +1305,7 @@ object SparkSession extends Logging {
   }
 
   private def loadBosonExtension(sparkContext: SparkContext): Seq[String] = {
-    if (sparkContext.getConf.getBoolean(BosonConf.BOSON_ENABLED.key, false)) {
+    if (sparkContext.getConf.getBoolean(BosonConf.BOSON_ENABLED.key, isBosonEnabled)) {
       Seq("com.apple.boson.BosonSparkSessionExtensions")
     } else {
       Seq.empty
@@ -1354,5 +1354,13 @@ object SparkSession extends Logging {
         case e: Throwable => logWarning("Failed to load session extension", e)
       }
     }
+  }
+
+  /**
+   * Whether Boson extension is enabled
+   */
+  def isBosonEnabled: Boolean = {
+    val v = System.getenv("BOSON")
+    v == null || v.toBoolean
   }
 }

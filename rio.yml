@@ -40,7 +40,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - BOSON=false build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
         - BOSON=true build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-common
@@ -49,7 +49,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-common-pr
@@ -57,7 +57,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - BOSON=false build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
         - BOSON=true build/sbt -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-common-pr
@@ -66,7 +66,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sketch/test" "kvstore/test" "network-common/test" "network-shuffle/test" "unsafe/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-core
@@ -74,7 +74,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "core/test"
+        - BOSON=false build/sbt -Phadoop-3 "core/test"
         - BOSON=true build/sbt -Phadoop-3 "core/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-core
@@ -83,7 +83,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-core-pr
@@ -91,7 +91,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "core/test"
+        - BOSON=false build/sbt -Phadoop-3 "core/test"
         - BOSON=true build/sbt -Phadoop-3 "core/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-core-pr
@@ -100,7 +100,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "core/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-streaming
@@ -108,7 +108,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "streaming/test"
+        - BOSON=false build/sbt -Phadoop-3 "streaming/test"
         - BOSON=true build/sbt -Phadoop-3 "streaming/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-streaming
@@ -117,7 +117,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-streaming-pr
@@ -125,7 +125,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "streaming/test"
+        - BOSON=false build/sbt -Phadoop-3 "streaming/test"
         - BOSON=true build/sbt -Phadoop-3 "streaming/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-streaming-pr
@@ -134,7 +134,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-mllib
@@ -142,7 +142,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
+        - BOSON=false build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
         - BOSON=true build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-mllib
@@ -151,7 +151,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-mllib-pr
@@ -159,7 +159,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
+        - BOSON=false build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
         - BOSON=true build/sbt -Phadoop-3 "mllib/test" "mllib-local/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-mllib-pr
@@ -168,7 +168,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "mllib/test" "mllib-local/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-graphx
@@ -176,7 +176,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "graphx/test"
+        - BOSON=false build/sbt -Phadoop-3 "graphx/test"
         - BOSON=true build/sbt -Phadoop-3 "graphx/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-graphx
@@ -185,7 +185,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-graphx-pr
@@ -193,7 +193,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "graphx/test"
+        - BOSON=false build/sbt -Phadoop-3 "graphx/test"
         - BOSON=true build/sbt -Phadoop-3 "graphx/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-graphx-pr
@@ -202,7 +202,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "graphx/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-catalyst
@@ -210,7 +210,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "catalyst/test"
+        - BOSON=false build/sbt -Phadoop-3 "catalyst/test"
         - BOSON=true build/sbt -Phadoop-3 "catalyst/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-catalyst
@@ -219,7 +219,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-catalyst-pr
@@ -227,7 +227,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "catalyst/test"
+        - BOSON=false build/sbt -Phadoop-3 "catalyst/test"
         - BOSON=true build/sbt -Phadoop-3 "catalyst/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-catalyst-pr
@@ -236,7 +236,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "catalyst/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-sql-1
@@ -246,7 +246,7 @@ builds:
       steps:
         - yum install -q -y python39 # PythonUDFSuite
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
-        - build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-sql-1-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -265,7 +265,7 @@ builds:
         - yum install -q -y python39 # PythonUDFSuite
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-sql-1-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -284,7 +284,7 @@ builds:
       steps:
         - yum install -q -y python39 # PythonUDFSuite
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
-        - build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-sql-1-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -303,7 +303,7 @@ builds:
         - yum install -q -y python39 # PythonUDFSuite
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-sql-1-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -322,7 +322,7 @@ builds:
       steps:
         - yum install -q -y python39
         - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
-        - build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
         - BOSON=true build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-sql-2
@@ -333,7 +333,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-sql-2-pr
@@ -343,7 +343,7 @@ builds:
       steps:
         - yum install -q -y python39
         - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
-        - build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
         - BOSON=true build/sbt -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-sql-2-pr
@@ -354,7 +354,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install pandas==1.4.1 pyarrow==7.0.0 # SQLQueryTestSuite
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "sql/test" -Dtest.include.tags=org.apache.spark.tags.ExtendedSQLTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-hadoop-cloud
@@ -362,7 +362,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+        - BOSON=false build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
         - BOSON=true build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hadoop-cloud
@@ -371,7 +371,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-hadoop-cloud-pr
@@ -379,7 +379,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+        - BOSON=false build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
         - BOSON=true build/sbt -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hadoop-cloud-pr
@@ -388,7 +388,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phadoop-cloud "hadoop-cloud/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-1
@@ -397,7 +397,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - yum install -q -y python39 # HiveScriptTransformationSuite
-        - build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - BOSON=false build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
         - BOSON=true build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-1
@@ -407,7 +407,7 @@ builds:
       steps:
         - yum install -q -y python39 # HiveScriptTransformationSuite
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-1-pr
@@ -416,7 +416,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - yum install -q -y python39 # HiveScriptTransformationSuite
-        - build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - BOSON=false build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
         - BOSON=true build/sbt -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-1-pr
@@ -426,7 +426,7 @@ builds:
       steps:
         - yum install -q -y python39 # HiveScriptTransformationSuite
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/test" -Dtest.exclude.tags=org.apache.spark.tags.ExtendedHiveTest
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-2
@@ -435,7 +435,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - yum install -q -y python39
-        - PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
+        - BOSON=false PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
         - BOSON=true PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-2
@@ -445,7 +445,7 @@ builds:
       steps:
         - yum install -q -y python39
         - dev/change-scala-version.sh 2.13
-        - PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
+        - BOSON=false PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
         - BOSON=true PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-2-pr
@@ -454,7 +454,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - yum install -q -y python39
-        - PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
+        - BOSON=false PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
         - BOSON=true PYSPARK_PYTHON=python3 build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveExternalCatalogVersionsSuite" "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-2-pr
@@ -464,7 +464,7 @@ builds:
       steps:
         - yum install -q -y python39
         - dev/change-scala-version.sh 2.13
-        - PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
+        - BOSON=false PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
         - BOSON=true PYSPARK_PYTHON=python3 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveSparkSubmitSuite" "hive/testOnly *.VersionsSuite" "hive/testOnly *.HiveDDLSuite" "hive/testOnly *.HiveCatalogedDDLSuite" "hive/testOnly *.Hive_2_1_DDLSuite" "hive/testOnly *.HiveQuerySuite" "hive/testOnly *.SQLQuerySuite" # skip HiveExternalCatalogVersionsSuite
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-3
@@ -472,7 +472,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+        - BOSON=false build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
         - BOSON=true build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-3
@@ -481,7 +481,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-3-pr
@@ -489,7 +489,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+        - BOSON=false build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
         - BOSON=true build/sbt -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-3-pr
@@ -498,7 +498,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
 
   - name: apple-spark-2.12_3.4.0-snapshot-launcher-repl-tools
@@ -506,7 +506,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+        - BOSON=false build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
         - BOSON=true build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-launcher-repl-tools
@@ -515,7 +515,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-launcher-repl-tools-pr
@@ -523,7 +523,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+        - BOSON=false build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
         - BOSON=true build/sbt -Phadoop-3 "launcher/test" "repl/test" "tools/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-launcher-repl-tools-pr
@@ -532,7 +532,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "launcher/test" "repl/test" "tools/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-thriftserver
@@ -540,7 +540,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+        - BOSON=false SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
         - BOSON=true SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-thriftserver
@@ -549,7 +549,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+        - BOSON=false SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
         - BOSON=true SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-thriftserver-pr
@@ -557,7 +557,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+        - BOSON=false SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
         - BOSON=true SERIAL_SBT_TESTS=1 build/sbt -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-thriftserver-pr
@@ -566,7 +566,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
+        - BOSON=false SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
         - BOSON=true SERIAL_SBT_TESTS=1 build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "hive-thriftserver/test" -Phive -Phive-thriftserver
 
   - name: apple-spark-2.12_3.4.0-snapshot-kafka
@@ -574,7 +574,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+        - BOSON=false build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
         - BOSON=true build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-kafka
@@ -583,7 +583,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-kafka-pr
@@ -591,7 +591,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+        - BOSON=false build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
         - BOSON=true build/sbt -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-kafka-pr
@@ -600,7 +600,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "streaming-kafka-0-10/test" "sql-kafka-0-10/test" "token-provider-kafka-0-10/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-kinesis
@@ -608,7 +608,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - BOSON=false build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
         - BOSON=true build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-kinesis
@@ -617,7 +617,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-kinesis-pr
@@ -625,7 +625,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - BOSON=false build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
         - BOSON=true build/sbt -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-kinesis-pr
@@ -634,7 +634,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pkinesis-asl "streaming-kinesis-asl/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-avro
@@ -642,7 +642,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phadoop-3 "avro/test"
+        - BOSON=false build/sbt -Phadoop-3 "avro/test"
         - BOSON=true build/sbt -Phadoop-3 "avro/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-avro
@@ -651,7 +651,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-avro-pr
@@ -659,7 +659,7 @@ builds:
     build:
       template: freestyle:v4:prb
       steps:
-        - build/sbt -Phadoop-3 "avro/test"
+        - BOSON=false build/sbt -Phadoop-3 "avro/test"
         - BOSON=true build/sbt -Phadoop-3 "avro/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-avro-pr
@@ -668,7 +668,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 "avro/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-connect
@@ -676,7 +676,7 @@ builds:
     build:
       template: freestyle:v4:build
       steps:
-        - build/sbt -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+        - BOSON=false build/sbt -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
         - BOSON=true build/sbt -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-connect
@@ -685,7 +685,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phive -Phadoop-3 assembly/package "protobuf/test" "connect-common/test" "connect/test" "connect-client-jvm/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-yarn-k8s
@@ -694,7 +694,7 @@ builds:
       template: freestyle:v4:build
       steps:
         - yum install -q -y python39 # YarnClusterSuite needs python3
-        - build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+        - BOSON=false build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
         - BOSON=true build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-yarn-k8s
@@ -704,7 +704,7 @@ builds:
       steps:
         - yum install -q -y python39 # YarnClusterSuite needs python3
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-yarn-k8s-pr
@@ -713,7 +713,7 @@ builds:
       template: freestyle:v4:prb
       steps:
         - yum install -q -y python39 # YarnClusterSuite needs python3
-        - build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+        - BOSON=false build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
         - BOSON=true build/sbt -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
 
   - name: apple-spark-2.13_3.4.0-snapshot-yarn-k8s-pr
@@ -723,7 +723,7 @@ builds:
       steps:
         - yum install -q -y python39 # YarnClusterSuite needs python3
         - dev/change-scala-version.sh 2.13
-        - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
+        - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Pyarn -Pkubernetes "yarn/test" "kubernetes/test"
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39
@@ -734,7 +734,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -755,7 +755,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -776,7 +776,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -797,7 +797,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple

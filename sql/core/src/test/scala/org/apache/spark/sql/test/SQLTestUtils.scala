@@ -251,10 +251,7 @@ private[sql] trait SQLTestUtilsBase
   /**
    * Whether Boson extension is enabled
    */
-  protected def isBosonEnabled: Boolean = {
-    val v = System.getenv("BOSON")
-    v != null && v.toBoolean
-  }
+  protected def isBosonEnabled: Boolean = SparkSession.isBosonEnabled
 
   /**
    * Whether Spark should only apply Boson scan optimization. This is only effective when
