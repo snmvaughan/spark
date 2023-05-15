@@ -51,6 +51,9 @@ SPARK-43378      Properly close stream objects in deserializeFromChunkedBuffer
 SPARK-43313      Adding missing column DEFAULT values for MERGE INSERT actions
 SPARK-43336      Casting between Timestamp and TimestampNTZ requires timezone
 SPARK-43156      Fix `COUNT(*) is null` bug in correlated scalar subquery
+SPARK-43425      Add TimestampNTZType to ColumnarBatchRow
+SPARK-43441      makeDotNode should not fail when DeterministicLevel is absent
+SPARK-43471      Handle missing hadoopProperties and metricsProperties
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -95,3 +98,4 @@ rdar://107856276 Disable shuffle service sidecar feature
 rdar://107970457 Bump Boson to 0.3.1 (#1733)
 rdar://108296516 [Boson] handle BosonFilter in stripSparkFilter
 rdar://108592695 [Boson] Bump Boson version to 0.3.2 in Spark
+rdar://109188323 [Boson] Enable Boson scan in Spark 3.4 by default (#1754)
