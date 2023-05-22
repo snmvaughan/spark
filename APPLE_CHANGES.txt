@@ -14,6 +14,17 @@ SPARK-42833      Refactor `applyExtensions` in `SparkSession`
 SPARK-42885      Upgrade `kubernetes-client` to 6.5.1
 SPARK-43070      Upgrade `sbt-unidoc` to 0.5.0
 SPARK-42382      Upgrade cyclonedx-maven-plugin to 2.7.5
+SPARK-43483      [SQL][DOCS] Adds SQL references for OFFSET clause
+SPARK-43281      [SQL] Fix concurrent writer does not update file metrics
+SPARK-43517      [PYTHON][DOCS] Add a migration guide for namedtuple monkey patch
+SPARK-43527      [PYTHON] Fix `catalog.listCatalogs` in PySpark
+SPARK-43548      [SS] Remove workaround for HADOOP-16255
+SPARK-43157      [SQL] Clone InMemoryRelation cached plan to prevent cloned plan from referencing same objects
+SPARK-43522      [SQL] Fix creating struct column name with index of array
+SPARK-43450      [SQL][TESTS] Add more `_metadata` filter test cases
+Revert "[SPARK-43313][SQL] Adding missing column DEFAULT values for MERGE INSERT actions"
+SPARK-43580      [PYTHON][TESTS] Add `https://dlcdn.apache.org/` to default_sites of get_preferred_mirrors
+SPARK-43587      [CORE][TESTS] Run `HealthTrackerIntegrationSuite` in a dedicated JVM
 
 # From 3.4.0
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -54,6 +65,11 @@ SPARK-43156      Fix `COUNT(*) is null` bug in correlated scalar subquery
 SPARK-43425      Add TimestampNTZType to ColumnarBatchRow
 SPARK-43441      makeDotNode should not fail when DeterministicLevel is absent
 SPARK-43471      Handle missing hadoopProperties and metricsProperties
+SPARK-43043      [CORE] Improve the performance of MapOutputTracker.updateMapOutput
+SPARK-43589      [SQL] Fix `cannotBroadcastTableOverMaxTableBytesError` to use `bytesToString`
+SPARK-42826      [3.4][FOLLOWUP][PS][DOCS] Update migration notes for pandas API on Spark
+SPARK-43547      [3.4][PS][DOCS] Update "Supported Pandas API" page to point out the proper pandas docs
+SPARK-43541      [SQL][3.4] Propagate all `Project` tags in resolving of expressions and missing columns
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -99,3 +115,4 @@ rdar://107970457 Bump Boson to 0.3.1 (#1733)
 rdar://108296516 [Boson] handle BosonFilter in stripSparkFilter
 rdar://108592695 [Boson] Bump Boson version to 0.3.2 in Spark
 rdar://109188323 [Boson] Enable Boson scan in Spark 3.4 by default (#1754)
+rdar://109549054 Bump Boson version to 0.3.5 (#1759)
