@@ -85,6 +85,15 @@ SPARK-43894      Fix bug in df.cache()
 SPARK-43760      Nullability of scalar subquery results
 SPARK-43949      Upgrade cloudpickle to 2.2.1
 SPARK-43956      Fix the bug doesn't display column's sql for Percentile[Cont|Disc]
+SPARK-43911      Use toSet to deduplicate the iterator data to prevent the creation of large Array
+Revert           SPARK-43911 Use toSet to deduplicate the iterator data to prevent the creation of large Array
+SPARK-43973      Structured Streaming UI should display failed queries correctly
+SPARK-43510      Fix YarnAllocator internal state when adding running executor after processing completed containers
+SPARK-43976      Handle the case where modifiedConfigs doesn't exist in event logs
+SPARK-43973      Fix compilation by switching QueryTerminatedEvent constructor
+MINOR            Move ResolveDefaultColumnsSuite to 'o.a.s.sql'
+SPARK-42290      Fix the OOM error can't be reported when AQE on
+SPARK-43404      Skip reusing sst file for same version of RocksDB state store to avoid id mismatch error
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -133,3 +142,4 @@ rdar://109188323 [Boson] Enable Boson scan in Spark 3.4 by default (#1754)
 rdar://109549054 Bump Boson version to 0.3.5 (#1759)
 rdar://110070310 Bump Hive version to 2.3.9.6-apple (#1766)
 rdar://110133417 Bump Boson version to 0.3.9 (#1768)
+rdar://110553017 [Boson] Update version to 0.3.11 (#1779)
