@@ -75,6 +75,11 @@ fi
 
 pushd "$PROJECT_ROOT"
 
+# Check whether the directory is clean. E.g. pending merges, uncommited changes, etc...
+# https://unix.stackexchange.com/a/394674
+git update-index --really-refresh || { popd; set +x; echo ""; echo "FAILED! The directory is unclean, please check the git status."; exit 1; }
+git diff-index --quiet HEAD || { popd; set +x; echo ""; echo "FAILED! The directory is unclean, please check the git status."; exit 1; }
+
 OLD_VERSION=$($MVN help:evaluate -Dexpression=project.version -q -DforceStdout)
 OLD_RELEASE_VERSION=${OLD_VERSION%-SNAPSHOT}
 
@@ -85,11 +90,17 @@ OLD_RELEASE_VERSION=${OLD_VERSION%-SNAPSHOT}
 NEW_VERSION=$(echo $OLD_VERSION | perl -pe 's/^((\d+\.)*)(\d+)(.*)$/$1.($3+1).$4/e')
 NEW_RELEASE_VERSION=${NEW_VERSION%-SNAPSHOT}
 
-$MVN versions:set -DnewVersion="$NEW_VERSION" | grep -v "no value"
+$MVN versions:set -DnewVersion="$NEW_VERSION" -DgenerateBackupPoms=false | grep -v "no value"
 
 sed -i '' 's/'"$OLD_RELEASE_VERSION"'/'"$NEW_RELEASE_VERSION"'/' rio.y*ml
 sed -i '' 's/'"${OLD_RELEASE_VERSION%-apple}"'/'"${NEW_RELEASE_VERSION%-apple}"'/' python/pyspark/version.py
 
+find . -name pom.xml -type f -print0 | xargs -0 grep -Hn "$OLD_VERSION" && { popd; set +x; echo ""; echo "FAILED! mvn missed bumping versions in the above files. It is likely a mvn bug."; echo "Please correct the above files manually. Once ready, you can make a commit with"; echo "git commit -a -m \"Bump to $NEW_VERSION after $OLD_RELEASE_VERSION release\""; echo ""; exit 1; } || echo "No old version left behind, making a local commit."
+
 git commit -a -m "Bump to $NEW_VERSION after $OLD_RELEASE_VERSION release"
 
 popd
+
+set +x
+echo ""
+echo "SUCCESS! Please double check whether the generated commit has correct versions before pushing to the remote."
