@@ -2791,4 +2791,10 @@ private[sql] object QueryExecutionErrors extends QueryErrorsBase {
         "location" -> toSQLValue(location.toString, StringType),
         "identifier" -> toSQLId(tableId.nameParts)))
   }
+
+  def mergeCardinalityViolationError(): SparkRuntimeException = {
+    new SparkRuntimeException(
+      errorClass = "MERGE_CARDINALITY_VIOLATION",
+      messageParameters = Map.empty)
+  }
 }

@@ -486,6 +486,9 @@ object MetadataAttribute {
       Some(attr)
     } else None
   }
+
+  def isValid(metadata: Metadata): Boolean =
+    metadata.contains(METADATA_COL_ATTR_KEY)
 }
 
 /**
