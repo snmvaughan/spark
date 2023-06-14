@@ -35,11 +35,13 @@ import org.apache.spark.sql.internal.{BaseSessionStateBuilder, SessionState, Ses
 import org.apache.spark.sql.internal.StaticSQLConf._
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.util.ExecutionListenerBus
+import org.apache.spark.tags.ExtendedSQLTest
 import org.apache.spark.util.ThreadUtils
 
 /**
  * Test cases for the builder pattern of [[SparkSession]].
  */
+@ExtendedSQLTest
 class SparkSessionBuilderSuite extends SparkFunSuite with Eventually {
 
   override def afterEach(): Unit = {
