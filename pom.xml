@@ -143,6 +143,7 @@
     <derby.version>10.14.2.0</derby.version>
     <parquet.version>1.12.3.3-apple</parquet.version>
     <orc.version>1.8.3</orc.version>
+    <orc.version>1.8.4</orc.version>
     <orc.classifier>shaded-protobuf</orc.classifier>
     <jetty.version>9.4.50.v20221201</jetty.version>
     <jakartaservlet.version>4.0.3</jakartaservlet.version>
