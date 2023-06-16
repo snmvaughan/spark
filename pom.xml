@@ -220,7 +220,7 @@
     <bouncycastle.version>1.60</bouncycastle.version>
     <tink.version>1.7.0</tink.version>
     <netty.version>4.1.87.Final</netty.version>
-    <boson.version>0.3.11</boson.version>
+    <boson.version>0.3.12</boson.version>
     <!--
     If you are changing Arrow version specification, please check
     ./python/pyspark/sql/pandas/utils.py, and ./python/setup.py too.
