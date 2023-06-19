@@ -27,6 +27,12 @@ SPARK-43580      Add `https://dlcdn.apache.org/` to default_sites of get_preferr
 SPARK-43587      Run `HealthTrackerIntegrationSuite` in a dedicated JVM
 SPARK-43842      Upgrade `gcs-connector` to 2.2.14
 SPARK-36612      Support left outer join build left or right outer join build right in shuffled hash join
+SPARK-44088      Remove `jdk.incubator.foreign` usage in Java 21
+SPARK-44095      Make HiveExternalCatalogVersionsSuite skip old Spark versions on Java 21
+SPARK-44092      Add `Utils.isJavaVersionAtLeast21` and make `core` module pass with Java 21
+SPARK-44045      Mark `WholeStageCodegenSparkSubmitSuite` as `ExtendedSQLTest`
+SPARK-44057      Mark all `local-cluster`-based tests as `ExtendedSQLTest`
+SPARK-42369      Fix constructor for java.nio.DirectByteBuffer
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -94,6 +100,14 @@ SPARK-43973      Fix compilation by switching QueryTerminatedEvent constructor
 MINOR            Move ResolveDefaultColumnsSuite to 'o.a.s.sql'
 SPARK-42290      Fix the OOM error can't be reported when AQE on
 SPARK-43404      Skip reusing sst file for same version of RocksDB state store to avoid id mismatch error
+SPARK-44038      Update YuniKorn docs with v1.3
+SPARK-43398      Executor timeout should be max of idle shuffle and rdd timeout
+SPARK-32559      Fix the trim logic did't handle ASCII control characters correctly
+SPARK-44053      Update ORC to 1.8.4
+SPARK-44040      Fix compute stats when AggregateExec node above QueryStageExec
+SPARK-44070      Bump snappy-java 1.1.10.1
+MINOR            Fix all dead links for K8s doc
+SPARK-44018      Improve the hashCode and toString for some DS V2 Expression
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -143,3 +157,5 @@ rdar://109549054 Bump Boson version to 0.3.5 (#1759)
 rdar://110070310 Bump Hive version to 2.3.9.6-apple (#1766)
 rdar://110133417 Bump Boson version to 0.3.9 (#1768)
 rdar://110553017 [Boson] Update version to 0.3.11 (#1779)
+rdar://110658365 Check whether mvn bumps versions correctly (#1782)
+rdar://110874630 Bump Boson to 0.3.12 (#1795)
