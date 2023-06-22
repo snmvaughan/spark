@@ -161,6 +161,10 @@ public class InMemoryStore implements KVStore {
     public void clear() {
       data.clear();
     }
+
+    public ConcurrentMap<Class<?>, InstanceList<?>> getData() {
+      return data;
+    }
   }
 
   /**
