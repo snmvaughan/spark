@@ -280,6 +280,7 @@ class Analyzer(override val catalogManager: CatalogManager) extends RuleExecutor
       KeepLegacyOutputs),
     Batch("Resolution", fixedPoint,
       new ResolveCatalogs(catalogManager) ::
+      ResolveProcedures(catalogManager) ::
       ResolveUserSpecifiedColumns ::
       ResolveInsertInto ::
       ResolveRelations ::

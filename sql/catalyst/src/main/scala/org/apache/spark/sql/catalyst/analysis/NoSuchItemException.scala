@@ -251,9 +251,9 @@ class NoSuchIndexException private(
     messageParameters = messageParameters) {
 
   def this(
-      errorClass: String,
-      messageParameters: Map[String, String],
-      cause: Option[Throwable]) = {
+            errorClass: String,
+            messageParameters: Map[String, String],
+            cause: Option[Throwable]) = {
     this(
       SparkThrowableHelper.getMessage(errorClass, messageParameters),
       cause,
@@ -267,5 +267,13 @@ class NoSuchIndexException private(
 
   def this(message: String, cause: Option[Throwable] = None) = {
     this(message, cause, errorClass = None, messageParameters = Map.empty[String, String])
+  }
+}
+
+class NoSuchProcedureException(message: String, cause: Option[Throwable] = None)
+  extends AnalysisException(message, cause = cause) {
+
+  def this(ident: Identifier) = {
+    this(s"Procedure ${ident.quoted} not found")
   }
 }

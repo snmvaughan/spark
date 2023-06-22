@@ -24,10 +24,11 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.spark.SparkException
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.{SparkSession, Strategy}
+import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{ResolvedIdentifier, ResolvedNamespace, ResolvedPartitionSpec, ResolvedTable}
 import org.apache.spark.sql.catalyst.catalog.CatalogUtils
 import org.apache.spark.sql.catalyst.expressions
-import org.apache.spark.sql.catalyst.expressions.{And, Attribute, DynamicPruning, Expression, NamedExpression, Not, Or, PredicateHelper, SubqueryExpression}
+import org.apache.spark.sql.catalyst.expressions.{And, Attribute, DynamicPruning, Expression, GenericInternalRow, NamedExpression, Not, Or, PredicateHelper, SubqueryExpression}
 import org.apache.spark.sql.catalyst.expressions.Literal.TrueLiteral
 import org.apache.spark.sql.catalyst.planning.PhysicalOperation
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -514,7 +515,6 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         case _ => throw QueryCompilationErrors.tableIndexNotSupportedError(
           s"DropIndex is not supported in this table ${table.name}.")
       }
-
     case ShowFunctions(ResolvedNamespace(catalog, ns), userScope, systemScope, pattern, output) =>
       ShowFunctionsExec(
         output,
@@ -523,8 +523,19 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         userScope,
         systemScope,
         pattern) :: Nil
+    case c @ Call(procedure, args) =>
+      val input = buildInternalRow(args)
+      CallExec(c.output, procedure, input) :: Nil
 
     case _ => Nil
+  }
+
+  private def buildInternalRow(exprs: Seq[Expression]): InternalRow = {
+    val values = new Array[Any](exprs.size)
+    for (index <- exprs.indices) {
+      values(index) = exprs(index).eval()
+    }
+    new GenericInternalRow(values)
   }
 }
 

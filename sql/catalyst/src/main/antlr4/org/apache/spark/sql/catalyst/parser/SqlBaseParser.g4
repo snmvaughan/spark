@@ -184,6 +184,8 @@ statement
     | SHOW CREATE TABLE multipartIdentifier (AS SERDE)?                #showCreateTable
     | SHOW CURRENT namespace                                           #showCurrentNamespace
     | SHOW CATALOGS (LIKE? pattern=stringLit)?                            #showCatalogs
+    | CALL multipartIdentifier
+        LEFT_PAREN (callArgument (COMMA callArgument)*)? RIGHT_PAREN   #call
     | (DESC | DESCRIBE) FUNCTION EXTENDED? describeFuncName            #describeFunction
     | (DESC | DESCRIBE) namespace EXTENDED?
         multipartIdentifier                                            #describeNamespace
@@ -845,6 +847,11 @@ transformArgument
     | constant
     ;
 
+callArgument
+    : expression                      #positionalArgument
+    | identifier ARG_ARROW expression #namedArgument
+    ;
+
 expression
     : booleanExpression
     ;
@@ -1465,6 +1472,7 @@ nonReserved
     | BUCKETS
     | BY
     | CACHE
+    | CALL
     | CASCADE
     | CASE
     | CAST

@@ -109,6 +109,7 @@ BUCKET: 'BUCKET';
 BUCKETS: 'BUCKETS';
 BY: 'BY';
 CACHE: 'CACHE';
+CALL: 'CALL';
 CASCADE: 'CASCADE';
 CASE: 'CASE';
 CAST: 'CAST';
@@ -415,6 +416,7 @@ COLON: ':';
 ARROW: '->';
 HENT_START: '/*+';
 HENT_END: '*/';
+ARG_ARROW: '=>';
 
 STRING
     : '\'' ( ~('\''|'\\') | ('\\' .) )* '\''
