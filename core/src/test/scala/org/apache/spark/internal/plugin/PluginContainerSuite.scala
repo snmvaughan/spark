@@ -109,6 +109,7 @@ class PluginContainerSuite extends SparkFunSuite with LocalSparkContext {
 
   test("do nothing if plugins are not configured") {
     val conf = new SparkConf()
+    conf.set("spark.acs.callhome.metrics.enable", "false")
     val env = mock(classOf[SparkEnv])
     when(env.conf).thenReturn(conf)
     val container = PluginContainer(env, Map.empty[String, ResourceInformation].asJava)

@@ -204,7 +204,13 @@ object PluginContainer {
       ctx: Either[SparkContext, SparkEnv],
       resources: java.util.Map[String, ResourceInformation]): Option[PluginContainer] = {
     val conf = ctx.fold(_.conf, _.conf)
-    val plugins = Utils.loadExtensions(classOf[SparkPlugin], conf.get(PLUGINS).distinct, conf)
+    val isEnabledContainerMetrics = conf.getBoolean(SPARK_CALL_HOME_PLUGIN_CLASS_ENABLED, true)
+    val pluginClasses = if (isEnabledContainerMetrics) {
+      Seq(SPARK_CALL_HOME_PLUGIN_CLASS) ++ conf.get(PLUGINS).distinct
+    } else {
+      conf.get(PLUGINS).distinct
+    }
+    val plugins = Utils.loadExtensions(classOf[SparkPlugin], pluginClasses, conf)
     if (plugins.nonEmpty) {
       ctx match {
         case Left(sc) => Some(new DriverPluginContainer(sc, resources, plugins))

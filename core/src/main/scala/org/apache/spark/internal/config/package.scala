@@ -41,6 +41,10 @@ package object config {
 
   private[spark] val SPARK_CALL_HOME_LISTENER_CLASS =
     "com.apple.spark.callhome.listener.SparkCallHomeListenerV2"
+  private[spark] val SPARK_CALL_HOME_PLUGIN_CLASS =
+    "com.apple.spark.callhome.plugins.CallHomeSparkPlugin"
+  private[spark] val SPARK_CALL_HOME_PLUGIN_CLASS_ENABLED =
+    "spark.acs.callhome.metrics.enable"
   private[spark] val SPARK_ACS_QUEUE_NAME = "sparkRuntimeQueue"
 
   private[spark] val RESOURCES_DISCOVERY_PLUGIN =
