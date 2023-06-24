@@ -33,6 +33,7 @@ SPARK-44092      Add `Utils.isJavaVersionAtLeast21` and make `core` module pass 
 SPARK-44045      Mark `WholeStageCodegenSparkSubmitSuite` as `ExtendedSQLTest`
 SPARK-44057      Mark all `local-cluster`-based tests as `ExtendedSQLTest`
 SPARK-42369      Fix constructor for java.nio.DirectByteBuffer
+SPARK-43876      Enable fast hashmap for distinct queries
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -108,6 +109,10 @@ SPARK-44040      Fix compute stats when AggregateExec node above QueryStageExec
 SPARK-44070      Bump snappy-java 1.1.10.1
 MINOR            Fix all dead links for K8s doc
 SPARK-44018      Improve the hashCode and toString for some DS V2 Expression
+SPARK-44134      Fix setting resources (GPU/FPGA) to 0 when they are set in spark-defaults.conf
+SPARK-44142      Replace type with tpe in utility to convert python types to spark types
+SPARK-44136      Fixed an issue that StateManager may get materialized in executor instead of driver in FlatMapGroupsWithStateExec
+SPARK-44158      Remove unused `spark.kubernetes.executor.lostCheckmaxAttempts`
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -159,3 +164,19 @@ rdar://110133417 Bump Boson version to 0.3.9 (#1768)
 rdar://110553017 [Boson] Update version to 0.3.11 (#1779)
 rdar://110658365 Check whether mvn bumps versions correctly (#1782)
 rdar://110874630 Bump Boson to 0.3.12 (#1795)
+SPARK-44110      Propagate proxy settings to forked JVMs
+SPARK-44153      Support `Heap Histogram` column in `Executors` tab
+SPARK-44147      Add `spark.ui.allowFramingFrom` doc to `Security` page
+rdar://99333529  (Job Insights: Tune based on cpu/mem/disk underutilization of pods)
+SPARK-43204      Align MERGE assignments with table attributes
+SPARK-43268      Use proper error classes when exceptions are constructed with a message
+rdar://111110273 Add InMemoryStore.getData method to support internal history server
+SPARK-42151      Align UPDATE assignments with table attributes
+rdar://84031512  Add stored procedure API (#1801)
+SPARK-43088      Respect RequiresDistributionAndOrdering in CTAS/RTAS
+SPARK-42855      Use runtime null checks in TableOutputResolver
+SPARK-42997      TableOutputResolver must use correct column paths in error messages for arrays and maps
+SPARK-44125      Support Java 21 in SparkR
+SPARK-44122      Make `connect` module pass except Arrow-related ones in Java 21
+SPARK-44099      Support both java-8-openjdk-amd64 and java-8-openjdk-arm64 in `spark-rm` Dockerfile
+
