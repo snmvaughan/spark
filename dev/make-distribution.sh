@@ -212,6 +212,7 @@ rm -rf "$DISTDIR"
 mkdir -p "$DISTDIR/jars"
 echo "Spark $VERSION$GITREVSTRING built for Hadoop $SPARK_HADOOP_VERSION" > "$DISTDIR/RELEASE"
 echo "Build flags: $@" >> "$DISTDIR/RELEASE"
+sed "s/_2.12/_${SCALA_VERSION}/" dev/CLASSES.csv.template | sed "s/VERSION/${VERSION}/" > "$DISTDIR/CLASSES.csv"
 
 # Copy jars
 cp "$SPARK_HOME"/assembly/target/scala*/jars/* "$DISTDIR/jars/"

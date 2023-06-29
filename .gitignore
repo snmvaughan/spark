@@ -124,3 +124,4 @@ sql/catalyst/src/main/antlr4/org/apache/spark/sql/catalyst/parser/gen/
 # For RIO
 .dist
 .library
+dev/CLASSES.csv.template
