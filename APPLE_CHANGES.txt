@@ -34,6 +34,20 @@ SPARK-44045      Mark `WholeStageCodegenSparkSubmitSuite` as `ExtendedSQLTest`
 SPARK-44057      Mark all `local-cluster`-based tests as `ExtendedSQLTest`
 SPARK-42369      Fix constructor for java.nio.DirectByteBuffer
 SPARK-43876      Enable fast hashmap for distinct queries
+SPARK-44139      Discard completely pushed down filters in group-based MERGE operations
+SPARK-44138      Prohibit non-deterministic expressions, subqueries and aggregates in MERGE conditions
+SPARK-43203      Move all Drop Table case to DataSource V2
+SPARK-43975      DataSource V2: Handle UPDATE commands for group-based sources
+SPARK-43963      DataSource V2: Handle MERGE commands for group-based sources
+SPARK-44237      Simplify DirectByteBuffer constructor lookup logic
+SPARK-44230      Make `sql` module passes in Java 21
+SPARK-44183      Increate `PyArrow` minimum version to 4.0.0
+SPARK-44153      Use JAVA_HOME and stderr
+SPARK-43885      DataSource V2: Handle MERGE commands for delta-based sources
+SPARK-44000      Add hint to disable broadcasting and replicating one side of join
+SPARK-43959      Make RowLevelOperationSuiteBase and AlignAssignmentsSuite abstract
+SPARK-43775      DataSource V2: Allow representing updates as deletes and inserts
+SPARK-43324      Handle UPDATE commands for delta-based sources
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -113,6 +127,11 @@ SPARK-44134      Fix setting resources (GPU/FPGA) to 0 when they are set in spar
 SPARK-44142      Replace type with tpe in utility to convert python types to spark types
 SPARK-44136      Fixed an issue that StateManager may get materialized in executor instead of driver in FlatMapGroupsWithStateExec
 SPARK-44158      Remove unused `spark.kubernetes.executor.lostCheckmaxAttempts`
+SPARK-44079      Fix `ArrayIndexOutOfBoundsException` when parse array as struct using PERMISSIVE mode with corrupt record
+SPARK-44206      DataSet.selectExpr scope Session.active
+SPARK-44184      Remove a wrong doc about `ARROW_PRE_0_15_IPC_FORMAT`
+SPARK-44241      Mistakenly set io.connectionTimeout/connectionCreationTimeout to zero or negative will cause incessant executor cons/destructions
+SPARK-42784      should still create subDir when the number of subDir in merge dir is less than conf
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -179,4 +198,4 @@ SPARK-42997      TableOutputResolver must use correct column paths in error mess
 SPARK-44125      Support Java 21 in SparkR
 SPARK-44122      Make `connect` module pass except Arrow-related ones in Java 21
 SPARK-44099      Support both java-8-openjdk-amd64 and java-8-openjdk-arm64 in `spark-rm` Dockerfile
-
+rdar://110667736 Include CLASSES.csv file in Apple spark tarball
