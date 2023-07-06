@@ -19,7 +19,10 @@ package org.apache.spark.sql.connector.catalog;
 
 import java.util.Map;
 
+import com.google.common.base.Preconditions;
+
 import org.apache.spark.annotation.Evolving;
+import org.apache.spark.sql.connector.expressions.SortOrder;
 import org.apache.spark.sql.connector.expressions.Transform;
 import org.apache.spark.sql.connector.write.LogicalWriteInfo;
 import org.apache.spark.sql.catalyst.analysis.NoSuchNamespaceException;
@@ -107,6 +110,30 @@ public interface StagingTableCatalog extends TableCatalog {
       Map<String, String> properties) throws NoSuchNamespaceException, NoSuchTableException;
 
   /**
+   * Stage the creation of a table with a specific distribution and ordering.
+   */
+  default StagedTable stageCreate(
+      Identifier ident,
+      Column[] columns,
+      Transform[] partitions,
+      Map<String, String> properties,
+      String distributionMode,
+      SortOrder[] ordering) throws TableAlreadyExistsException, NoSuchNamespaceException {
+
+    Preconditions.checkArgument(
+        distributionMode.equals("none"),
+        "%s does not support tables with a specific distribution",
+        this.getClass().getName());
+
+    Preconditions.checkArgument(
+        ordering.length == 0,
+        "%s does not support tables with a specific ordering",
+        this.getClass().getName());
+
+    return stageCreate(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+  }
+
+  /**
    * Stage the replacement of a table, preparing it to be committed into the metastore when the
    * returned table's {@link StagedTable#commitStagedChanges()} is called.
    * <p>
@@ -156,6 +183,30 @@ public interface StagingTableCatalog extends TableCatalog {
       Map<String, String> properties) throws NoSuchNamespaceException;
 
   /**
+   * Stage the replacement of a table with a specific distribution and ordering.
+   */
+  default StagedTable stageReplace(
+      Identifier ident,
+      Column[] columns,
+      Transform[] partitions,
+      Map<String, String> properties,
+      String distributionMode,
+      SortOrder[] ordering) throws NoSuchNamespaceException, NoSuchTableException {
+
+    Preconditions.checkArgument(
+        distributionMode.equals("none"),
+        "%s does not support tables with a specific distribution",
+        this.getClass().getName());
+
+    Preconditions.checkArgument(
+        ordering.length == 0,
+        "%s does not support tables with a specific ordering",
+        this.getClass().getName());
+
+    return stageReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+  }
+
+  /**
    * Stage the creation or replacement of a table, preparing it to be committed into the metastore
    * when the returned table's {@link StagedTable#commitStagedChanges()} is called.
    * <p>
@@ -187,5 +238,29 @@ public interface StagingTableCatalog extends TableCatalog {
       Map<String, String> properties) throws NoSuchNamespaceException {
     return stageCreateOrReplace(
       ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+  }
+
+  /**
+   * Stage the creation or replacement of a table with a specific distribution and ordering.
+   */
+  default StagedTable stageCreateOrReplace(
+      Identifier ident,
+      Column[] columns,
+      Transform[] partitions,
+      Map<String, String> properties,
+      String distributionMode,
+      SortOrder[] ordering) throws NoSuchNamespaceException {
+
+    Preconditions.checkArgument(
+        distributionMode.equals("none"),
+        "%s does not support tables with a specific distribution",
+        this.getClass().getName());
+
+    Preconditions.checkArgument(
+        ordering.length == 0,
+        "%s does not support tables with a specific ordering",
+        this.getClass().getName());
+
+    return stageCreateOrReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
   }
 }

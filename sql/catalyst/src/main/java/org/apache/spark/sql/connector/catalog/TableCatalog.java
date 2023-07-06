@@ -18,6 +18,7 @@
 package org.apache.spark.sql.connector.catalog;
 
 import org.apache.spark.annotation.Evolving;
+import org.apache.spark.sql.connector.expressions.SortOrder;
 import org.apache.spark.sql.connector.expressions.Transform;
 import org.apache.spark.sql.catalyst.analysis.NoSuchNamespaceException;
 import org.apache.spark.sql.catalyst.analysis.NoSuchTableException;
@@ -28,6 +29,8 @@ import org.apache.spark.sql.types.StructType;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Catalog methods for working with Tables.
@@ -196,6 +199,30 @@ public interface TableCatalog extends CatalogPlugin {
       Column[] columns,
       Transform[] partitions,
       Map<String, String> properties) throws TableAlreadyExistsException, NoSuchNamespaceException {
+    return createTable(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+  }
+
+  /**
+   * Create a table with a specific distribution and ordering.
+   */
+  default Table createTable(
+      Identifier ident,
+      Column[] columns,
+      Transform[] partitions,
+      Map<String, String> properties,
+      String distributionMode,
+      SortOrder[] ordering) throws TableAlreadyExistsException, NoSuchNamespaceException {
+
+    Preconditions.checkArgument(
+        distributionMode.equals("none"),
+        "%s does not support tables with a specific distribution",
+        this.getClass().getName());
+
+    Preconditions.checkArgument(
+        ordering.length == 0,
+        "%s does not support tables with a specific ordering",
+        this.getClass().getName());
+
     return createTable(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
   }
 

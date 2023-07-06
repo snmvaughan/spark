@@ -174,7 +174,7 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       WriteToDataSourceV2Exec(writer, invalidateCacheFunc, planLater(query), customMetrics) :: Nil
 
     case CreateTable(ResolvedIdentifier(catalog, ident), schema, partitioning,
-        tableSpec, ifNotExists) =>
+        tableSpec, ifNotExists, distributionMode, ordering) =>
       ResolveDefaultColumns.validateCatalogForDefaultValue(schema, catalog.asTableCatalog, ident)
       val newSchema: StructType =
         ResolveDefaultColumns.constantFoldCurrentDefaultsToExistDefaults(
@@ -183,23 +183,28 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
         newSchema, catalog.asTableCatalog, ident, "CREATE TABLE")
 
       CreateTableExec(catalog.asTableCatalog, ident, structTypeToV2Columns(newSchema),
-        partitioning, qualifyLocInTableSpec(tableSpec), ifNotExists) :: Nil
+        partitioning, qualifyLocInTableSpec(tableSpec), ifNotExists,
+        distributionMode, ordering) :: Nil
 
     case CreateTableAsSelect(ResolvedIdentifier(catalog, ident), parts, query, tableSpec,
-        options, ifNotExists, true) =>
+        options, ifNotExists, true, distributionMode, ordering) =>
       catalog match {
         case staging: StagingTableCatalog =>
           AtomicCreateTableAsSelectExec(staging, ident, parts, query,
-            qualifyLocInTableSpec(tableSpec), options, ifNotExists) :: Nil
+            qualifyLocInTableSpec(tableSpec), options, ifNotExists,
+            distributionMode, ordering) :: Nil
         case _ =>
           CreateTableAsSelectExec(catalog.asTableCatalog, ident, parts, query,
-            qualifyLocInTableSpec(tableSpec), options, ifNotExists) :: Nil
+            qualifyLocInTableSpec(tableSpec), options, ifNotExists,
+            distributionMode, ordering) :: Nil
       }
 
     case RefreshTable(r: ResolvedTable) =>
       RefreshTableExec(r.catalog, r.identifier, recacheTable(r)) :: Nil
 
-    case ReplaceTable(ResolvedIdentifier(catalog, ident), schema, parts, tableSpec, orCreate) =>
+    case ReplaceTable(ResolvedIdentifier(catalog, ident), schema, parts, tableSpec, orCreate,
+      distributionMode, ordering) =>
+
       ResolveDefaultColumns.validateCatalogForDefaultValue(schema, catalog.asTableCatalog, ident)
       val newSchema: StructType =
         ResolveDefaultColumns.constantFoldCurrentDefaultsToExistDefaults(
@@ -211,14 +216,16 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
       catalog match {
         case staging: StagingTableCatalog =>
           AtomicReplaceTableExec(staging, ident, v2Columns, parts,
-            qualifyLocInTableSpec(tableSpec), orCreate = orCreate, invalidateCache) :: Nil
+            qualifyLocInTableSpec(tableSpec), orCreate = orCreate, invalidateCache,
+            distributionMode, ordering) :: Nil
         case _ =>
           ReplaceTableExec(catalog.asTableCatalog, ident, v2Columns, parts,
-            qualifyLocInTableSpec(tableSpec), orCreate = orCreate, invalidateCache) :: Nil
+            qualifyLocInTableSpec(tableSpec), orCreate = orCreate, invalidateCache,
+            distributionMode, ordering) :: Nil
       }
 
     case ReplaceTableAsSelect(ResolvedIdentifier(catalog, ident),
-        parts, query, tableSpec, options, orCreate, true) =>
+        parts, query, tableSpec, options, orCreate, true, distributionMode, ordering) =>
       catalog match {
         case staging: StagingTableCatalog =>
           AtomicReplaceTableAsSelectExec(
@@ -229,7 +236,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
             qualifyLocInTableSpec(tableSpec),
             options,
             orCreate = orCreate,
-            invalidateCache) :: Nil
+            invalidateCache,
+            distributionMode,
+            ordering) :: Nil
         case _ =>
           ReplaceTableAsSelectExec(
             catalog.asTableCatalog,
@@ -239,7 +248,9 @@ class DataSourceV2Strategy(session: SparkSession) extends Strategy with Predicat
             qualifyLocInTableSpec(tableSpec),
             options,
             orCreate = orCreate,
-            invalidateCache) :: Nil
+            invalidateCache,
+            distributionMode,
+            ordering) :: Nil
       }
 
     case AppendData(r @ DataSourceV2Relation(v1: SupportsWrite, _, _, _, _), _, _,

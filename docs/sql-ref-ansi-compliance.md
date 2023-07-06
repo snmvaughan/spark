@@ -425,6 +425,7 @@ Below is a list of all the keywords in Spark SQL.
 |DIRECTORY|non-reserved|non-reserved|non-reserved|
 |DISTINCT|reserved|non-reserved|reserved|
 |DISTRIBUTE|non-reserved|non-reserved|non-reserved|
+|DISTRIBUTED|non-reserved|non-reserved|non-reserved|
 |DIV|non-reserved|non-reserved|not a keyword|
 |DROP|non-reserved|non-reserved|reserved|
 |ELSE|reserved|non-reserved|reserved|
@@ -493,6 +494,7 @@ Below is a list of all the keywords in Spark SQL.
 |LIST|non-reserved|non-reserved|non-reserved|
 |LOAD|non-reserved|non-reserved|non-reserved|
 |LOCAL|non-reserved|non-reserved|reserved|
+|LOCALLY|non-reserved|non-reserved|non-reserved|
 |LOCATION|non-reserved|non-reserved|non-reserved|
 |LOCK|non-reserved|non-reserved|non-reserved|
 |LOCKS|non-reserved|non-reserved|non-reserved|
@@ -528,6 +530,7 @@ Below is a list of all the keywords in Spark SQL.
 |OPTIONS|non-reserved|non-reserved|non-reserved|
 |OR|reserved|non-reserved|reserved|
 |ORDER|reserved|non-reserved|reserved|
+|ORDERED|non-reserved|non-reserved|non-reserved|
 |OUT|non-reserved|non-reserved|reserved|
 |OUTER|reserved|non-reserved|reserved|
 |OUTPUTFORMAT|non-reserved|non-reserved|non-reserved|
@@ -634,6 +637,7 @@ Below is a list of all the keywords in Spark SQL.
 |UNIQUE|reserved|non-reserved|reserved|
 |UNKNOWN|reserved|non-reserved|reserved|
 |UNLOCK|non-reserved|non-reserved|non-reserved|
+|UNORDERED|non-reserved|non-reserved|non-reserved|
 |UNPIVOT|non-reserved|non-reserved|non-reserved|
 |UNSET|non-reserved|non-reserved|non-reserved|
 |UPDATE|non-reserved|non-reserved|reserved|
@@ -651,6 +655,7 @@ Below is a list of all the keywords in Spark SQL.
 |WINDOW|non-reserved|non-reserved|reserved|
 |WITH|reserved|non-reserved|reserved|
 |WITHIN|reserved|non-reserved|reserved|
+|WRITE|non-reserved|non-reserved|non-reserved|
 |YEAR|non-reserved|non-reserved|non-reserved|
 |YEARS|non-reserved|non-reserved|non-reserved|
 |ZONE|non-reserved|non-reserved|non-reserved|

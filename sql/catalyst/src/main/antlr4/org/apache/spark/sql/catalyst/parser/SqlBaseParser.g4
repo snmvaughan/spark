@@ -149,6 +149,7 @@ statement
     | ALTER TABLE multipartIdentifier
         (partitionSpec)? SET locationSpec                              #setTableLocation
     | ALTER TABLE multipartIdentifier RECOVER PARTITIONS               #recoverPartitions
+    | ALTER TABLE multipartIdentifier WRITE writeSpec                  #setWriteDistributionAndOrdering
     | DROP TABLE (IF EXISTS)? multipartIdentifier PURGE?               #dropTable
     | DROP VIEW (IF EXISTS)? multipartIdentifier                       #dropView
     | CREATE (OR REPLACE)? (GLOBAL? TEMPORARY)?
@@ -380,6 +381,7 @@ createTableClauses
      (PARTITIONED BY partitioning=partitionFieldList) |
      skewSpec |
      bucketSpec |
+     writeSpec |
      rowFormat |
      createFileFormat |
      locationSpec |
@@ -1174,10 +1176,30 @@ comment
     : stringLit
     | NULL
     ;
+writeSpec
+    : (writeDistributionSpec | writeOrderingSpec)+
+    ;
+
+writeDistributionSpec
+    : DISTRIBUTED BY PARTITION
+    ;
 
 version
     : INTEGER_VALUE
     | stringLit
+    ;
+writeOrderingSpec
+    : LOCALLY? ORDERED BY writeOrder
+    | UNORDERED
+    ;
+
+writeOrder
+    : fields+=writeOrderField (',' fields+=writeOrderField)*
+    | '(' fields+=writeOrderField (',' fields+=writeOrderField)* ')'
+    ;
+
+writeOrderField
+    : transform direction=(ASC | DESC)? (NULLS nullOrder=(FIRST | LAST))?
     ;
 
 // When `SQL_standard_keyword_behavior=true`, there are 2 kinds of keywords in Spark SQL.
@@ -1246,6 +1268,7 @@ ansiNonReserved
     | DIRECTORIES
     | DIRECTORY
     | DISTRIBUTE
+    | DISTRIBUTED
     | DIV
     | DROP
     | ESCAPED
@@ -1291,6 +1314,7 @@ ansiNonReserved
     | LIST
     | LOAD
     | LOCAL
+    | LOCALLY
     | LOCATION
     | LOCK
     | LOCKS
@@ -1317,6 +1341,7 @@ ansiNonReserved
     | OF
     | OPTION
     | OPTIONS
+    | ORDERED
     | OUT
     | OUTPUTFORMAT
     | OVER
@@ -1404,6 +1429,7 @@ ansiNonReserved
     | UNBOUNDED
     | UNCACHE
     | UNLOCK
+    | UNORDERED
     | UNPIVOT
     | UNSET
     | UPDATE
@@ -1415,6 +1441,7 @@ ansiNonReserved
     | WEEK
     | WEEKS
     | WINDOW
+    | WRITE
     | YEAR
     | YEARS
     | ZONE
@@ -1523,6 +1550,7 @@ nonReserved
     | DIRECTORY
     | DISTINCT
     | DISTRIBUTE
+    | DISTRIBUTED
     | DIV
     | DROP
     | ELSE
@@ -1584,6 +1612,7 @@ nonReserved
     | LIST
     | LOAD
     | LOCAL
+    | LOCALLY
     | LOCATION
     | LOCK
     | LOCKS
@@ -1616,6 +1645,7 @@ nonReserved
     | OPTIONS
     | OR
     | ORDER
+    | ORDERED
     | OUT
     | OUTER
     | OUTPUTFORMAT
@@ -1718,6 +1748,7 @@ nonReserved
     | UNKNOWN
     | UNLOCK
     | UNPIVOT
+    | UNORDERED
     | UNSET
     | UPDATE
     | USE
@@ -1733,6 +1764,7 @@ nonReserved
     | WINDOW
     | WITH
     | WITHIN
+    | WRITE
     | YEAR
     | YEARS
     | ZONE

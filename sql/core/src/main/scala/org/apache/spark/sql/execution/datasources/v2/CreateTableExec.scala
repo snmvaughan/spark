@@ -24,7 +24,7 @@ import org.apache.spark.sql.catalyst.analysis.TableAlreadyExistsException
 import org.apache.spark.sql.catalyst.expressions.Attribute
 import org.apache.spark.sql.catalyst.plans.logical.TableSpec
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, Column, Identifier, TableCatalog}
-import org.apache.spark.sql.connector.expressions.Transform
+import org.apache.spark.sql.connector.expressions.{SortOrder, Transform}
 import org.apache.spark.sql.errors.QueryCompilationErrors
 
 case class CreateTableExec(
@@ -33,7 +33,9 @@ case class CreateTableExec(
     columns: Array[Column],
     partitioning: Seq[Transform],
     tableSpec: TableSpec,
-    ignoreIfExists: Boolean) extends LeafV2CommandExec {
+    ignoreIfExists: Boolean,
+    distributionMode: String,
+    ordering: Seq[SortOrder]) extends LeafV2CommandExec {
   import org.apache.spark.sql.connector.catalog.CatalogV2Implicits._
 
   val tableProperties = CatalogV2Util.convertTableProperties(tableSpec)
@@ -41,7 +43,9 @@ case class CreateTableExec(
   override protected def run(): Seq[InternalRow] = {
     if (!catalog.tableExists(identifier)) {
       try {
-        catalog.createTable(identifier, columns, partitioning.toArray, tableProperties.asJava)
+        catalog.createTable(
+          identifier, columns, partitioning.toArray[Transform], tableProperties.asJava,
+          distributionMode, ordering.toArray[SortOrder])
       } catch {
         case _: TableAlreadyExistsException if ignoreIfExists =>
           logWarning(s"Table ${identifier.quoted} was created concurrently. Ignoring.")

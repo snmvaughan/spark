@@ -44,7 +44,7 @@ import org.apache.spark.sql.catalyst.util.{CharVarcharUtils, DateTimeUtils, Gene
 import org.apache.spark.sql.catalyst.util.DateTimeUtils.{convertSpecialDate, convertSpecialTimestamp, convertSpecialTimestampNTZ, getZoneId, stringToDate, stringToTimestamp, stringToTimestampWithoutTimeZone}
 import org.apache.spark.sql.connector.catalog.{CatalogV2Util, SupportsNamespaces, TableCatalog}
 import org.apache.spark.sql.connector.catalog.TableChange.ColumnPosition
-import org.apache.spark.sql.connector.expressions.{ApplyTransform, BucketTransform, DaysTransform, Expression => V2Expression, FieldReference, HoursTransform, IdentityTransform, LiteralValue, MonthsTransform, Transform, YearsTransform}
+import org.apache.spark.sql.connector.expressions.{ApplyTransform, BucketTransform, DaysTransform, Expression => V2Expression, FieldReference, HoursTransform, IdentityTransform, LiteralValue, LogicalExpressions, MonthsTransform, NullOrdering, SortDirection, SortOrder => V2SortOrder, Transform, YearsTransform}
 import org.apache.spark.sql.errors.QueryParsingErrors
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types._
@@ -3303,6 +3303,13 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
       Map[String, String], Option[String], Option[String], Option[SerdeInfo])
 
   /**
+   * Type to keep track of custom table clauses:
+   * - distribution mode
+   * - ordering
+   */
+  type CustomTableClauses = (String, Seq[V2SortOrder])
+
+  /**
    * Validate a create table statement and return the [[TableIdentifier]].
    */
   override def visitCreateTableHeader(
@@ -3340,6 +3347,10 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
 
   override def visitPartitionTransform(
       ctx: PartitionTransformContext): Transform = withOrigin(ctx) {
+    visitTransform(ctx.transform)
+  }
+
+  private def visitTransform(ctx: TransformContext): Transform = withOrigin(ctx) {
     def getFieldReference(
         ctx: ApplyTransformContext,
         arg: V2Expression): FieldReference = {
@@ -3365,7 +3376,7 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
       }
     }
 
-    ctx.transform match {
+    ctx match {
       case identityCtx: IdentityTransformContext =>
         IdentityTransform(FieldReference(typedVisit[Seq[String]](identityCtx.qualifiedName)))
 
@@ -3746,6 +3757,21 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
     }
   }
 
+  private def visitCustomCreateTableClauses(ctx: CreateTableClausesContext): CustomTableClauses = {
+    checkDuplicateClauses(ctx.writeSpec, "DISTRIBUTED/ORDERED BY", ctx)
+
+    ctx.writeSpec.asScala.headOption match {
+      case Some(writeSpec) =>
+        val (distributionSpec, orderingSpec) = toDistributionAndOrderingSpec(writeSpec)
+        val distributionMode = toDistributionMode(distributionSpec, orderingSpec)
+        val ordering = toOrdering(orderingSpec)
+        (distributionMode, ordering)
+
+      case None =>
+        ("none", Array.empty[V2SortOrder])
+    }
+  }
+
   override def visitCreateTableClauses(ctx: CreateTableClausesContext): TableClauses = {
     checkDuplicateClauses(ctx.TBLPROPERTIES, "TBLPROPERTIES", ctx)
     checkDuplicateClauses(ctx.OPTIONS, "OPTIONS", ctx)
@@ -3862,6 +3888,12 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
     val tableSpec = TableSpec(properties, provider, options, location, comment,
       serdeInfo, external)
 
+    val (distributionMode, ordering) = visitCustomCreateTableClauses(ctx.createTableClauses)
+
+    if (distributionMode == "hash" && partitioning.isEmpty) {
+      operationNotAllowed("DISTRIBUTED BY PARTITION is supported only for partitioned tables", ctx)
+    }
+
     Option(ctx.query).map(plan) match {
       case Some(_) if columns.nonEmpty =>
         operationNotAllowed(
@@ -3876,14 +3908,16 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
 
       case Some(query) =>
         CreateTableAsSelect(UnresolvedIdentifier(table),
-          partitioning, query, tableSpec, Map.empty, ifNotExists)
+          partitioning, query, tableSpec, Map.empty, ifNotExists, false,
+          distributionMode, ordering)
 
       case _ =>
         // Note: table schema includes both the table columns list and the partition columns
         // with data type.
         val schema = StructType(columns ++ partCols)
         CreateTable(UnresolvedIdentifier(table),
-          schema, partitioning, tableSpec, ignoreIfExists = ifNotExists)
+          schema, partitioning, tableSpec, ignoreIfExists = ifNotExists,
+          distributionMode, ordering)
     }
   }
 
@@ -3932,6 +3966,12 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
     val tableSpec = TableSpec(properties, provider, options, location, comment,
       serdeInfo, false)
 
+    val (distributionMode, ordering) = visitCustomCreateTableClauses(ctx.createTableClauses)
+
+    if (distributionMode == "hash" && partitioning.isEmpty) {
+      operationNotAllowed("DISTRIBUTED BY PARTITION is supported only for partitioned tables", ctx)
+    }
+
     Option(ctx.query).map(plan) match {
       case Some(_) if columns.nonEmpty =>
         operationNotAllowed(
@@ -3946,14 +3986,16 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
 
       case Some(query) =>
         ReplaceTableAsSelect(UnresolvedIdentifier(table),
-          partitioning, query, tableSpec, writeOptions = Map.empty, orCreate = orCreate)
+          partitioning, query, tableSpec, writeOptions = Map.empty, orCreate = orCreate, false,
+          distributionMode, ordering)
 
       case _ =>
         // Note: table schema includes both the table columns list and the partition columns
         // with data type.
         val schema = StructType(columns ++ partCols)
         ReplaceTable(UnresolvedIdentifier(table),
-          schema, partitioning, tableSpec, orCreate = orCreate)
+          schema, partitioning, tableSpec, orCreate = orCreate,
+          distributionMode, ordering)
     }
   }
 
@@ -4320,6 +4362,85 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
         alterTableTypeMismatchHint),
       Option(ctx.partitionSpec).map(visitNonOptionalPartitionSpec),
       visitLocationSpec(ctx.locationSpec))
+  }
+
+  /**
+   * Create a [[SetWriteDistributionAndOrdering]] command.
+   */
+  override def visitSetWriteDistributionAndOrdering(
+      ctx: SetWriteDistributionAndOrderingContext): LogicalPlan = withOrigin(ctx) {
+
+    val (distributionSpec, orderingSpec) = toDistributionAndOrderingSpec(ctx.writeSpec)
+
+    if (distributionSpec == null && orderingSpec == null) {
+      throw new IllegalArgumentException(
+        "ALTER TABLE has no changes: missing both distribution and ordering clauses")
+    }
+
+    val distributionMode = toDistributionMode(distributionSpec, orderingSpec)
+    val ordering = toOrdering(orderingSpec)
+
+    val table = createUnresolvedTable(ctx.multipartIdentifier, "ALTER TABLE ... WRITE")
+    SetWriteDistributionAndOrdering(table, distributionMode, ordering)
+  }
+
+  private def toDistributionMode(
+      distributionSpec: WriteDistributionSpecContext,
+      orderingSpec: WriteOrderingSpecContext): String = {
+
+    if (distributionSpec != null) {
+      "hash"
+    } else if (orderingSpec.UNORDERED != null || orderingSpec.LOCALLY != null) {
+      "none"
+    } else {
+      "range"
+    }
+  }
+
+  private def toOrdering(orderingSpec: WriteOrderingSpecContext): Array[V2SortOrder] = {
+    if (orderingSpec != null && orderingSpec.writeOrder != null) {
+      orderingSpec.writeOrder.fields.asScala.map(visitWriteOrderField).toArray
+    } else {
+      Array.empty[V2SortOrder]
+    }
+  }
+
+  private def toDistributionAndOrderingSpec(
+      writeSpec: WriteSpecContext): (WriteDistributionSpecContext, WriteOrderingSpecContext) = {
+
+    if (writeSpec.writeDistributionSpec.size > 1) {
+      throw new IllegalArgumentException("There are multiple distribution clauses")
+    }
+
+    if (writeSpec.writeOrderingSpec.size > 1) {
+      throw new IllegalArgumentException("There are multiple ordering clauses")
+    }
+
+    val distributionSpec = writeSpec.writeDistributionSpec.asScala.headOption.orNull
+    val orderingSpec = writeSpec.writeOrderingSpec.asScala.headOption.orNull
+
+    (distributionSpec, orderingSpec)
+  }
+
+  /**
+   * Create a [[V2SortOrder]] expression.
+   */
+  override def visitWriteOrderField(ctx: WriteOrderFieldContext): V2SortOrder = withOrigin(ctx) {
+    val direction = if (ctx.DESC != null) {
+      SortDirection.DESCENDING
+    } else {
+      SortDirection.ASCENDING
+    }
+
+    val nullOrdering = if (ctx.FIRST != null) {
+      NullOrdering.NULLS_FIRST
+    } else if (ctx.LAST != null) {
+      NullOrdering.NULLS_LAST
+    } else {
+      direction.defaultNullOrdering
+    }
+
+    LogicalExpressions.sort(visitTransform(ctx.transform), direction, nullOrdering)
   }
 
   /**

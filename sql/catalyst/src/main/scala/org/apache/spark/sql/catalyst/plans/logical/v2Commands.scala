@@ -26,7 +26,7 @@ import org.apache.spark.sql.catalyst.plans.DescribeCommandSchema
 import org.apache.spark.sql.catalyst.trees.BinaryLike
 import org.apache.spark.sql.catalyst.util.{CharVarcharUtils, RowDeltaUtils, WriteDeltaProjections}
 import org.apache.spark.sql.connector.catalog._
-import org.apache.spark.sql.connector.expressions.Transform
+import org.apache.spark.sql.connector.expressions.{SortOrder, Transform}
 import org.apache.spark.sql.connector.expressions.filter.Predicate
 import org.apache.spark.sql.connector.write.{DeltaWrite, RowLevelOperation, RowLevelOperationTable, SupportsDelta, Write}
 import org.apache.spark.sql.execution.datasources.v2.DataSourceV2Relation
@@ -447,7 +447,9 @@ case class CreateTable(
     tableSchema: StructType,
     partitioning: Seq[Transform],
     tableSpec: TableSpec,
-    ignoreIfExists: Boolean) extends UnaryCommand with V2CreateTablePlan {
+    ignoreIfExists: Boolean,
+    distributionMode: String = "none",
+    ordering: Seq[SortOrder] = Seq.empty) extends UnaryCommand with V2CreateTablePlan {
 
   override def child: LogicalPlan = name
 
@@ -469,8 +471,11 @@ case class CreateTableAsSelect(
     tableSpec: TableSpec,
     writeOptions: Map[String, String],
     ignoreIfExists: Boolean,
-    isAnalyzed: Boolean = false)
-  extends V2CreateTableAsSelectPlan {
+    isAnalyzed: Boolean = false,
+    distributionMode: String = "none",
+    ordering: Seq[SortOrder] = Seq.empty) extends V2CreateTableAsSelectPlan {
+
+  override def tableSchema: StructType = query.schema
 
   override def markAsAnalyzed(ac: AnalysisContext): LogicalPlan = copy(isAnalyzed = true)
 
@@ -498,7 +503,9 @@ case class ReplaceTable(
     tableSchema: StructType,
     partitioning: Seq[Transform],
     tableSpec: TableSpec,
-    orCreate: Boolean) extends UnaryCommand with V2CreateTablePlan {
+    orCreate: Boolean,
+    distributionMode: String = "none",
+    ordering: Seq[SortOrder] = Seq.empty) extends UnaryCommand with V2CreateTablePlan {
 
   override def child: LogicalPlan = name
 
@@ -523,7 +530,9 @@ case class ReplaceTableAsSelect(
     tableSpec: TableSpec,
     writeOptions: Map[String, String],
     orCreate: Boolean,
-    isAnalyzed: Boolean = false)
+    isAnalyzed: Boolean = false,
+    distributionMode: String = "none",
+    ordering: Seq[SortOrder] = Seq.empty)
   extends V2CreateTableAsSelectPlan {
 
   override def markAsAnalyzed(ac: AnalysisContext): LogicalPlan = copy(isAnalyzed = true)
