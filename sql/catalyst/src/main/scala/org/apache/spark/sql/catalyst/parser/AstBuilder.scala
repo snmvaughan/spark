@@ -4381,7 +4381,11 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
     val ordering = toOrdering(orderingSpec)
 
     val table = createUnresolvedTable(ctx.multipartIdentifier, "ALTER TABLE ... WRITE")
-    SetWriteDistributionAndOrdering(table, distributionMode, ordering)
+    if (distributionMode == "unordered") {
+      SetWriteDistributionAndOrdering(table, "none", ordering)
+    } else {
+      SetWriteDistributionAndOrdering(table, distributionMode, ordering)
+    }
   }
 
   private def toDistributionMode(
@@ -4391,7 +4395,8 @@ class AstBuilder extends SqlBaseParserBaseVisitor[AnyRef] with SQLConfHelper wit
     if (distributionSpec != null) {
       "hash"
     } else if (orderingSpec.UNORDERED != null || orderingSpec.LOCALLY != null) {
-      "none"
+      // Need to distinguish between "none" (default) and explicitly unordered
+      "unordered"
     } else {
       "range"
     }

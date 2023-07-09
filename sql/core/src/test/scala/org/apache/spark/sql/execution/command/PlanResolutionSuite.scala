@@ -3134,7 +3134,7 @@ class PlanResolutionSuite extends AnalysisTest {
           .add("description", StringType)
           .add("point", new StructType().add("x", DoubleType).add("y", DoubleType)))
         assert(create.partitioning == expectedPartitioning)
-        assert(create.distributionMode == "none")
+        assert(create.distributionMode == "unordered")
         assert(create.ordering == expectedOrdering)
         assert(create.tableSpec.properties == expectedProperties)
         assert(create.ignoreIfExists)
@@ -3167,7 +3167,7 @@ class PlanResolutionSuite extends AnalysisTest {
         assert(ctas.tableSpec.properties == expectedProperties)
         assert(ctas.writeOptions.isEmpty)
         assert(ctas.partitioning.isEmpty)
-        assert(ctas.distributionMode == "none")
+        assert(ctas.distributionMode == "unordered")
         assert(ctas.ordering.isEmpty)
         assert(ctas.ignoreIfExists)
 
