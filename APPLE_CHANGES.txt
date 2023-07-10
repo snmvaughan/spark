@@ -48,6 +48,9 @@ SPARK-44000      Add hint to disable broadcasting and replicating one side of jo
 SPARK-43959      Make RowLevelOperationSuiteBase and AlignAssignmentsSuite abstract
 SPARK-43775      DataSource V2: Allow representing updates as deletes and inserts
 SPARK-43324      Handle UPDATE commands for delta-based sources
+SPARK-44294      Fix HeapHistogram column shows unexpectedly w/ select-all-box
+SPARK-44215      If num chunks are 0, then server should throw a RuntimeException
+SPARK-44313      Fix generated column expression validation when there is a char/varchar column in the schema
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -199,3 +202,5 @@ SPARK-44125      Support Java 21 in SparkR
 SPARK-44122      Make `connect` module pass except Arrow-related ones in Java 21
 SPARK-44099      Support both java-8-openjdk-amd64 and java-8-openjdk-arm64 in `spark-rm` Dockerfile
 rdar://110667736 Include CLASSES.csv file in Apple spark tarball
+rdar://111235765 Create Table and Alter Table with Distribution Port to 3.4 (#1808)
+rdar://111955881 Differentiate Create Table Unordered from Create Table default (#1810)
