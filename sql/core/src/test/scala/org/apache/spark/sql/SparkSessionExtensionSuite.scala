@@ -39,10 +39,11 @@ import org.apache.spark.sql.connector.write.WriterCommitMessage
 import org.apache.spark.sql.execution._
 import org.apache.spark.sql.execution.adaptive.{AdaptiveSparkPlanExec, QueryStageExec, ShuffleQueryStageExec}
 import org.apache.spark.sql.execution.datasources.{FileFormat, WriteFilesExec, WriteFilesSpec}
+import org.apache.spark.sql.execution.datasources.v2.ExtendedDataSourceV2Strategy
 import org.apache.spark.sql.execution.exchange.{BroadcastExchangeExec, BroadcastExchangeLike, ShuffleExchangeExec, ShuffleExchangeLike, ShuffleOrigin}
 import org.apache.spark.sql.execution.vectorized.OnHeapColumnVector
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.internal.SQLConf.COLUMN_BATCH_SIZE
+import org.apache.spark.sql.internal.SQLConf.{COLUMN_BATCH_SIZE, ICEBERG_ENABLED}
 import org.apache.spark.sql.internal.StaticSQLConf.SPARK_SESSION_EXTENSIONS
 import org.apache.spark.sql.types.{DataType, Decimal, IntegerType, LongType, Metadata, StructType}
 import org.apache.spark.sql.vectorized.{ColumnarArray, ColumnarBatch, ColumnarMap, ColumnVector}
@@ -62,12 +63,28 @@ class SparkSessionExtensionSuite extends SparkFunSuite with SQLHelper {
   }
 
   private def withSession(
-      builders: Seq[SparkSessionExtensionsProvider])(f: SparkSession => Unit): Unit = {
+      builders: Seq[SparkSessionExtensionsProvider], pairs: (String, String)*)
+      (f: SparkSession => Unit): Unit = {
     val builder = SparkSession.builder().master("local[1]")
     builders.foreach(builder.withExtensions)
-    val spark = builder.getOrCreate()
+    val configuredBuilder =
+      if (!SQLConf.get.contains(SQLConf.ICEBERG_ENABLED.key)) {
+        builder.config(SQLConf.ICEBERG_ENABLED.key, "false")
+      } else {
+        builder
+      }
+    val spark = configuredBuilder.getOrCreate()
     try f(spark) finally {
       stop(spark)
+    }
+  }
+
+  test("Test Iceberg extension") {
+    withSQLConf(SQLConf.ICEBERG_ENABLED.key -> "true") {
+      withSession(Seq()) { session =>
+        assert(session.sessionState.planner.strategies.contains(
+          ExtendedDataSourceV2Strategy(session)))
+      }
     }
   }
 
@@ -341,6 +358,7 @@ class SparkSessionExtensionSuite extends SparkFunSuite with SQLHelper {
     val session = SparkSession.builder()
       .master("local[1]")
       .config(SPARK_SESSION_EXTENSIONS.key, classOf[MyExtensions].getCanonicalName)
+      .config(ICEBERG_ENABLED.key, false)
       .getOrCreate()
     try {
       assert(session.sessionState.planner.strategies.contains(MySparkStrategy(session)))
@@ -364,6 +382,7 @@ class SparkSessionExtensionSuite extends SparkFunSuite with SQLHelper {
       .config(SPARK_SESSION_EXTENSIONS.key, Seq(
         classOf[MyExtensions2].getCanonicalName,
         classOf[MyExtensions].getCanonicalName).mkString(","))
+      .config(ICEBERG_ENABLED.key, false)
       .getOrCreate()
     try {
       assert(session.sessionState.planner.strategies.containsSlice(
@@ -392,6 +411,7 @@ class SparkSessionExtensionSuite extends SparkFunSuite with SQLHelper {
       .config(SPARK_SESSION_EXTENSIONS.key, Seq(
         classOf[MyExtensions].getCanonicalName,
         classOf[MyExtensions].getCanonicalName).mkString(","))
+      .config(ICEBERG_ENABLED.key, false)
       .getOrCreate()
     try {
       assert(session.sessionState.planner.strategies.count(_ === MySparkStrategy(session)) === 2)

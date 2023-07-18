@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 
 import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe.TypeTag
+import scala.util.Try
 import scala.util.control.NonFatal
 
 import com.apple.boson.BosonConf
@@ -839,6 +840,8 @@ class SparkSession private(
 @Stable
 object SparkSession extends Logging {
 
+  def icebergClass: String = "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions"
+
   /**
    * Builder for [[SparkSession]].
    */
@@ -1312,6 +1315,14 @@ object SparkSession extends Logging {
     }
   }
 
+  private def loadIcebergExtension(sparkContext: SparkContext): Seq[String] = {
+    if (sparkContext.getConf.getBoolean(SQLConf.ICEBERG_ENABLED.key, isIcebergEnabled)) {
+      Seq(icebergClass)
+    } else {
+      Seq.empty
+    }
+  }
+
   /**
    * Initialize extensions specified in [[StaticSQLConf]]. The classes will be applied to the
    * extensions passed into this function.
@@ -1320,7 +1331,8 @@ object SparkSession extends Logging {
       sparkContext: SparkContext,
       extensions: SparkSessionExtensions): SparkSessionExtensions = {
     val extensionConfClassNames = sparkContext.getConf.get(StaticSQLConf.SPARK_SESSION_EXTENSIONS)
-      .getOrElse(Seq.empty) ++ loadBosonExtension(sparkContext)
+      .getOrElse(Seq.empty) ++ loadBosonExtension(sparkContext) ++
+      loadIcebergExtension(sparkContext)
     extensionConfClassNames.foreach { extensionConfClassName =>
       try {
         val extensionConfClass = Utils.classForName(extensionConfClassName)
@@ -1362,5 +1374,12 @@ object SparkSession extends Logging {
   def isBosonEnabled: Boolean = {
     val v = System.getenv("BOSON")
     v == null || v.toBoolean
+  }
+
+  /**
+   * Whether Iceberg extension is enabled
+   */
+  def isIcebergEnabled: Boolean = {
+    Try(Utils.classForName(icebergClass, false)).isSuccess
   }
 }

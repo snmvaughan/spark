@@ -663,8 +663,8 @@ class PersistedViewTestSuite extends SQLViewTestSuite with SharedSparkSession {
       val message = intercept[AnalysisException] {
         sql("SELECT * FROM v")
       }.getMessage
-      assert(message.contains(s"Invalid view text: $dropView." +
-        s" The view ${table.qualifiedName} may have been tampered with"))
+      assert(message.contains(s"has an incompatible schema change " +
+        s"and column 1 cannot be resolved"))
     }
   }
 

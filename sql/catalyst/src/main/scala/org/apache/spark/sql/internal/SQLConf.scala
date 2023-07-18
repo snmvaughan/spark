@@ -4206,6 +4206,15 @@ object SQLConf {
       .booleanConf
       .createWithDefault(true)
 
+  val ICEBERG_ENABLED =
+    buildConf("spark.sql.extensions.iceberg.enabled")
+      .internal()
+      .doc("Whether to automatically load org.apache.iceberg.spark.extensions" +
+        ".IcebergSparkSessionExtensions by default.")
+      .version("3.4.0")
+      .booleanConf
+      .createWithDefault(true)
+
   /**
    * Holds information about keys that have been deprecated.
    *
