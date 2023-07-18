@@ -2821,6 +2821,22 @@
         <version>${iceberg.version}</version>
 	<scope>runtime</scope>
       </dependency>
+
+      <!-- Run Iceberg unit tests -->
+      <dependency>
+        <groupId>org.apache.iceberg</groupId>
+        <artifactId>iceberg-spark-3.4_${scala.binary.version}</artifactId>
+        <version>${iceberg.version}</version>
+        <classifier>shadow-tests</classifier>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.iceberg</groupId>
+        <artifactId>iceberg-hive-metastore</artifactId>
+        <version>${iceberg.version}</version>
+        <classifier>shadow-tests</classifier>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -3001,6 +3017,10 @@
               <include>**/*TestCase.java</include>
               <include>**/*Suite.java</include>
             </includes>
+            <dependenciesToScan>
+              <dependency>org.apache.iceberg:iceberg-spark-3.4_${scala.binary.version}:jar:shadow-tests</dependency>
+              <dependency>org.apache.iceberg:iceberg-hive-metastore:jar:shadow-tests</dependency>
+            </dependenciesToScan>
             <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
             <argLine>-ea -Xmx4g -Xss4m -XX:MaxMetaspaceSize=2g -XX:ReservedCodeCacheSize=${CodeCacheSize} ${extraJavaTestArgs} -Dio.netty.tryReflectionSetAccessible=true</argLine>
             <environmentVariables>
@@ -3619,6 +3639,14 @@
       <id>hive-thriftserver</id>
       <modules>
         <module>sql/hive-thriftserver</module>
+      </modules>
+    </profile>
+
+
+    <profile>
+      <id>iceberg</id>
+      <modules>
+        <module>sql/iceberg</module>
       </modules>
     </profile>
 
