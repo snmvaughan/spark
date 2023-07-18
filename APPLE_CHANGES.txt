@@ -135,6 +135,10 @@ SPARK-44206      DataSet.selectExpr scope Session.active
 SPARK-44184      Remove a wrong doc about `ARROW_PRE_0_15_IPC_FORMAT`
 SPARK-44241      Mistakenly set io.connectionTimeout/connectionCreationTimeout to zero or negative will cause incessant executor cons/destructions
 SPARK-42784      should still create subDir when the number of subDir in merge dir is less than conf
+SPARK-44251      Set nullable correctly on coalesced join key in full outer USING join
+SPARK-44180      DistributionAndOrderingUtils should apply ResolveTimeZone
+SPARK-44391      Check the number of argument types in `InvokeLike`
+SPARK-44415      Upgrade snappy-java to 1.1.10.2
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -204,3 +208,10 @@ SPARK-44099      Support both java-8-openjdk-amd64 and java-8-openjdk-arm64 in `
 rdar://110667736 Include CLASSES.csv file in Apple spark tarball
 rdar://111235765 Create Table and Alter Table with Distribution Port to 3.4 (#1808)
 rdar://111955881 Differentiate Create Table Unordered from Create Table default (#1810)
+rdar://111985992 Upgrade Parquet to 1.13.1.1-apple (#1811)
+rdar://112211550 Add spark-connect library to binary distribution
+rdar://112203854 Update Boson version to 0.3.13 (#1815)
+rdar://112293760 Add Iceberg 1.3.0.0-apple To Spark 3.4 Apple (#1818)
+rdar://112293760 Bump Iceberg to 1.3.0.1-apple (#1823)
+rdar://112325953 Add Rio pipeline to run iceberg unit tests for branch-3.4.0 (#1819)
+rdar://112431669 Auto load Iceberg extensions (#1805)
