@@ -501,20 +501,19 @@ builds:
         - BOSON=false build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
         - BOSON=true build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive "hive/testOnly *.HiveCompatibilitySuite"
 
-# Uncomment once shadow-test jar removes Parquet shading: https://github.pie.apple.com/IPR/apache-incubator-iceberg/pull/1025
-#  - name: apple-spark-2.12_3.4.0-snapshot-iceberg-spark-test-jars
-#    branchName: branch-3.4.0-apple
-#    build:
-#      template: freestyle:v4:build
-#      steps:
-#        - build/mvn -Phadoop-3 -Phive -Piceberg -Dtest="org/apache/iceberg/*" -DwildcardSuites=none test
+  - name: apple-spark-2.12_3.4.0-snapshot-iceberg-spark-test-jars
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:build
+      steps:
+        - build/mvn -Phadoop-3 -Phive -Piceberg -Dtest="org/apache/iceberg/*" -DwildcardSuites=none test
 
-#  - name: apple-spark-2.12_3.4.0-snapshot-iceberg-spark-test-jars-pr
-#    branchName: branch-3.4.0-apple
-#    build:
-#      template: freestyle:v4:prb
-#      steps:
-#        - build/mvn -Phadoop-3 -Phive -Piceberg -Dtest="org/apache/iceberg/*" -DwildcardSuites=none test
+  - name: apple-spark-2.12_3.4.0-snapshot-iceberg-spark-test-jars-pr
+    branchName: branch-3.4.0-apple
+    build:
+      template: freestyle:v4:prb
+      steps:
+        - build/mvn -Phadoop-3 -Phive -Piceberg -Dtest="org/apache/iceberg/*" -DwildcardSuites=none test
 
   - name: apple-spark-2.12_3.4.0-snapshot-iceberg
     branchName: branch-3.4.0-apple
