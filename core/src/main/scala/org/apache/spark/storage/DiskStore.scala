@@ -147,6 +147,7 @@ private[spark] class DiskStore(
   def moveFileToBlock(sourceFile: File, blockSize: Long, targetBlockId: BlockId): Unit = {
     blockSizes.put(targetBlockId, blockSize)
     val targetFile = diskManager.getFile(targetBlockId.name)
+    logDebug(s"\n${sourceFile.getPath()} ->\n${targetFile.getPath()}")
     FileUtils.moveFile(sourceFile, targetFile)
   }
 
