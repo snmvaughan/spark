@@ -55,6 +55,7 @@ SPARK-44501      Ignore checksum files in KubernetesLocalDiskShuffleExecutorComp
 SPARK-44360      Support schema pruning in delta-based MERGE operations
 SPARK-44392      Add tests for schema pruning in delta-basedUPDATEs
 SPARK-44402      Add tests for schema pruning in delta-based DELETEs
+SPARK-44534      Handle only shuffle files in KubernetesLocalDiskShuffleExecutorComponents
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -144,6 +145,13 @@ SPARK-44180      DistributionAndOrderingUtils should apply ResolveTimeZone
 SPARK-44391      Check the number of argument types in `InvokeLike`
 SPARK-44415      Upgrade snappy-java to 1.1.10.2
 SPARK-44464      Fix applyInPandasWithStatePythonRunner to output rows that have Null as first column value
+SPARK-44494      Use `minikube` v1.30.1 for `k8s-integration-tests`
+SPARK-44544      Deduplicate `run_python_packaging_tests`
+SPARK-44553      Ignoring `connect-check-protos` logic in GA testing
+SPARK-44479      Fix protobuf conversion from an empty struct type
+SPARK-44557      Clean up untracked/ignored files before running pip packaging test in GitHub Actions
+SPARK-44513      Upgrade snappy-java to 1.1.10.3
+SPARK-44544      Force run `run_python_packaging_tests`
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -223,3 +231,5 @@ rdar://112431669 Auto load Iceberg extensions (#1805)
 rdar://112325953 Add Rio pipeline to run iceberg unit tests for branch-3.4.0
 rdar://112620764 Add a debug log to DiskStore.moveFileToBlock (#1829)
 rdar://112692714 (Bump Iceberg to 1.3.0.2-apple) (#1828)
+rdar://112767815 Upgrade Parquet version to 1.13.1.2-apple for ACS Spark 3.4 (#1830)
+rdar://113050231 [Boson] Bump Boson version to 0.3.14 in Spark (#1833)
