@@ -935,6 +935,9 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
+    finally:
+      pipelineChain:
+        - pipeline: image-branch-3.4.0-apple-publish-2.12_3.4.0
 
   - name: apple-spark-2.13_3.4.0-binaries-snapshot
     branchName: branch-3.4.0-apple
@@ -958,6 +961,9 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
+    finally:
+      pipelineChain:
+        - pipeline: image-branch-3.4.0-apple-publish-2.13_3.4.0
 
   - name: apple-spark-2.12_3.4.0-release
     branchName: branch-3.4.0-apple-release
@@ -1034,6 +1040,9 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
+    finally:
+      pipelineChain:
+        - pipeline: image-branch-3.4.0-apple-release-publish-2.12_3.4.0
 
   - name: apple-spark-2.13_3.4.0-binaries-release
     branchName: branch-3.4.0-apple-release
@@ -1057,3 +1066,146 @@ builds:
       freeform:
       - publish:
         - repo: oss-patched-binaries-local
+    finally:
+      pipelineChain:
+        - pipeline: image-branch-3.4.0-apple-release-publish-2.13_3.4.0
+
+  - group: image
+    branchName: branch-3.4.0-apple-release
+    version: 2.12_3.4.0
+    trigger:
+      gitPush: false
+    machine:
+      targetPlatforms:
+        - linux/amd64
+        - linux/arm64
+      resources:
+        size: xlarge
+      executor:
+        type: moes
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        # You need to add the following 6 env vars for Rio 3
+        HTTP_PROXY: "http://proxy.config.pcp.local:3128"
+        HTTPS_PROXY: "http://proxy.config.pcp.local:3128"
+        http_proxy: "http://proxy.config.pcp.local:3128"
+        https_proxy: "http://proxy.config.pcp.local:3128"
+        NO_PROXY: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+        no_proxy: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+    build: &release_image_build
+      template: freestyle:v4:publish
+      buildParameters:
+        - parameter: SPARK_ARTIFACT
+          description: The SPARK_ARTIFACT that would have been extracted from the RIO_CONTEXT_FILE (See the previous failed runs output)
+          defaultValue: ""
+      steps:
+        # Use the upstream published Boson
+        - if [ ! -z "${RIO_CONTEXT_FILE}" ]; then SPARK_ARTIFACT=$(cat $RIO_CONTEXT_FILE | jq -r '.[0].artifacts[] | select (.name | startswith("spark-distribution_")) | .name' | grep -e '-apple.tgz$'); fi
+        - echo "SPARK_ARTIFACT = ${SPARK_ARTIFACT:=${BUILD_PARAM_SPARK_ARTIFACT}}"
+        - if [ -z "${SPARK_ARTIFACT}" ]; then echo 'SPARK_ARTIFACT is required!'; exit 1; fi
+
+        # Remove any previous distribution
+        - rm -rf spark-* dist
+        - wget -O - $SPARK_ARTIFACT | tar -xz
+        - mv -v spark-3.4* dist
+    package: &release_image_package
+      release: true
+      dockerfile:
+        - dockerfilePath: dist/kubernetes/dockerfiles/spark/Dockerfile
+          context: dist
+          perApplication: false
+          version: "3.4"
+          publish:
+            - repo: docker.apple.com/spark-dev/spark_${SCALA_BINARY_VERSION}
+
+  - group: image
+    branchName: branch-3.4.0-apple-release
+    version: 2.13_3.4.0
+    trigger:
+      gitPush: false
+    machine:
+      targetPlatforms:
+        - linux/amd64
+        - linux/arm64
+      resources:
+        size: xlarge
+      executor:
+        type: moes
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        # You need to add the following 6 env vars for Rio 3
+        HTTP_PROXY: "http://proxy.config.pcp.local:3128"
+        HTTPS_PROXY: "http://proxy.config.pcp.local:3128"
+        http_proxy: "http://proxy.config.pcp.local:3128"
+        https_proxy: "http://proxy.config.pcp.local:3128"
+        NO_PROXY: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+        no_proxy: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+    build:
+      <<: *release_image_build
+    package:
+      <<: *release_image_package
+
+  - group: image
+    branchName: branch-3.4.0-apple
+    version: 2.12_3.4.0
+    trigger:
+      gitPush: false
+    machine:
+      targetPlatforms:
+        - linux/amd64
+        - linux/arm64
+      resources:
+        size: xlarge
+      executor:
+        type: moes
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.12"
+        # You need to add the following 6 env vars for Rio 3
+        HTTP_PROXY: "http://proxy.config.pcp.local:3128"
+        HTTPS_PROXY: "http://proxy.config.pcp.local:3128"
+        http_proxy: "http://proxy.config.pcp.local:3128"
+        https_proxy: "http://proxy.config.pcp.local:3128"
+        NO_PROXY: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+        no_proxy: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+    build:
+      <<: *release_image_build
+    package: &snapshot_image_package
+      release: true
+      dockerfile:
+        - dockerfilePath: dist/kubernetes/dockerfiles/spark/Dockerfile
+          context: dist
+          perApplication: false
+          version: "3.4-snapshot"
+          publish:
+            - repo: docker.apple.com/spark-dev/spark_${SCALA_BINARY_VERSION}
+
+  - group: image
+    branchName: branch-3.4.0-apple
+    version: 2.13_3.4.0
+    trigger:
+      gitPush: false
+    machine:
+      targetPlatforms:
+        - linux/amd64
+        - linux/arm64
+      resources:
+        size: xlarge
+      executor:
+        type: moes
+      env:
+        <<: *base_env
+        SCALA_BINARY_VERSION: "2.13"
+        # You need to add the following 6 env vars for Rio 3
+        HTTP_PROXY: "http://proxy.config.pcp.local:3128"
+        HTTPS_PROXY: "http://proxy.config.pcp.local:3128"
+        http_proxy: "http://proxy.config.pcp.local:3128"
+        https_proxy: "http://proxy.config.pcp.local:3128"
+        NO_PROXY: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+        no_proxy: "localhost,127.0.0.1,10.100.0.0/16,*.internal,*.apple.com,internal,apple.com"
+    build:
+      <<: *release_image_build
+    package:
+      <<: *snapshot_image_package
