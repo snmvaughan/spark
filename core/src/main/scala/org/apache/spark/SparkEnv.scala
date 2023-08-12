@@ -26,6 +26,7 @@ import scala.collection.concurrent
 import scala.collection.mutable
 import scala.util.Properties
 
+import com.apple.boson.BosonConf
 import com.google.common.cache.CacheBuilder
 import org.apache.hadoop.conf.Configuration
 
@@ -316,7 +317,20 @@ object SparkEnv extends Logging {
     val shortShuffleMgrNames = Map(
       "sort" -> classOf[org.apache.spark.shuffle.sort.SortShuffleManager].getName,
       "tungsten-sort" -> classOf[org.apache.spark.shuffle.sort.SortShuffleManager].getName)
-    val shuffleMgrName = conf.get(config.SHUFFLE_MANAGER)
+    val shuffleMgrName = {
+      val bosonEnv = System.getenv("BOSON")
+      val bosonEnabled =
+        conf.getBoolean(BosonConf.BOSON_ENABLED.key, bosonEnv == null || bosonEnv.toBoolean)
+      val bosonShuffleEnabled = conf.getBoolean(BosonConf.BOSON_EXEC_SHUFFLE_ENABLED.key, false)
+
+      if (!conf.contains(config.SHUFFLE_MANAGER) && bosonEnabled && bosonShuffleEnabled) {
+        // If no custom shuffle manager is specified, and Boson is enabled,
+        // use Boson shuffle manager.
+        "org.apache.spark.sql.boson.execution.shuffle.BosonShuffleManager"
+      } else {
+        conf.get(config.SHUFFLE_MANAGER)
+      }
+    }
     val shuffleMgrClass =
       shortShuffleMgrNames.getOrElse(shuffleMgrName.toLowerCase(Locale.ROOT), shuffleMgrName)
     val shuffleManager = Utils.instantiateSerializerOrShuffleManager[ShuffleManager](

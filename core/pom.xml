@@ -492,6 +492,11 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.apple.pie.boson</groupId>
+      <artifactId>boson-spark-spark${spark.version.short}_${scala.binary.version}</artifactId>
+    </dependency>
+
     <!--
       This spark-tags test-dep is needed even though it isn't used in this module, otherwise testing-cmds that exclude
       them will yield errors.
