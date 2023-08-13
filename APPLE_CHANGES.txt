@@ -5,6 +5,9 @@ SPARK-44661      `getMapOutputLocation` should not throw NPE
 SPARK-42730      Update Spark Standalone Mode page
 SPARK-44585      Fix warning condition in MLLib RankingMetrics ndcgAk
 SPARK-44623      Upgrade `commons-lang3` to 3.13.0
+SPARK-44707      Use INFO log in `ExecutorPodsWatcher.onClose` if `SparkContext` is stopped
+SPARK-44726      Improve `HeartbeatReceiver` config validation error message
+SPARK-44741      Support regex-based MetricFilter in `StatsdSink`
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -65,9 +68,15 @@ SPARK-44534      Handle only shuffle files in KubernetesLocalDiskShuffleExecutor
 SPARK-44653      Non-trivial DataFrame unions should not break caching
 SPARK-44588      Fix double encryption issue for migrated shuffle blocks
 MINOR            Update concat and concat_ws documentation to point out unexpected behavior
+SPARK-44641      Incorrect result in certain scenarios when SPJ is not triggered
 
 # From 3.4.2
 SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
+SPARK-44634      Encoders.bean does no longer support nested beans with type arguments
+SPARK-44657      Fix incorrect limit handling in ArrowBatchWithSchemaIterator and config parsing of CONNECT_GRPC_ARROW_MAX_BATCH_SIZE
+SPARK-44725      Document `spark.network.timeoutInterval`
+SPARK-44581      Fix the bug that ShutdownHookManager gets wrong UGI from SecurityManager of ApplicationMaster
+SPARK-44745      Document shuffle data recovery from the remounted K8s PVCs
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -247,3 +256,8 @@ rdar://112767815 Upgrade Parquet version to 1.13.1.2-apple for ACS Spark 3.4 (#1
 rdar://113050231 [Boson] Bump Boson version to 0.3.14 in Spark (#1833)
 rdar://113352087 Fix artifact filter for publishing images
 rdar://113060247 Publish images for snapshot and release builds
+rdar://113641362 Avoid artifactory redirects for snapshot distributions
+rdar://110127648 Upgrade callhome service to 0.2.29
+rdar://113772991 Update Boson to 0.3.15
+rdar://113767905 Update Iceberg to 1.3.0.3-apple
+rdar://113781872 Enable BosonShuffleManager in Spark 3.4
