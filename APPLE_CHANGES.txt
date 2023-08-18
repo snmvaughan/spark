@@ -77,6 +77,11 @@ SPARK-44657      Fix incorrect limit handling in ArrowBatchWithSchemaIterator an
 SPARK-44725      Document `spark.network.timeoutInterval`
 SPARK-44581      Fix the bug that ShutdownHookManager gets wrong UGI from SecurityManager of ApplicationMaster
 SPARK-44745      Document shuffle data recovery from the remounted K8s PVCs
+SPARK-44813      The Jira Python misses our assignee when it searches users again
+SPARK-44875      Fix spelling for commentator to test SPARK-44813
+SPARK-44857      Fix `getBaseURI` error in Spark Worker LogPage UI buttons
+SPARK-44859      Fix incorrect property name in structured streaming doc
+
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
