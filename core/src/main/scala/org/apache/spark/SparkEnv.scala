@@ -26,7 +26,6 @@ import scala.collection.concurrent
 import scala.collection.mutable
 import scala.util.Properties
 
-import com.apple.boson.BosonConf
 import com.google.common.cache.CacheBuilder
 import org.apache.hadoop.conf.Configuration
 
@@ -320,8 +319,8 @@ object SparkEnv extends Logging {
     val shuffleMgrName = {
       val bosonEnv = System.getenv("BOSON")
       val bosonEnabled =
-        conf.getBoolean(BosonConf.BOSON_ENABLED.key, bosonEnv == null || bosonEnv.toBoolean)
-      val bosonShuffleEnabled = conf.getBoolean(BosonConf.BOSON_EXEC_SHUFFLE_ENABLED.key, false)
+        conf.getBoolean("spark.boson.enabled", bosonEnv == null || bosonEnv.toBoolean)
+      val bosonShuffleEnabled = conf.getBoolean("spark.boson.exec.shuffle.enabled", false)
 
       if (!conf.contains(config.SHUFFLE_MANAGER) && bosonEnabled && bosonShuffleEnabled) {
         // If no custom shuffle manager is specified, and Boson is enabled,
