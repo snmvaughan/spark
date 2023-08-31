@@ -27,8 +27,6 @@ import scala.reflect.runtime.universe.TypeTag
 import scala.util.Try
 import scala.util.control.NonFatal
 
-import com.apple.boson.BosonConf
-
 import org.apache.spark.{SPARK_VERSION, SparkConf, SparkContext, SparkException, TaskContext}
 import org.apache.spark.annotation.{DeveloperApi, Experimental, Stable, Unstable}
 import org.apache.spark.api.java.JavaRDD
@@ -1308,7 +1306,7 @@ object SparkSession extends Logging {
   }
 
   private def loadBosonExtension(sparkContext: SparkContext): Seq[String] = {
-    if (sparkContext.getConf.getBoolean(BosonConf.BOSON_ENABLED.key, isBosonEnabled)) {
+    if (sparkContext.getConf.getBoolean("spark.boson.enabled", isBosonEnabled)) {
       Seq("com.apple.boson.BosonSparkSessionExtensions")
     } else {
       Seq.empty
