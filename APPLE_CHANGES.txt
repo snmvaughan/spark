@@ -11,6 +11,10 @@ SPARK-44741      Support regex-based MetricFilter in `StatsdSink`
 SPARK-44214      Support Spark Driver Live Log UI
 SPARK-44916      Document Spark Driver Live Log UI
 SPARK-44936      Simplify the log when Spark HybridStore hits the memory limit
+SPARK-44993      Add `ShuffleChecksumUtils.compareChecksums` by reusing `ShuffleChecksumTestHelp.compareChecksums`
+SPARK-44995      Promote `SparkKubernetesClientFactory` to `DeveloperApi`
+SPARK-44996      Use `lazy val` for `DefaultVolcanoClient`
+SPARK-45054      HiveExternalCatalog.listPartitions should restore partition statistics
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -72,6 +76,8 @@ SPARK-44653      Non-trivial DataFrame unions should not break caching
 SPARK-44588      Fix double encryption issue for migrated shuffle blocks
 MINOR            Update concat and concat_ws documentation to point out unexpected behavior
 SPARK-44641      Incorrect result in certain scenarios when SPJ is not triggered
+MINOR            Fix incorrect link in sql menu and typo
+SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenAsQuotedEmptyStringCsv`
 
 # From 3.4.2
 SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
@@ -279,3 +285,5 @@ rdar://113767905 Update Iceberg to 1.3.0.3-apple
 rdar://113781872 Enable BosonShuffleManager in Spark 3.4
 rdar://112799075 Async profiler support
 rdar://113781872 Remove BosonConf dependency from core by using string config names
+rdar://114672798 Don't load Boson jar in Spark unless Boson is enabled (#1850)
+rdar://114854895 Bump Boson to 0.3.18 (#1854)
