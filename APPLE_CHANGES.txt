@@ -15,6 +15,10 @@ SPARK-44993      Add `ShuffleChecksumUtils.compareChecksums` by reusing `Shuffle
 SPARK-44995      Promote `SparkKubernetesClientFactory` to `DeveloperApi`
 SPARK-44996      Use `lazy val` for `DefaultVolcanoClient`
 SPARK-45054      HiveExternalCatalog.listPartitions should restore partition statistics
+SPARK-44915      Validate checksum of remounted PVC's shuffle data before recovery
+SPARK-45145      Add JavaSparkSQLCli example
+SPARK-45147      Remove `System.setSecurityManager` usage
+SPARK-45174      Support `spark.deploy.maxDrivers`
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -99,6 +103,19 @@ SPARK-44935      Fix `RELEASE` file to have the correct information in Docker im
 SPARK-44929      Standardize log output for console appender in tests
 SPARK-44840      Make `array_insert()` 1-based for negative indexes
 SPARK-44547      Ignore fallback storage for cached RDD migration
+SPARK-44846      Convert the lower redundant Aggregate to Project in RemoveRedundantAggregates
+SPARK-44940      Improve performance of JSON parsing when "spark.sql.json.enablePartialResults" is enabled
+SPARK-45071      Optimize the processing speed of `BinaryArithmetic#dataType` when processing multi-column data
+SPARK-45079      Fix an internal error from `percentile_approx()`on `NULL` accuracy
+SPARK-45103      Update ORC to 1.8.5
+SPARK-45100      Fix an internal error from `reflect()`on `NULL` class and method
+SPARK-43203      V2SessionCatalog.dropTable should handle null table
+SPARK-44805      getBytes/getShorts/getInts/etc. should work in a column vector that has a dictionary
+SPARK-45075      Fix alter table with invalid default value will not report error
+SPARK-45109      Fix log function in Connect
+SPARK-45146      Update the default value of 'spark.submit.deployMode'
+SPARK-45127      Exclude README.md from document build
+SPARK-45187      Fix `WorkerPage` to use the same pattern for `logPage` urls
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
