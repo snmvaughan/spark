@@ -883,7 +883,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,code-profiler"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
     package:
@@ -906,7 +906,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - dev/change-scala-version.sh 2.13
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-${HADOOP_BINARY_VERSION},hadoop-cloud,hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,code-profiler"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.jar"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*.pom"
     package:
@@ -929,7 +929,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - yum install -q -y python39
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect,code-profiler"
         - ./dev/make-distribution.sh --tgz --pip --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
     package:
@@ -955,7 +955,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - dev/change-scala-version.sh 2.13
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --snapshot --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect,code-profiler"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz,snapshot"
     package:
@@ -980,7 +980,7 @@ builds:
     build:
       template: freestyle:v4:publish
       steps:
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,code-profiler"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       release: true
@@ -1007,7 +1007,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - dev/change-scala-version.sh 2.13
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,code-profiler"
         - ci stage-lib --many-many-artifacts ".dist/local-repo/**/*" --exclude "**/*.xml" --exclude "**/*.md5" --exclude "**/*.sha1"
     package:
       release: true
@@ -1034,7 +1034,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - yum install -q -y python39
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-P hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect,code-profiler"
         - ./dev/make-distribution.sh --tgz --pip --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz"
     package:
@@ -1060,7 +1060,7 @@ builds:
       template: freestyle:v4:publish
       steps:
         - dev/change-scala-version.sh 2.13
-        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect"
+        - ./dev/rio-maven-custom-build.sh --scala "$SCALA_BINARY_VERSION" --release --maven-opts "${MAVEN_OPTS}" --maven-params "-Dscala.version=$SCALA_VERSION -P scala-${SCALA_BINARY_VERSION},hive,hadoop-cloud,hadoop-${HADOOP_BINARY_VERSION},hive-thriftserver,kinesis-asl,yarn,kubernetes,volcano,connect,code-profiler"
         - ./dev/make-distribution.sh --tgz --use-existing-build --with-hadoop --skip-java-test -DskipTests=true -Dscala-$SCALA_BINARY_VERSION=enabled -Dhive-thriftserver=enabled -Dscala.version="$SCALA_VERSION" -Dscala.binary.version="$SCALA_BINARY_VERSION" -Pscala-$SCALA_BINARY_VERSION -Phadoop-${HADOOP_BINARY_VERSION}
         - ci stage-lib ".dist/local-repo/**/*.tgz"
     package:

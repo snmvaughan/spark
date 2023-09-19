@@ -203,7 +203,8 @@ public interface StagingTableCatalog extends TableCatalog {
         "%s does not support tables with a specific ordering",
         this.getClass().getName());
 
-    return stageReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+    return stageReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions,
+        properties);
   }
 
   /**
@@ -261,6 +262,7 @@ public interface StagingTableCatalog extends TableCatalog {
         "%s does not support tables with a specific ordering",
         this.getClass().getName());
 
-    return stageCreateOrReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions, properties);
+    return stageCreateOrReplace(ident, CatalogV2Util.v2ColumnsToStructType(columns), partitions,
+        properties);
   }
 }
