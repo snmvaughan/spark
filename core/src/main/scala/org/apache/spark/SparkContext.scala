@@ -3105,6 +3105,10 @@ object SparkContext extends Logging {
    * based on a single conf: `spark.hadoop.fs.s3a.bucket.<bucket>.committer.magic.enabled`
    */
   private def fillMissingMagicCommitterConfsIfNeeded(conf: SparkConf): Unit = {
+    // Enable Magic Committer by default in Team-shared Spark Cluster
+    if (System.getenv("TEAM_SHARED_SPARK_CLUSTER") != null) {
+      conf.setIfMissing("spark.hadoop.fs.s3a.bucket.*.committer.magic.enabled", "true")
+    }
     val magicCommitterConfs = conf
       .getAllWithPrefix("spark.hadoop.fs.s3a.bucket.")
       .filter(_._1.endsWith(".committer.magic.enabled"))
