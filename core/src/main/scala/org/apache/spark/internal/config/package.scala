@@ -1928,6 +1928,7 @@ package object config {
         "the codec.")
       .version("3.0.0")
       .stringConf
+      .transform(_.toLowerCase(Locale.ROOT))
       .createWithDefault("zstd")
 
   private[spark] val BUFFER_SIZE =
