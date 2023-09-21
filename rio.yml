@@ -1102,7 +1102,7 @@ builds:
           defaultValue: ""
       steps:
         # Use the upstream published Boson
-        - if [ ! -z "${RIO_CONTEXT_FILE}" ]; then SPARK_ARTIFACT=$(cat $RIO_CONTEXT_FILE | jq -r '.[0].artifacts[] | select (.name | startswith("spark-distribution_")) | .url' | grep -e '-apple[0-9.-]*\.tgz$'); fi
+        - if [ ! -z "${RIO_CONTEXT_FILE}" ]; then SPARK_ARTIFACT=$(cat $RIO_CONTEXT_FILE | jq -r '.[0].artifacts[] | select (.name | startswith("spark-distribution_")) | .url' | grep -e '-apple[0-9.-]*\.tgz$' | head -1); fi
         - echo "SPARK_ARTIFACT = ${SPARK_ARTIFACT:=${BUILD_PARAM_SPARK_ARTIFACT}}"
         - if [ -z "${SPARK_ARTIFACT}" ]; then echo 'SPARK_ARTIFACT is required!'; exit 1; fi
 
