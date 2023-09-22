@@ -116,6 +116,17 @@ SPARK-45109      Fix log function in Connect
 SPARK-45146      Update the default value of 'spark.submit.deployMode'
 SPARK-45127      Exclude README.md from document build
 SPARK-45187      Fix `WorkerPage` to use the same pattern for `logPage` urls
+SPARK-45197      Make `StandaloneRestServer` add `JavaModuleOptions` to drivers
+SPARK-45229      Show the number of drivers waiting in SUBMITTED status in MasterPage
+SPARK-45078      Fix `array_insert` ImplicitCastInputTypes not work
+SPARK-45081      Encoders.bean does no longer work with read-only properties
+SPARK-44910      Encoders.bean does not support superclasses with generic type arguments
+SPARK-45210      Switch languages consistently across docs for all code snippets (Spark 3.4 and below)
+SPARK-45237      Change the default value of `spark.history.store.hybridStore.diskBackend` in `monitoring.md` to `ROCKSDB`
+SPARK-45261      Fix `EventLogFileWriters` to handle `none` as a codec
+SPARK-45263      Make `EventLoggingListenerSuite` independent from `spark.eventLog.compress` conf
+SPARK-45261      Avoid `transform` of conf value
+SPARK-45257      Enable `spark.eventLog.compress` by default
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -304,3 +315,10 @@ rdar://112799075 Async profiler support
 rdar://113781872 Remove BosonConf dependency from core by using string config names
 rdar://114672798 Don't load Boson jar in Spark unless Boson is enabled (#1850)
 rdar://114854895 Bump Boson to 0.3.18 (#1854)
+rdar://112799075 enable async_profiler in build
+rdar://114213400 Bump spark-call-home-listener to 0.2.31
+rdar://115803725 Enable Magic Committer by default in Team-shared Spark Cluster
+rdar://115843507 Bump Boson to 0.3.19
+rdar://115848005 Potential Image build failure due to changes in RIO_CONTEXT_FILE
+rdar://115883001 Increase Python test parallelism to 3
+rdar://115909994 Updates Iceberg to Apple 1.3.0.4
