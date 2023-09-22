@@ -793,7 +793,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -803,7 +803,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39
     branchName: branch-3.4.0-apple
@@ -814,7 +814,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39-boson # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -825,7 +825,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39-pr
     branchName: branch-3.4.0-apple
@@ -835,7 +835,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.12_3.4.0-snapshot-python39-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -845,7 +845,7 @@ builds:
         - yum install -q -y python39
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - build/sbt -Phadoop-3 -Phive test:package
-        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39-pr
     branchName: branch-3.4.0-apple
@@ -856,7 +856,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=false python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.13_3.4.0-snapshot-python39-boson-pr # long-running test has its own Boson tests
     branchName: branch-3.4.0-apple
@@ -867,7 +867,7 @@ builds:
         - pip3.9 install numpy==1.22.3 scipy==1.8.0 pandas==1.4.1 pyarrow==7.0.0 openpyxl==3.0.10 "jinja2<3.0.0" markupsafe==2.0.1 grpcio==1.48.1 grpcio-status==1.48.1 protobuf==3.19.5 googleapis-common-protos==1.56.4
         - dev/change-scala-version.sh 2.13
         - build/sbt -Dscala.version=2.13.8 -Pscala-2.13 -Phadoop-3 -Phive test:package
-        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 1
+        - BOSON=true python/run-tests.py --python-executables python3.9 --parallelism 3
 
   - name: apple-spark-2.12_3.4.0-snapshot
     branchName: branch-3.4.0-apple
