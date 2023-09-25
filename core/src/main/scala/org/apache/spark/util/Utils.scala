@@ -2331,8 +2331,7 @@ private[spark] object Utils extends Logging {
 
   /** Return a heap dump. Used to capture dumps for the web UI */
   def getHeapHistogram(): Array[String] = {
-    // From Java 9+, we can use 'ProcessHandle.current().pid()'
-    val pid = getProcessName().split("@").head
+    val pid = String.valueOf(ProcessHandle.current().pid())
     val jmap = System.getProperty("java.home") + "/bin/jmap"
     val builder = new ProcessBuilder(jmap, "-histo:live", pid)
     val p = builder.start()
