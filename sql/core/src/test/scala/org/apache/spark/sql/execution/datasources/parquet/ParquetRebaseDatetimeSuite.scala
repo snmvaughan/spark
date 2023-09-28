@@ -28,6 +28,7 @@ import org.apache.spark.sql.internal.SQLConf.{LegacyBehaviorPolicy, ParquetOutpu
 import org.apache.spark.sql.internal.SQLConf.LegacyBehaviorPolicy.{CORRECTED, EXCEPTION, LEGACY}
 import org.apache.spark.sql.internal.SQLConf.ParquetOutputTimestampType.{INT96, TIMESTAMP_MICROS, TIMESTAMP_MILLIS}
 import org.apache.spark.sql.test.SharedSparkSession
+import org.apache.spark.tags.SlowSQLTest
 
 // Boson is disabled for this suite because it doesn't support datetime rebase mode
 // See https://github.pie.apple.com/pie/boson/issues/233
@@ -464,6 +465,7 @@ abstract class ParquetRebaseDatetimeSuite
   }
 }
 
+@SlowSQLTest
 class ParquetRebaseDatetimeV1Suite extends ParquetRebaseDatetimeSuite {
   override protected def sparkConf: SparkConf =
     super
@@ -471,6 +473,7 @@ class ParquetRebaseDatetimeV1Suite extends ParquetRebaseDatetimeSuite {
       .set(SQLConf.USE_V1_SOURCE_LIST, "parquet")
 }
 
+@SlowSQLTest
 class ParquetRebaseDatetimeV2Suite extends ParquetRebaseDatetimeSuite {
   override protected def sparkConf: SparkConf =
     super
