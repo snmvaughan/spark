@@ -19,6 +19,7 @@ SPARK-44915      Validate checksum of remounted PVC's shuffle data before recove
 SPARK-45145      Add JavaSparkSQLCli example
 SPARK-45147      Remove `System.setSecurityManager` usage
 SPARK-45174      Support `spark.deploy.maxDrivers`
+SPARK-45322      Use ProcessHandle to get pid directly
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -82,6 +83,7 @@ MINOR            Update concat and concat_ws documentation to point out unexpect
 SPARK-44641      Incorrect result in certain scenarios when SPJ is not triggered
 MINOR            Fix incorrect link in sql menu and typo
 SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenAsQuotedEmptyStringCsv`
+SPARK-44034      Add a new test group for sql module
 
 # From 3.4.2
 SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
@@ -127,6 +129,11 @@ SPARK-45261      Fix `EventLogFileWriters` to handle `none` as a codec
 SPARK-45263      Make `EventLoggingListenerSuite` independent from `spark.eventLog.compress` conf
 SPARK-45261      Avoid `transform` of conf value
 SPARK-45257      Enable `spark.eventLog.compress` by default
+SPARK-45286      Add back Matomo analytics
+SPARK-44937      Mark connection as timedOut in TransportClient.close
+SPARK-45057      Avoid acquire read lock when keepReadLock is false
+SPARK-45227      Fix a subtle thread-safety issue with CoarseGrainedExecutorBackend
+SPARK-44074      Fix loglevel restore behavior of `SparkFunSuite#withLogAppender` and re-enable UT `Logging plan changes for execution`
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -322,3 +329,4 @@ rdar://115843507 Bump Boson to 0.3.19
 rdar://115848005 Potential Image build failure due to changes in RIO_CONTEXT_FILE
 rdar://115883001 Increase Python test parallelism to 3
 rdar://115909994 Updates Iceberg to Apple 1.3.0.4
+rdar://116016436 Remove hadoop-2 dependency check
