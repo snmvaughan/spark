@@ -470,6 +470,11 @@ private[spark] object SparkHadoopUtil extends Logging {
    */
 
   /**
+   * AWS Endpoint URL.
+   */
+  private[deploy] val ENV_VAR_AWS_ENDPOINT_URL = "AWS_ENDPOINT_URL"
+
+  /**
    * AWS Access key.
    */
   private[deploy] val ENV_VAR_AWS_ACCESS_KEY = "AWS_ACCESS_KEY_ID"
@@ -532,6 +537,7 @@ private[spark] object SparkHadoopUtil extends Logging {
     // the behavior of the old implementation of this code, for backwards compatibility.
     if (conf != null) {
       appendS3CredentialsFromEnvironment(hadoopConf,
+        System.getenv(ENV_VAR_AWS_ENDPOINT_URL),
         System.getenv(ENV_VAR_AWS_ACCESS_KEY),
         System.getenv(ENV_VAR_AWS_SECRET_KEY),
         System.getenv(ENV_VAR_AWS_SESSION_TOKEN))
@@ -559,6 +565,7 @@ private[spark] object SparkHadoopUtil extends Logging {
   // Exposed for testing
   private[deploy] def appendS3CredentialsFromEnvironment(
       hadoopConf: Configuration,
+      endpointUrl: String,
       keyId: String,
       accessKey: String,
       sessionToken: String): Unit = {
@@ -571,6 +578,10 @@ private[spark] object SparkHadoopUtil extends Logging {
       hadoopConf.set("fs.s3.awsSecretAccessKey", accessKey, source + ENV_VAR_AWS_SECRET_KEY)
       hadoopConf.set("fs.s3n.awsSecretAccessKey", accessKey, source + ENV_VAR_AWS_SECRET_KEY)
       hadoopConf.set("fs.s3a.secret.key", accessKey, source + ENV_VAR_AWS_SECRET_KEY)
+
+      if (endpointUrl != null) {
+        hadoopConf.set("fs.s3a.endpoint", endpointUrl, source + ENV_VAR_AWS_ENDPOINT_URL)
+      }
 
       // look for session token if the other variables were set
       if (sessionToken != null) {
