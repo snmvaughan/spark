@@ -1581,6 +1581,16 @@ object SQLConf {
       .booleanConf
       .createWithDefault(false)
 
+  val USE_LISTFILES_FILESYSTEM_LIST =
+    buildConf("spark.sql.sources.useListFilesFileSystemList")
+      .doc("A comma-separated list of file system schemes to use FileSystem.listFiles API " +
+        "for a single root path listing")
+      .version("4.0.0")
+      .internal()
+      .stringConf
+      .transform(_.toLowerCase(Locale.ROOT))
+      .createWithDefault("")
+
   // Whether to automatically resolve ambiguity in join conditions for self-joins.
   // See SPARK-6231.
   val DATAFRAME_SELF_JOIN_AUTO_RESOLVE_AMBIGUITY =
@@ -4992,6 +5002,8 @@ class SQLConf extends Serializable with Logging {
   def castDatetimeToString: Boolean = getConf(SQLConf.LEGACY_CAST_DATETIME_TO_STRING)
 
   def ignoreDataLocality: Boolean = getConf(SQLConf.IGNORE_DATA_LOCALITY)
+
+  def useListFilesFileSystemList: String = getConf(SQLConf.USE_LISTFILES_FILESYSTEM_LIST)
 
   def csvFilterPushDown: Boolean = getConf(CSV_FILTER_PUSHDOWN_ENABLED)
 
