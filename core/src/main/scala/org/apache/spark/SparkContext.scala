@@ -3112,6 +3112,7 @@ object SparkContext extends Logging {
       // To help a migration from EMRFS
       // https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-file-systems.html
       conf.setIfMissing("spark.hadoop.fs.s3.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+      conf.setIfMissing("spark.sql.sources.useListFilesFileSystemList", "s3,s3a")
     }
     val magicCommitterConfs = conf
       .getAllWithPrefix("spark.hadoop.fs.s3a.bucket.")
