@@ -3109,6 +3109,7 @@ object SparkContext extends Logging {
     // Enable Magic Committer by default in Team-shared Spark Cluster
     if (System.getenv("TEAM_SHARED_SPARK_CLUSTER") != null) {
       conf.setIfMissing("spark.hadoop.fs.s3a.bucket.*.committer.magic.enabled", "true")
+      conf.setIfMissing("spark.hadoop.fs.s3a.bulk.delete.page.size", "1000")
       // To help a migration from EMRFS
       // https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-file-systems.html
       conf.setIfMissing("spark.hadoop.fs.s3.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
