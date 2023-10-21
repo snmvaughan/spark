@@ -23,6 +23,14 @@ SPARK-45322      Use ProcessHandle to get pid directly
 SPARK-45404      Support `AWS_ENDPOINT_URL` env variables
 SPARK-45423      Lower `ParquetWriteSupport` log level to debug
 SPARK-45452      Improve `InMemoryFileIndex` to use `FileSystem.listFiles` API
+SPARK-45500      Show `RELAUNCHING` drivers too
+SPARK-45578      Remove `InaccessibleObjectException` usage by using `trySetAccessible`
+SPARK-45500      Show the number of abnormally completed drivers in MasterPage
+SPARK-45497      Add a symbolic link file `spark-examples.jar` in K8s Docker images
+SPARK-45474      Support top-level filtering in MasterPage JSON API
+SPARK-45462      Show `Duration` in `ApplicationPage`
+SPARK-45452      Simplify path check logic
+
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -87,6 +95,7 @@ SPARK-44641      Incorrect result in certain scenarios when SPJ is not triggered
 MINOR            Fix incorrect link in sql menu and typo
 SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenAsQuotedEmptyStringCsv`
 SPARK-44034      Add a new test group for sql module
+SPARK-45389      Correct MetaException matching rule on getting partition metadata
 
 # From 3.4.2
 SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
@@ -234,6 +243,15 @@ SPARK-44557      Clean up untracked/ignored files before running pip packaging t
 SPARK-44513      Upgrade snappy-java to 1.1.10.3
 SPARK-44544      Force run `run_python_packaging_tests`
 
+# From 3.4.2
+MINOR            Remove signature from Hive thriftserver exception
+SPARK-45568      Fix flaky WholeStageCodegenSparkSubmitSuite
+SPARK-45508      Add "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" so Platform can access Cleaner on Java 9+
+SPARK-45433      Fix CSV/JSON schema inference when timestamps do not match specified timestampFormat
+SPARK-45473      Fix incorrect error message for RoundBase
+SPARK-44729      Add canonical links to the PySpark docs page
+MINOR            Update `CTAS` with `LOCATION` behavior with Spark 3.2+
+
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
 MINOR            Adjust test cases for RIO
@@ -335,3 +353,9 @@ rdar://115909994 Updates Iceberg to Apple 1.3.0.4
 rdar://116016436 Remove hadoop-2 dependency check
 rdar://116440884 Use S3AFileSystem for 's3://' in Team-shared Spark Cluster
 rdar://116631249 Set spark.sql.sources.useListFilesFileSystemList=s3,s3a in Team-shared Spark Cluster
+rdar://117273662 Update Boson to 0.3.20 (#1865)
+rdar://117157873: Fatal error (e.g. OOM) during generating streaming jobs should fail the streaming context (#1864)
+rdar://117158009 Update stripSparkFilter test method for Boson (#1863)
+rdar://116895470 Set spark.hadoop.mapreduce.outputcommitter.factory.scheme.s3 in Team-shared Spark Cluster
+rdar://116895388 Set spark.hadoop.fs.s3a.bulk.delete.page.size to 1000 in Team-shared Spark Cluster
+
