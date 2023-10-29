@@ -146,6 +146,14 @@ SPARK-44937      Mark connection as timedOut in TransportClient.close
 SPARK-45057      Avoid acquire read lock when keepReadLock is false
 SPARK-45227      Fix a subtle thread-safety issue with CoarseGrainedExecutorBackend
 SPARK-44074      Fix loglevel restore behavior of `SparkFunSuite#withLogAppender` and re-enable UT `Logging plan changes for execution`
+SPARK-45452      Do not fail too early if FileSystem does not implement getSchema
+SPARK-45652      SPJ: Handle empty input partitions after dynamic filtering
+SPARK-45678      Cover BufferReleasingInputStream.available/reset under tryOrFetchFailedException 
+SPARK-45604      Add LogicalType checking on INT64 -> DateTime conversion on Parquet Vectorized Reader
+SPARK-45430      Fix for FramelessOffsetWindowFunction when IGNORE NULLS and offset > rowCount
+SPARK-45588      Fix flaky ProtobufCatalystDataConversionSuite
+SPARK-40154      Correct storage level in Dataframe.cache docstring
+SPARK-45670      SparkSubmit does not support `--total-executor-cores` when deploying on K8s
 
 # From 3.4.1
 SPARK-43067      Correct the location of error class resource file in Kafka connector
@@ -358,4 +366,4 @@ rdar://117157873: Fatal error (e.g. OOM) during generating streaming jobs should
 rdar://117158009 Update stripSparkFilter test method for Boson (#1863)
 rdar://116895470 Set spark.hadoop.mapreduce.outputcommitter.factory.scheme.s3 in Team-shared Spark Cluster
 rdar://116895388 Set spark.hadoop.fs.s3a.bulk.delete.page.size to 1000 in Team-shared Spark Cluster
-
+rdar://117590641 Bump Boson version to 0.3.21 (#1871)
