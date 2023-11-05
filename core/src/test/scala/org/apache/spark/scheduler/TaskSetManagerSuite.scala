@@ -2153,9 +2153,9 @@ class TaskSetManagerSuite
     clock.advance(1000)
     // Mark one of the task succeeded, which should satisfy the quantile
     manager.handleSuccessfulTask(0, createTaskResult(0))
-    // Advance 1 more second so the remaining task takes longer than medium but doesn't satisfy the
+    // Advance 3 more second so the remaining task takes longer than medium but doesn't satisfy the
     // duration threshold yet
-    clock.advance(1000)
+    clock.advance(3000)
     assert(manager.checkSpeculatableTasks(0))
     assert(sched.speculativeTasks.size == 1)
   }
@@ -2355,6 +2355,7 @@ class TaskSetManagerSuite
     // set the speculation multiplier to be 0, so speculative tasks are launched based on
     // minTimeToSpeculation parameter to checkSpeculatableTasks
     val conf = new SparkConf()
+      .set(config.SPECULATION_QUANTILE, 0.75)
       .set(config.SPECULATION_MULTIPLIER, 0.0)
       .set(config.SPECULATION_ENABLED, true)
     sc = new SparkContext("local", "test", conf)
