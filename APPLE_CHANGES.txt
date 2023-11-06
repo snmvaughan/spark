@@ -30,6 +30,19 @@ SPARK-45497      Add a symbolic link file `spark-examples.jar` in K8s Docker ima
 SPARK-45474      Support top-level filtering in MasterPage JSON API
 SPARK-45462      Show `Duration` in `ApplicationPage`
 SPARK-45452      Simplify path check logic
+MINOR            Validate spark.deploy.defaultCores value during config setting
+SPARK-45785      Support `spark.deploy.appNumberModulo` to rotate app number
+SPARK-44843      Double streamingTimeout for StateStoreMetricsTest to make RocksDBStateStore related streaming tests reliable
+SPARK-45774      Support `spark.master.ui.historyServerUrl` in `ApplicationPage`
+SPARK-45777      Support `spark.test.appId` in `LocalSchedulerBackend`
+SPARK-45771      Enable `spark.eventLog.rolling.enabled` by default
+SPARK-45763      Improve `MasterPage` to show `Resource` column only when it exists
+SPARK-45754      Support `spark.deploy.appIdPattern`
+SPARK-45751      Update the default value for spark.executor.logs.rolling.maxRetainedFile
+SPARK-45753      Support `spark.deploy.driverIdPattern`
+SPARK-45749      Fix `Spark History Server` to sort `Duration` column properly
+SPARK-45735      Reenable CatalogTests without Spark Connect
+SPARK-45172      Upgrade `commons-compress` to 1.24.0
 
 
 # From 3.5.0
@@ -367,3 +380,5 @@ rdar://117158009 Update stripSparkFilter test method for Boson (#1863)
 rdar://116895470 Set spark.hadoop.mapreduce.outputcommitter.factory.scheme.s3 in Team-shared Spark Cluster
 rdar://116895388 Set spark.hadoop.fs.s3a.bulk.delete.page.size to 1000 in Team-shared Spark Cluster
 rdar://117590641 Bump Boson version to 0.3.21 (#1871)
+rdar://117948760 Bump Boson version to 0.3.22 (#1874)
+rdar://117967381 Increase spark.speculation.quantile and multiplier
