@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.4.0`
+This contains the changes after creating `v3.4.1`
 
 # From 4.0.0
 SPARK-44661      `getMapOutputLocation` should not throw NPE
@@ -43,7 +43,12 @@ SPARK-45753      Support `spark.deploy.driverIdPattern`
 SPARK-45749      Fix `Spark History Server` to sort `Duration` column properly
 SPARK-45735      Reenable CatalogTests without Spark Connect
 SPARK-45172      Upgrade `commons-compress` to 1.24.0
-
+SPARK-45819      Support `clear` in REST Submission API
+SPARK-45843      Support `killall` in REST Submission API
+SPARK-45867      Support `spark.worker.idPattern`
+SPARK-45756      Support `spark.master.useAppNameAsAppId.enabled`
+SPARK-45731      Also update partition statistics with `ANALYZE TABLE` command
+SPARK-45901      Collect and update `spark-standalone.md` with new confs
 
 # From 3.5.0
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -109,6 +114,7 @@ MINOR            Fix incorrect link in sql menu and typo
 SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenAsQuotedEmptyStringCsv`
 SPARK-44034      Add a new test group for sql module
 SPARK-45389      Correct MetaException matching rule on getting partition metadata
+SPARK-42388      Avoid parquet footer reads twice in vectorized reader
 
 # From 3.4.2
 SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
@@ -167,104 +173,6 @@ SPARK-45430      Fix for FramelessOffsetWindowFunction when IGNORE NULLS and off
 SPARK-45588      Fix flaky ProtobufCatalystDataConversionSuite
 SPARK-40154      Correct storage level in Dataframe.cache docstring
 SPARK-45670      SparkSubmit does not support `--total-executor-cores` when deploying on K8s
-
-# From 3.4.1
-SPARK-43067      Correct the location of error class resource file in Kafka connector
-SPARK-43075      Change gRPC to grpcio when it is not installed.
-MINOR            Tests in SubquerySuite should not drop view created in `beforeAll`
-SPARK-43072      Include TIMESTAMP_NTZ type in ANSI Compliance doc
-SPARK-43071      Support SELECT DEFAULT with ORDER BY, LIMIT, OFFSET for INSERT source relation
-SPARK-43083      Mark *StateStoreSuite as ExtendedSQLTest
-SPARK-43085      Support column DEFAULT assignment for multi-part table names
-SPARK-43126      Mark two Hive UDF expressions as stateful
-SPARK-43125      Fix Connect Server Can't Handle Exception With Null Message
-SPARK-43050      Fix construct aggregate expressions by replacing grouping functions
-SPARK-43139      Fix incorrect column names in sql-ref-syntax-dml-insert-table.md
-SPARK-42475      Fix PySpark connect Quickstart binder link
-SPARK-43158      Set upperbound of pandas version for Binder integration
-SPARK-43141      Ignore generated Java files in checkstyle
-SPARK-42078      Add `CapturedException` to utils
-SPARK-43113      Evaluate stream-side variables when generating code for a bound condition
-SPARK-43098      Fix correctness COUNT bug when scalar subquery has group by clause
-SPARK-37829      Dataframe.joinWith outer-join should return a null value for unmatched row
-MINOR            Fix the doc of parameter `num` in `DataFrame.offset`
-SPARK-43113      Add comment about copying steam-side variables
-SPARK-43249      Fix missing stats for SQL Command
-SPARK-43293      __qualified_access_only should be ignored in normal columns
-SPARK-43414      Fix flakiness in Kafka RDD suites due to port binding configuration issue
-SPARK-43410      Improve vectorized loop for Packed skipValues
-SPARK-43342      Revert SPARK-39006 Show a directional error message for executor PVC dynamic allocation failure
-SPARK-43395      Exclude macOS tar extended metadata in make-distribution.sh
-SPARK-43374      Move protobuf-java to BSD 3-clause group and update the license copy
-SPARK-43340      Handle missing stack-trace field in eventlogs
-SPARK-43337      Asc/desc arrow icons for sorting column does not get displayed in the table column
-SPARK-43284      Return URI encoded path, and add a test
-SPARK-43284      back to url-encoded strings
-SPARK-43378      Properly close stream objects in deserializeFromChunkedBuffer
-SPARK-43313      Adding missing column DEFAULT values for MERGE INSERT actions
-SPARK-43336      Casting between Timestamp and TimestampNTZ requires timezone
-SPARK-43156      Fix `COUNT(*) is null` bug in correlated scalar subquery
-SPARK-43425      Add TimestampNTZType to ColumnarBatchRow
-SPARK-43441      makeDotNode should not fail when DeterministicLevel is absent
-SPARK-43471      Handle missing hadoopProperties and metricsProperties
-SPARK-43043      Improve the performance of MapOutputTracker.updateMapOutput
-SPARK-43589      Fix `cannotBroadcastTableOverMaxTableBytesError` to use `bytesToString`
-SPARK-42826      Update migration notes for pandas API on Spark
-SPARK-43547      Update "Supported Pandas API" page to point out the proper pandas docs
-SPARK-43541      Propagate all `Project` tags in resolving of expressions and missing columns
-SPARK-43718      Set nullable correctly for keys in USING joins
-SPARK-43719      Handle `missing row.excludedInStages` field
-MINOR            Fix `SeriesDateTimeTests.test_quarter` to work properly
-SPARK-43758      Upgrade snappy-java to 1.1.10.0
-SPARK-43758      Update Hadoop 2 dependency manifest
-SPARK-43759      Expose TimestampNTZType in pyspark.sql.types
-SPARK-43751      Document `unbase64` behavior change
-SPARK-43802      Fix codegen for unhex and unbase64 with failOnError=true
-SPARK-42421      Use the utils to get the switch for dynamic allocation used in local checkpoint
-SPARK-43894      Fix bug in df.cache()
-SPARK-43760      Nullability of scalar subquery results
-SPARK-43949      Upgrade cloudpickle to 2.2.1
-SPARK-43956      Fix the bug doesn't display column's sql for Percentile[Cont|Disc]
-SPARK-43911      Use toSet to deduplicate the iterator data to prevent the creation of large Array
-Revert           SPARK-43911 Use toSet to deduplicate the iterator data to prevent the creation of large Array
-SPARK-43973      Structured Streaming UI should display failed queries correctly
-SPARK-43510      Fix YarnAllocator internal state when adding running executor after processing completed containers
-SPARK-43976      Handle the case where modifiedConfigs doesn't exist in event logs
-SPARK-43973      Fix compilation by switching QueryTerminatedEvent constructor
-MINOR            Move ResolveDefaultColumnsSuite to 'o.a.s.sql'
-SPARK-42290      Fix the OOM error can't be reported when AQE on
-SPARK-43404      Skip reusing sst file for same version of RocksDB state store to avoid id mismatch error
-SPARK-44038      Update YuniKorn docs with v1.3
-SPARK-43398      Executor timeout should be max of idle shuffle and rdd timeout
-SPARK-32559      Fix the trim logic did't handle ASCII control characters correctly
-SPARK-44053      Update ORC to 1.8.4
-SPARK-44040      Fix compute stats when AggregateExec node above QueryStageExec
-SPARK-44070      Bump snappy-java 1.1.10.1
-MINOR            Fix all dead links for K8s doc
-SPARK-44018      Improve the hashCode and toString for some DS V2 Expression
-SPARK-44134      Fix setting resources (GPU/FPGA) to 0 when they are set in spark-defaults.conf
-SPARK-44142      Replace type with tpe in utility to convert python types to spark types
-SPARK-44136      Fixed an issue that StateManager may get materialized in executor instead of driver in FlatMapGroupsWithStateExec
-SPARK-44158      Remove unused `spark.kubernetes.executor.lostCheckmaxAttempts`
-SPARK-44079      Fix `ArrayIndexOutOfBoundsException` when parse array as struct using PERMISSIVE mode with corrupt record
-SPARK-44206      DataSet.selectExpr scope Session.active
-SPARK-44184      Remove a wrong doc about `ARROW_PRE_0_15_IPC_FORMAT`
-SPARK-44241      Mistakenly set io.connectionTimeout/connectionCreationTimeout to zero or negative will cause incessant executor cons/destructions
-SPARK-42784      should still create subDir when the number of subDir in merge dir is less than conf
-SPARK-44251      Set nullable correctly on coalesced join key in full outer USING join
-SPARK-44180      DistributionAndOrderingUtils should apply ResolveTimeZone
-SPARK-44391      Check the number of argument types in `InvokeLike`
-SPARK-44415      Upgrade snappy-java to 1.1.10.2
-SPARK-44464      Fix applyInPandasWithStatePythonRunner to output rows that have Null as first column value
-SPARK-44494      Use `minikube` v1.30.1 for `k8s-integration-tests`
-SPARK-44544      Deduplicate `run_python_packaging_tests`
-SPARK-44553      Ignoring `connect-check-protos` logic in GA testing
-SPARK-44479      Fix protobuf conversion from an empty struct type
-SPARK-44557      Clean up untracked/ignored files before running pip packaging test in GitHub Actions
-SPARK-44513      Upgrade snappy-java to 1.1.10.3
-SPARK-44544      Force run `run_python_packaging_tests`
-
-# From 3.4.2
 MINOR            Remove signature from Hive thriftserver exception
 SPARK-45568      Fix flaky WholeStageCodegenSparkSubmitSuite
 SPARK-45508      Add "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" so Platform can access Cleaner on Java 9+
@@ -272,6 +180,16 @@ SPARK-45433      Fix CSV/JSON schema inference when timestamps do not match spec
 SPARK-45473      Fix incorrect error message for RoundBase
 SPARK-44729      Add canonical links to the PySpark docs page
 MINOR            Update `CTAS` with `LOCATION` behavior with Spark 3.2+
+SPARK-45786      Fix inaccurate Decimal multiplication and division results
+SPARK-45829      Update the default value for spark.executor.logs.rolling.maxSize
+SPARK-45814      Make ArrowConverters.createEmptyArrowBatch call close() to avoid memory leak
+SPARK-45847      CliSuite flakiness due to non-sequential guarantee for stdout&stderr
+SPARK-45878      Fix ConcurrentModificationException in CliSuite
+SPARK-45884      Upgrade ORC to 1.8.6
+MINOR            Fix the example value in the docs
+SPARK-45592      Correctness issue in AQE with InMemoryTableScanExec
+SPARK-45282      Correctness issue in AQE with InMemoryTableScanExec
+SPARK-45896      Construct `ValidateExternalType` with the correct expected type
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -382,3 +300,4 @@ rdar://116895388 Set spark.hadoop.fs.s3a.bulk.delete.page.size to 1000 in Team-s
 rdar://117590641 Bump Boson version to 0.3.21 (#1871)
 rdar://117948760 Bump Boson version to 0.3.22 (#1874)
 rdar://117967381 Increase spark.speculation.quantile and multiplier
+rdar://118061020 Remove legacy `spark.aci.callhome.enabled` config
