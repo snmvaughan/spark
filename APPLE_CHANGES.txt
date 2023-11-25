@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.4.1`
+This contains the changes after creating `v3.4.2-rc1`
 
 # From 4.0.0
 SPARK-44661      `getMapOutputLocation` should not throw NPE
@@ -115,81 +115,6 @@ SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenA
 SPARK-44034      Add a new test group for sql module
 SPARK-45389      Correct MetaException matching rule on getting partition metadata
 SPARK-42388      Avoid parquet footer reads twice in vectorized reader
-
-# From 3.4.2
-SPARK-44670      Fix 'test_dataframe_conversion.DataFrameConversionTest.get_excel_dfs' test to work with Python 3.7
-SPARK-44634      Encoders.bean does no longer support nested beans with type arguments
-SPARK-44657      Fix incorrect limit handling in ArrowBatchWithSchemaIterator and config parsing of CONNECT_GRPC_ARROW_MAX_BATCH_SIZE
-SPARK-44725      Document `spark.network.timeoutInterval`
-SPARK-44581      Fix the bug that ShutdownHookManager gets wrong UGI from SecurityManager of ApplicationMaster
-SPARK-44745      Document shuffle data recovery from the remounted K8s PVCs
-SPARK-44813      The Jira Python misses our assignee when it searches users again
-SPARK-44875      Fix spelling for commentator to test SPARK-44813
-SPARK-44857      Fix `getBaseURI` error in Spark Worker LogPage UI buttons
-SPARK-44859      Fix incorrect property name in structured streaming doc
-SPARK-44854      Python timedelta to DayTimeIntervalType edge case bug
-SPARK-44871      Fix percentile_disc behaviour
-SPARK-44922      Disable o.a.p.h.InternalParquetRecordWriter logs for tests
-SPARK-44925      K8s default service token file should not be materialized into token
-SPARK-44920      Use await() instead of awaitUninterruptibly() in TransportClientFactory.createClient()
-SPARK-44935      Fix `RELEASE` file to have the correct information in Docker images if exists
-SPARK-44929      Standardize log output for console appender in tests
-SPARK-44840      Make `array_insert()` 1-based for negative indexes
-SPARK-44547      Ignore fallback storage for cached RDD migration
-SPARK-44846      Convert the lower redundant Aggregate to Project in RemoveRedundantAggregates
-SPARK-44940      Improve performance of JSON parsing when "spark.sql.json.enablePartialResults" is enabled
-SPARK-45071      Optimize the processing speed of `BinaryArithmetic#dataType` when processing multi-column data
-SPARK-45079      Fix an internal error from `percentile_approx()`on `NULL` accuracy
-SPARK-45103      Update ORC to 1.8.5
-SPARK-45100      Fix an internal error from `reflect()`on `NULL` class and method
-SPARK-43203      V2SessionCatalog.dropTable should handle null table
-SPARK-44805      getBytes/getShorts/getInts/etc. should work in a column vector that has a dictionary
-SPARK-45075      Fix alter table with invalid default value will not report error
-SPARK-45109      Fix log function in Connect
-SPARK-45146      Update the default value of 'spark.submit.deployMode'
-SPARK-45127      Exclude README.md from document build
-SPARK-45187      Fix `WorkerPage` to use the same pattern for `logPage` urls
-SPARK-45197      Make `StandaloneRestServer` add `JavaModuleOptions` to drivers
-SPARK-45229      Show the number of drivers waiting in SUBMITTED status in MasterPage
-SPARK-45078      Fix `array_insert` ImplicitCastInputTypes not work
-SPARK-45081      Encoders.bean does no longer work with read-only properties
-SPARK-44910      Encoders.bean does not support superclasses with generic type arguments
-SPARK-45210      Switch languages consistently across docs for all code snippets (Spark 3.4 and below)
-SPARK-45237      Change the default value of `spark.history.store.hybridStore.diskBackend` in `monitoring.md` to `ROCKSDB`
-SPARK-45261      Fix `EventLogFileWriters` to handle `none` as a codec
-SPARK-45263      Make `EventLoggingListenerSuite` independent from `spark.eventLog.compress` conf
-SPARK-45261      Avoid `transform` of conf value
-SPARK-45257      Enable `spark.eventLog.compress` by default
-SPARK-45286      Add back Matomo analytics
-SPARK-44937      Mark connection as timedOut in TransportClient.close
-SPARK-45057      Avoid acquire read lock when keepReadLock is false
-SPARK-45227      Fix a subtle thread-safety issue with CoarseGrainedExecutorBackend
-SPARK-44074      Fix loglevel restore behavior of `SparkFunSuite#withLogAppender` and re-enable UT `Logging plan changes for execution`
-SPARK-45452      Do not fail too early if FileSystem does not implement getSchema
-SPARK-45652      SPJ: Handle empty input partitions after dynamic filtering
-SPARK-45678      Cover BufferReleasingInputStream.available/reset under tryOrFetchFailedException 
-SPARK-45604      Add LogicalType checking on INT64 -> DateTime conversion on Parquet Vectorized Reader
-SPARK-45430      Fix for FramelessOffsetWindowFunction when IGNORE NULLS and offset > rowCount
-SPARK-45588      Fix flaky ProtobufCatalystDataConversionSuite
-SPARK-40154      Correct storage level in Dataframe.cache docstring
-SPARK-45670      SparkSubmit does not support `--total-executor-cores` when deploying on K8s
-MINOR            Remove signature from Hive thriftserver exception
-SPARK-45568      Fix flaky WholeStageCodegenSparkSubmitSuite
-SPARK-45508      Add "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" so Platform can access Cleaner on Java 9+
-SPARK-45433      Fix CSV/JSON schema inference when timestamps do not match specified timestampFormat
-SPARK-45473      Fix incorrect error message for RoundBase
-SPARK-44729      Add canonical links to the PySpark docs page
-MINOR            Update `CTAS` with `LOCATION` behavior with Spark 3.2+
-SPARK-45786      Fix inaccurate Decimal multiplication and division results
-SPARK-45829      Update the default value for spark.executor.logs.rolling.maxSize
-SPARK-45814      Make ArrowConverters.createEmptyArrowBatch call close() to avoid memory leak
-SPARK-45847      CliSuite flakiness due to non-sequential guarantee for stdout&stderr
-SPARK-45878      Fix ConcurrentModificationException in CliSuite
-SPARK-45884      Upgrade ORC to 1.8.6
-MINOR            Fix the example value in the docs
-SPARK-45592      Correctness issue in AQE with InMemoryTableScanExec
-SPARK-45282      Correctness issue in AQE with InMemoryTableScanExec
-SPARK-45896      Construct `ValidateExternalType` with the correct expected type
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
