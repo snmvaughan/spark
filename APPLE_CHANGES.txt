@@ -1,4 +1,4 @@
-This contains the changes after creating `v3.4.2-rc1`
+This contains the changes after creating `v3.4.2`
 
 # From 4.0.0
 SPARK-44661      `getMapOutputLocation` should not throw NPE
@@ -49,8 +49,10 @@ SPARK-45867      Support `spark.worker.idPattern`
 SPARK-45756      Support `spark.master.useAppNameAsAppId.enabled`
 SPARK-45731      Also update partition statistics with `ANALYZE TABLE` command
 SPARK-45901      Collect and update `spark-standalone.md` with new confs
+SPARK-45948      Make single-pod spark jobs respect `spark.app.id`
+SPARK-46053      Support `DEDICATED_JVM_SBT_TESTS`
 
-# From 3.5.0
+# From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
 SPARK-42536      Upgrade log4j2 to 2.20.0
 SPARK-42718      Upgrade rocksdbjni to 7.10.2
@@ -115,6 +117,7 @@ SPARK-44990      Reduce the frequency of get `spark.sql.legacy.nullValueWrittenA
 SPARK-44034      Add a new test group for sql module
 SPARK-45389      Correct MetaException matching rule on getting partition metadata
 SPARK-42388      Avoid parquet footer reads twice in vectorized reader
+SPARK-46014      Run `RocksDBStateStoreStreamingAggregationSuite` on a dedicated JVM
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
