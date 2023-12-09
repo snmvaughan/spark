@@ -51,6 +51,25 @@ SPARK-45731      Also update partition statistics with `ANALYZE TABLE` command
 SPARK-45901      Collect and update `spark-standalone.md` with new confs
 SPARK-45948      Make single-pod spark jobs respect `spark.app.id`
 SPARK-46053      Support `DEDICATED_JVM_SBT_TESTS`
+SPARK-44723      Upgrade `gcs-connector` to 2.2.16
+SPARK-44898      Upgrade `gcs-connector` to 2.2.17
+SPARK-46174      Upgrade `gcs-connector` to 2.2.18
+MINOR            Fix the result file description of CoalescedRDDBenchmark
+SPARK-46191      Improve `FileSystemPersistenceEngine.persist` error msg in case of the existing file
+SPARK-46193      Add `PersistenceEngineBenchmark`
+SPARK-46205      Improve `PersistenceEngine` performance with `KryoSerializer`
+SPARK-46205      Simplify PersistenceEngineBenchmark
+SPARK-46210      Update `YuniKorn` docs with v1.4
+SPARK-46215      Improve `FileSystemPersistenceEngine` to allow nonexistent parents
+SPARK-46216      Improve `FileSystemPersistenceEngine` to support compressions
+SPARK-46217      Include `Driver/App` data in `PersistenceEngineBenchmark`
+SPARK-46258      Add `RocksDBPersistenceEngine`
+SPARK-46292      Show a summary of workers in MasterPage
+SPARK-46299      Make `spark.deploy.recovery*` docs up-to-date
+SPARK-46301      Support `spark.worker.(initial|max)RegistrationRetries`
+SPARK-46311      Log the final state of drivers during `Master.removeDriver`
+SPARK-46313      Log `Spark HA` recovery duration
+SPARK-46320      Support `spark.master.rest.host`
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -118,6 +137,18 @@ SPARK-44034      Add a new test group for sql module
 SPARK-45389      Correct MetaException matching rule on getting partition metadata
 SPARK-42388      Avoid parquet footer reads twice in vectorized reader
 SPARK-46014      Run `RocksDBStateStoreStreamingAggregationSuite` on a dedicated JVM
+SPARK-45943      Move DetermineTableStats to resolution rules
+
+# From 3.4.3
+SPARK-46006      YarnAllocator set target executor number to 0 to cancel pending allocate request when driver stop
+SPARK-46029      Escape the single quote, _ and % for DS V2 pushdown
+SPARK-46189      Perform comparisons and arithmetic between same types in various Pandas aggregate functions to avoid interpreted mode errors
+SPARK-46182      Track `lastTaskFinishTime` using the exact task finished event
+SPARK-46092      Don't push down Parquet row group filters that overflow
+SPARK-46239      Hide `Jetty` info
+SPARK-46286      Document `spark.io.compression.zstd.bufferPool.enabled`
+SPARK-45580      Handle case where a nested subquery becomes an existence join
+SPARK-46275      Protobuf: Return null in permissive mode when deserialization fails
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -229,3 +260,5 @@ rdar://117590641 Bump Boson version to 0.3.21 (#1871)
 rdar://117948760 Bump Boson version to 0.3.22 (#1874)
 rdar://117967381 Increase spark.speculation.quantile and multiplier
 rdar://118061020 Remove legacy `spark.aci.callhome.enabled` config
+rdar://119344310 Bump Boson version to 0.3.23
+rdar://116249117 Upgrade callhome service to 0.2.32
