@@ -205,7 +205,8 @@ object PluginContainer {
       resources: java.util.Map[String, ResourceInformation]): Option[PluginContainer] = {
     val conf = ctx.fold(_.conf, _.conf)
     val isEnabledContainerMetrics = conf.getBoolean(SPARK_CALL_HOME_PLUGIN_CLASS_ENABLED, true)
-    val pluginClasses = if (isEnabledContainerMetrics) {
+    val pluginClasses = if (isEnabledContainerMetrics &&
+        System.getenv("TEAM_SHARED_SPARK_CLUSTER") == null) {
       Seq(SPARK_CALL_HOME_PLUGIN_CLASS) ++ conf.get(PLUGINS).distinct
     } else {
       conf.get(PLUGINS).distinct
