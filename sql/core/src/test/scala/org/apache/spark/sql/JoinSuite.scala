@@ -25,7 +25,7 @@ import scala.collection.mutable.ListBuffer
 import org.mockito.Mockito._
 
 import org.apache.spark.TestUtils.{assertNotSpilled, assertSpilled}
-import org.apache.spark.sql.boson.BosonSort
+import org.apache.spark.sql.boson.BosonSortExec
 import org.apache.spark.sql.catalyst.TableIdentifier
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation
 import org.apache.spark.sql.catalyst.expressions.{Ascending, GenericRow, SortOrder}
@@ -1511,7 +1511,7 @@ class JoinSuite extends QueryTest with SharedSparkSession with AdaptiveSparkPlan
           assert(collect(plan) { case _: BroadcastNestedLoopJoinExec => true }.size === 1)
           assert(collect(plan) { case _: SortMergeJoinExec => true }.size === 3)
           // No extra sort on left side before last sort merge join
-          assert(collect(plan) { case _: SortExec | _: BosonSort => true }.size === 5)
+          assert(collect(plan) { case _: SortExec | _: BosonSortExec => true }.size === 5)
       }
 
       // Test output ordering is not preserved
@@ -1522,7 +1522,7 @@ class JoinSuite extends QueryTest with SharedSparkSession with AdaptiveSparkPlan
           assert(collect(plan) { case _: BroadcastNestedLoopJoinExec => true }.size === 1)
           assert(collect(plan) { case _: SortMergeJoinExec => true }.size === 3)
           // Have sort on left side before last sort merge join
-          assert(collect(plan) { case _: SortExec | _: BosonSort => true }.size === 6)
+          assert(collect(plan) { case _: SortExec | _: BosonSortExec => true }.size === 6)
       }
 
       // Test singe partition
