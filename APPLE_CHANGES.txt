@@ -70,6 +70,13 @@ SPARK-46301      Support `spark.worker.(initial|max)RegistrationRetries`
 SPARK-46311      Log the final state of drivers during `Master.removeDriver`
 SPARK-46313      Log `Spark HA` recovery duration
 SPARK-46320      Support `spark.master.rest.host`
+SPARK-46353      Refactor to improve `RegisterWorker` unit test coverage
+SPARK-44556      Reuse `OrcTail` when enable vectorizedReader
+SPARK-46344      Warn properly when a driver exists successfully but master is disconnected
+SPARK-46348      Support `spark.deploy.recoveryTimeout`
+SPARK-46346      Fix Master to update a worker from `UNKNOWN` to `ALIVE` on `RegisterWorker` msg
+SPARK-46215      Handle symbolic links
+SPARK-46369      Remove `kill` link from `RELAUNCHING` drivers in `MasterPage`
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -149,6 +156,14 @@ SPARK-46239      Hide `Jetty` info
 SPARK-46286      Document `spark.io.compression.zstd.bufferPool.enabled`
 SPARK-45580      Handle case where a nested subquery becomes an existence join
 SPARK-46275      Protobuf: Return null in permissive mode when deserialization fails
+SPARK-46339      Directory with batch number name should not be treated as metadata log
+SPARK-46417      Do not fail when calling hive.getTable and throwException is false
+SPARK-46330      Loading of Spark UI blocks for a long time when HybridStore enabled
+SPARK-46466      Vectorized parquet reader should never do rebase for timestamp ntz
+SPARK-46514      Fix HiveMetastoreLazyInitializationSuite
+SPARK-46425      Pin the bundler version in CI
+SPARK-46577      HiveMetastoreLazyInitializationSuite leaks hive's SessionState
+SPARK-46598      OrcColumnarBatchReader should respect the memory mode when creating column vectors for the missing column
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -262,3 +277,5 @@ rdar://117967381 Increase spark.speculation.quantile and multiplier
 rdar://118061020 Remove legacy `spark.aci.callhome.enabled` config
 rdar://119344310 Bump Boson version to 0.3.23
 rdar://116249117 Upgrade callhome service to 0.2.32
+rdar://120547873 Disable CallHomeService in Team-shared Spark Cluster
+rdar://120502883 Bump Boson version to 0.3.25
