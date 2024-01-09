@@ -3116,6 +3116,7 @@ object SparkContext extends Logging {
       conf.setIfMissing("spark.hadoop.mapreduce.outputcommitter.factory.scheme.s3",
         "org.apache.hadoop.fs.s3a.commit.S3ACommitterFactory")
       conf.setIfMissing("spark.sql.sources.useListFilesFileSystemList", "s3,s3a")
+      conf.setIfMissing("spark.hadoop.fs.s3a.experimental.input.fadvise", "random")
     }
     val magicCommitterConfs = conf
       .getAllWithPrefix("spark.hadoop.fs.s3a.bucket.")
