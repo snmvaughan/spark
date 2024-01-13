@@ -77,6 +77,13 @@ SPARK-46348      Support `spark.deploy.recoveryTimeout`
 SPARK-46346      Fix Master to update a worker from `UNKNOWN` to `ALIVE` on `RegisterWorker` msg
 SPARK-46215      Handle symbolic links
 SPARK-46369      Remove `kill` link from `RELAUNCHING` drivers in `MasterPage`
+SPARK-46643      Fix ORC tests to be independent from default compression
+SPARK-46646      Improve `TPCDSQueryBenchmark` to support other file formats
+SPARK-46652      Remove `Snappy` from `TPCDSQueryBenchmark` benchmark case name
+SPARK-46502      Support timestamp types in UnwrapCastInBinaryComparison (#1890)
+SPARK-46664      Improve `Master` to recover quickly in case of zero workers and apps
+SPARK-46664      Add a persistent `DriverInfo`
+SPARK-46368      Support `readyz` in REST Submission API
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -164,6 +171,9 @@ SPARK-46514      Fix HiveMetastoreLazyInitializationSuite
 SPARK-46425      Pin the bundler version in CI
 SPARK-46577      HiveMetastoreLazyInitializationSuite leaks hive's SessionState
 SPARK-46598      OrcColumnarBatchReader should respect the memory mode when creating column vectors for the missing column
+SPARK-46628      Use SPDX short identifier in `license` name
+SPARK-46704      Fix `MasterPage` to sort `Running Drivers` table by `Duration` column correctly
+SPARK-46700      Count the last spilling for the shuffle disk spilling bytes metric
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -279,3 +289,7 @@ rdar://119344310 Bump Boson version to 0.3.23
 rdar://116249117 Upgrade callhome service to 0.2.32
 rdar://120547873 Disable CallHomeService in Team-shared Spark Cluster
 rdar://120502883 Bump Boson version to 0.3.25
+rdar://120662563 Mark `BloomFilterAggregateQuerySuite` as `ExtendedSQLTest`
+rdar://120719277 Set fs.s3a.experimental.input.fadvise to random in Team-shared Spark Cluster
+rdar://120913245 Update to Release Iceberg 1.3.0.5-apple (#1891)
+rdar://120925358 Upgrade Boson to 0.3.26 (#1892)
