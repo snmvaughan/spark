@@ -113,7 +113,7 @@ object DataSourceReadBenchmark extends SqlBasedBenchmark {
   }
 
   private def saveAsOrcTable(df: DataFrameWriter[Row], dir: String): Unit = {
-    df.mode("overwrite").option("compression", "snappy").orc(dir)
+    df.mode("overwrite").orc(dir)
     spark.read.orc(dir).createOrReplaceTempView("orcTable")
   }
 

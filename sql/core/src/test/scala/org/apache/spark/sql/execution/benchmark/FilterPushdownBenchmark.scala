@@ -49,7 +49,6 @@ object FilterPushdownBenchmark extends SqlBasedBenchmark {
       .set("spark.master", "local[1]")
       .setIfMissing("spark.driver.memory", "3g")
       .setIfMissing("spark.executor.memory", "3g")
-      .setIfMissing("orc.compression", "snappy")
       .setIfMissing("spark.sql.parquet.compression.codec", "snappy")
 
     SparkSession.builder().config(conf).getOrCreate()

@@ -52,7 +52,6 @@ object BuiltInDataSourceWriteBenchmark extends DataSourceWriteBenchmark {
     }
 
     spark.conf.set(SQLConf.PARQUET_COMPRESSION.key, "snappy")
-    spark.conf.set(SQLConf.ORC_COMPRESSION.key, "snappy")
 
     formats.foreach { format =>
       runBenchmark(s"$format writer benchmark") {
