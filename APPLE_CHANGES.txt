@@ -84,6 +84,15 @@ SPARK-46502      Support timestamp types in UnwrapCastInBinaryComparison (#1890)
 SPARK-46664      Improve `Master` to recover quickly in case of zero workers and apps
 SPARK-46664      Add a persistent `DriverInfo`
 SPARK-46368      Support `readyz` in REST Submission API
+SPARK-46737      Use the default ORC compression in OrcReadBenchmark
+SPARK-46742      Add ORC compression tests for hive module `OrcFileFormat`
+SPARK-46749      Document SPARK_LOG_* and SPARK_PID_DIR
+SPARK-46748      Remove *slave*.sh scripts
+SPARK-46752      Use default ORC compression in data source benchmarks
+SPARK-46770      Remove legacy docker-for-desktop logic
+SPARK-46780      Improve SBT K8s IT to skip R image build step if not needed
+SPARK-46784      Create and use a K8s test tag for `PersistentVolume`
+SPARK-46783      Use built-in storage classes in PVTestsSuite
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -174,6 +183,10 @@ SPARK-46598      OrcColumnarBatchReader should respect the memory mode when crea
 SPARK-46628      Use SPDX short identifier in `license` name
 SPARK-46704      Fix `MasterPage` to sort `Running Drivers` table by `Duration` column correctly
 SPARK-46700      Count the last spilling for the shuffle disk spilling bytes metric
+SPARK-46715      Pin sphinxcontrib-*
+MINOR            Add zstandard as a candidate to fix the desc of spark.sql.avro.compression.codec
+SPARK-46786      Fix MountVolumesFeatureStep to use `ReadWriteOncePod` instead of `ReadWriteOnce`
+SPARK-44495      Use the latest minikube in K8s IT
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -293,3 +306,6 @@ rdar://120662563 Mark `BloomFilterAggregateQuerySuite` as `ExtendedSQLTest`
 rdar://120719277 Set fs.s3a.experimental.input.fadvise to random in Team-shared Spark Cluster
 rdar://120913245 Update to Release Iceberg 1.3.0.5-apple (#1891)
 rdar://120925358 Upgrade Boson to 0.3.26 (#1892)
+rdar://121278298: Upgrade Boson to 0.3.27 (#1894)
+rdar://121281532 (Updates to Iceberg 1.3.0.6-apple) (#1895)
+rdar://121325971 Disable ReadWriteOncePod
