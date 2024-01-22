@@ -36,7 +36,8 @@ class FileBatchWrite(
     val (_, duration) = Utils.timeTakenMs { committer.commitJob(job, results.map(_.commitMsg)) }
     logInfo(s"Write Job ${description.uuid} committed. Elapsed time: $duration ms.")
 
-    processStats(description.statsTrackers, results.map(_.summary.stats), duration)
+    processStats(description.statsTrackers, results.map(_.summary.stats), duration,
+      results.map(_.summary.updatedPartitionsMap).reduce(_ ++ _))
     logInfo(s"Finished processing stats for write job ${description.uuid}.")
   }
 
