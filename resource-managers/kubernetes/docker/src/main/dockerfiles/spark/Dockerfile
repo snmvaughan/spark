@@ -40,7 +40,7 @@ RUN set -ex && \
     sed -i 's/http:\/\/deb.\(.*\)/https:\/\/deb.\1/g' /etc/apt/sources.list && \
     apt-get -o Acquire::https::artifacts.apple.com::Verify-Peer=false update && \
     ln -s /lib /lib64 && \
-    apt-get install -o Acquire::https::artifacts.apple.com::Verify-Peer=false -y bash tini libc6 libpam-modules krb5-user libnss3 procps net-tools && \
+    apt-get install -o Acquire::https::artifacts.apple.com::Verify-Peer=false -y bash tini libc6 libpam-modules krb5-user libnss3 procps net-tools logrotate && \
     mkdir -p /opt/spark && \
     mkdir -p /opt/spark/examples && \
     mkdir -p /opt/spark/work-dir && \
