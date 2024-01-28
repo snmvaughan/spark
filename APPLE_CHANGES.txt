@@ -93,6 +93,17 @@ SPARK-46770      Remove legacy docker-for-desktop logic
 SPARK-46780      Improve SBT K8s IT to skip R image build step if not needed
 SPARK-46784      Create and use a K8s test tag for `PersistentVolume`
 SPARK-46783      Use built-in storage classes in PVTestsSuite
+SPARK-46797      Rename `spark.deploy.spreadOut` to `spark.deploy.spreadOutApps`
+SPARK-46799      Improve `MasterSuite` to use nanoTime-based appIDs and workerIDs
+SPARK-46827      Make `RocksDBPersistenceEngine` to support a symbolic link
+SPARK-46846      Make `WorkerResourceInfo` extend `Serializable` explicitly
+SPARK-46869      Add `logrotate` to Spark docker files
+SPARK-46868      Support Spark Worker Log UI
+SPARK-46870      Support Spark Master Log UI
+SPARK-46872      Recover `log-view.js` to be non-module
+SPARK-46881      Support `spark.deploy.workerSelectionPolicy`
+SPARK-46883      Support `/json/clusterutilization` API
+SPARK-46886      Enable `spark.ui.prometheus.enabled` by default
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -161,6 +172,7 @@ SPARK-45389      Correct MetaException matching rule on getting partition metada
 SPARK-42388      Avoid parquet footer reads twice in vectorized reader
 SPARK-46014      Run `RocksDBStateStoreStreamingAggregationSuite` on a dedicated JVM
 SPARK-45943      Move DetermineTableStats to resolution rules
+SPARK-45943      Add `VolumeSuite` to K8s IT
 
 # From 3.4.3
 SPARK-46006      YarnAllocator set target executor number to 0 to cancel pending allocate request when driver stop
@@ -187,6 +199,15 @@ SPARK-46715      Pin sphinxcontrib-*
 MINOR            Add zstandard as a candidate to fix the desc of spark.sql.avro.compression.codec
 SPARK-46786      Fix MountVolumesFeatureStep to use `ReadWriteOncePod` instead of `ReadWriteOnce`
 SPARK-44495      Use the latest minikube in K8s IT
+SPARK-46779      InMemoryRelation` instances of the same cached plan should be semantically equivalent
+SPARK-46801      Do not treat exit code 5 as a test failure in Python testing script
+SPARK-46800      Support `spark.deploy.spreadOutDrivers`
+SPARK-46817      Fix `spark-daemon.sh` usage by adding `decommission` command
+SPARK-46763      Fix assertion failure in ReplaceDeduplicateWithAggregate for duplicate attributes
+SPARK-46794      Remove subqueries from LogicalRDD constraints
+SPARK-46861      Avoid Deadlock in DAGScheduler
+SPARK-46855      Add `sketch` to the dependencies of the `catalyst` in `module.py`
+SPARK-46862      Disable CSV column pruning in the multi-line mode
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
