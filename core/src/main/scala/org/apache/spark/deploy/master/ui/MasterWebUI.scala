@@ -21,6 +21,7 @@ import java.net.{InetAddress, NetworkInterface, SocketException}
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 
 import org.apache.spark.deploy.DeployMessages.{DecommissionWorkersOnHosts, MasterStateResponse, RequestMasterState}
+import org.apache.spark.deploy.LogUtils.addRenderLogHandler
 import org.apache.spark.deploy.master.Master
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config.DECOMMISSION_ENABLED
@@ -53,6 +54,7 @@ class MasterWebUI(
     attachPage(new LogPage(this))
     attachPage(masterPage)
     addStaticHandler(MasterWebUI.STATIC_RESOURCE_DIR)
+    addRenderLogHandler(this, master.conf)
     if (killEnabled) {
       attachHandler(createRedirectHandler(
         "/app/kill", "/", masterPage.handleAppKillRequest, httpMethods = Set("POST")))
