@@ -104,6 +104,13 @@ SPARK-46872      Recover `log-view.js` to be non-module
 SPARK-46881      Support `spark.deploy.workerSelectionPolicy`
 SPARK-46883      Support `/json/clusterutilization` API
 SPARK-46886      Enable `spark.ui.prometheus.enabled` by default
+SPARK-46889      Validate `spark.master.ui.decommission.allow.mode` setting
+SPARK-46899      Remove `POST` APIs from `MasterWebUI` when `spark.ui.killEnabled` is `false`
+SPARK-46903      Support Spark History Server Log UI
+SPARK-46907      Show driver log location in Spark History Server
+SPARK-46924      Fix `Load New` button in `Master/HistoryServer` Log UI
+SPARK-46965      Check `logType` in `Utils.getLog`
+
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -208,10 +215,9 @@ SPARK-46794      Remove subqueries from LogicalRDD constraints
 SPARK-46861      Avoid Deadlock in DAGScheduler
 SPARK-46855      Add `sketch` to the dependencies of the `catalyst` in `module.py`
 SPARK-46862      Disable CSV column pruning in the multi-line mode
-SPARK-46965      Check `logType` in `Utils.getLog`
-SPARK-46747      Avoid scan in getTableExistsQuery for JDBC Dialects
-SPARK-46893      Remove inline scripts from UI descriptions
 SPARK-46888      Fix `Master` to reject `/workers/kill/` requests if decommission is disabled
+SPARK-46893      Remove inline scripts from UI descriptions
+SPARK-46747      Avoid scan in getTableExistsQuery for JDBC Dialects
 SPARK-46945      Add `spark.kubernetes.legacy.useReadWriteOnceAccessMode` for old K8s clusters
 
 # Internal Patches
@@ -335,10 +341,5 @@ rdar://120925358 Upgrade Boson to 0.3.26 (#1892)
 rdar://121278298: Upgrade Boson to 0.3.27 (#1894)
 rdar://121281532 (Updates to Iceberg 1.3.0.6-apple) (#1895)
 rdar://121325971 Disable ReadWriteOncePod
-SPARK-46924 Fix `Load New` button in `Master/HistoryServer` Log UI
-SPARK-46907 Show driver log location in Spark History Server
-SPARK-46903 Support Spark History Server Log UI	9cb3cecc210
-SPARK-46899 Remove `POST` APIs from `MasterWebUI` when `spark.ui.killEnabled` is `false`
-SPARK-46889 Validate `spark.master.ui.decommission.allow.mode` setting
 rdar://122200823 Update to Iceberg 1.3.0.7 (#1900) @Russell Spitzer
 
