@@ -1124,7 +1124,12 @@ abstract class ParquetQuerySuite extends QueryTest with ParquetTest with SharedS
             .where(s"a < ${Long.MaxValue}")
             .collect()
         }
-        assert(exception.getCause.getCause.isInstanceOf[SchemaColumnConvertNotSupportedException])
+        if (isBosonEnabled) {
+          // Boson returns different exception in this case
+          assert(exception.getMessage.contains("Column: [a], Expected: bigint, Found: INT32"))
+        } else {
+          assert(exception.getCause.getCause.isInstanceOf[SchemaColumnConvertNotSupportedException])
+        }
       }
     }
   }
