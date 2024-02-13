@@ -526,7 +526,7 @@ builds:
         - build/mvn install -Phive -Piceberg -Phadoop-3 -DskipTests
         - git clone git@github.pie.apple.com:IPR/apache-incubator-iceberg.git
         - cd apache-incubator-iceberg
-        - git checkout -b apple-1.3.x origin/apple-1.3.x
+        - git checkout -b apple-1.3.0.x origin/apple-1.3.0.x
         - sed -i "s/sparkVersion = \(.*\)/sparkVersion = '${NEW_VERSION}'/g" spark/v3.4/build.gradle
         - sed -i "s/org\.apache\.hive:\* = \(.*\)/org\.apache\.hive:\* = $(sed -n 's/<hive\.version>\(.*\)<\/hive\.version>/\1/p' ../pom.xml | xargs)/g" versions.props
         - ./gradlew test
@@ -541,7 +541,7 @@ builds:
         - build/mvn install -Phive -Piceberg -Phadoop-3 -DskipTests
         - git clone git@github.pie.apple.com:IPR/apache-incubator-iceberg.git
         - cd apache-incubator-iceberg
-        - git checkout -b apple-1.3.x origin/apple-1.3.x
+        - git checkout -b apple-1.3.0.x origin/apple-1.3.0.x
         - sed -i "s/sparkVersion = \(.*\)/sparkVersion = '${NEW_VERSION}'/g" spark/v3.4/build.gradle
         - sed -i "s/org\.apache\.hive:\* = \(.*\)/org\.apache\.hive:\* = $(sed -n 's/<hive\.version>\(.*\)<\/hive\.version>/\1/p' ../pom.xml | xargs)/g" versions.props
         - ./gradlew test
