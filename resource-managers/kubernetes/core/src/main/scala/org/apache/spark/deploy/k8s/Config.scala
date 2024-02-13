@@ -257,7 +257,7 @@ private[spark] object Config extends Logging {
       .doc("request timeout to be used in milliseconds for driver to request executors")
       .version("3.0.0")
       .intConf
-      .createWithDefault(10000)
+      .createWithDefault(60000)
 
   val DRIVER_CLIENT_CONNECTION_TIMEOUT =
     ConfigBuilder("spark.kubernetes.driver.connectionTimeout")
