@@ -35,6 +35,7 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config
 import org.apache.spark.internal.config.UI._
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession, SQLContext}
+import org.apache.spark.sql.SparkSession.isUCAuthzEnabled
 import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation
 import org.apache.spark.sql.catalyst.catalog.ExternalCatalogWithListener
 import org.apache.spark.sql.catalyst.expressions.CodegenObjectFactoryMode
@@ -87,6 +88,13 @@ object TestHive
               .set("spark.boson.exec.enabled", "true")
               .set("spark.boson.exec.all.enabled", "true")
           }
+        }
+        if (isUCAuthzEnabled) {
+          val extensions = conf.getOption("spark.sql.extensions").toSeq ++
+            Seq("com.apple.acs.illuminata.authorizer.UCSparkSQLExtension")
+          conf
+            .set("spark.sql.extensions", extensions.mkString(","))
+            .set("spark.ucauthz.enabled", "true")
         }
 
         conf

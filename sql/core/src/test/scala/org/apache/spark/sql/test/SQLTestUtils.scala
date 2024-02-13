@@ -261,6 +261,11 @@ private[sql] trait SQLTestUtilsBase
     v != null && v.toBoolean
   }
 
+  /**
+   * Whether UC-Spark-Authz extension is enabled
+   */
+  protected def isUCAuthzEnabled: Boolean = SparkSession.isUCAuthzEnabled
+
   protected override def withSQLConf(pairs: (String, String)*)(f: => Unit): Unit = {
     SparkSession.setActiveSession(spark)
     super.withSQLConf(pairs: _*)(f)

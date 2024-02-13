@@ -86,6 +86,13 @@ trait SharedSparkSessionBase
           .set("spark.boson.exec.all.enabled", "true")
       }
     }
+    if (isUCAuthzEnabled) {
+      val extensions = conf.getOption("spark.sql.extensions").toSeq ++
+        Seq("com.apple.acs.illuminata.authorizer.UCSparkSQLExtension")
+      conf
+        .set("spark.sql.extensions", extensions.mkString(","))
+        .set("spark.ucauthz.enabled", "true")
+    }
     conf.set(
       StaticSQLConf.WAREHOUSE_PATH,
       conf.get(StaticSQLConf.WAREHOUSE_PATH) + "/" + getClass.getCanonicalName)

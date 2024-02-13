@@ -228,6 +228,7 @@
     <arrow.version>11.0.0</arrow.version>
     <ammonite.version>2.5.8</ammonite.version>
 
+    <uc-spark-authz.version>0.1.2</uc-spark-authz.version>
     <!-- org.fusesource.leveldbjni will be used except on arm64 platform. -->
     <leveldbjni.group>org.fusesource.leveldbjni</leveldbjni.group>
     <kubernetes-client.version>6.5.1</kubernetes-client.version>
@@ -2826,6 +2827,27 @@
         <artifactId>iceberg-spark-runtime-3.4_${scala.binary.version}</artifactId>
         <version>${iceberg.version}</version>
 	<scope>runtime</scope>
+      </dependency>
+
+      <!-- UC-Spark-Authz plugin for row-level filtering and column masking -->
+      <dependency>
+        <groupId>com.apple.pie</groupId>
+        <artifactId>uc-spark${spark.version.short}-authz_${scala.binary.version}</artifactId>
+        <version>${uc-spark-authz.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-catalyst_${scala.binary.version}</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- Run Iceberg unit tests -->

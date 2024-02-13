@@ -1313,6 +1313,14 @@ object SparkSession extends Logging {
     }
   }
 
+  private def loadUCAuthzExtension(sparkContext: SparkContext): Seq[String] = {
+    if (sparkContext.getConf.getBoolean("spark.ucauthz.enabled", isUCAuthzEnabled)) {
+      Seq("com.apple.acs.illuminata.authorizer.UCSparkSQLExtension")
+    } else {
+      Seq.empty
+    }
+  }
+
   private def loadIcebergExtension(sparkContext: SparkContext): Seq[String] = {
     if (sparkContext.getConf.getBoolean(SQLConf.ICEBERG_ENABLED.key, isIcebergEnabled)) {
       Seq(icebergClass)
@@ -1330,7 +1338,7 @@ object SparkSession extends Logging {
       extensions: SparkSessionExtensions): SparkSessionExtensions = {
     val extensionConfClassNames = sparkContext.getConf.get(StaticSQLConf.SPARK_SESSION_EXTENSIONS)
       .getOrElse(Seq.empty) ++ loadBosonExtension(sparkContext) ++
-      loadIcebergExtension(sparkContext)
+      loadUCAuthzExtension(sparkContext) ++ loadIcebergExtension(sparkContext)
     extensionConfClassNames.foreach { extensionConfClassName =>
       try {
         val extensionConfClass = Utils.classForName(extensionConfClassName)
@@ -1372,6 +1380,14 @@ object SparkSession extends Logging {
   def isBosonEnabled: Boolean = {
     val v = System.getenv("BOSON")
     v == null || v.toBoolean
+  }
+
+  /**
+   * Whether UC-Spark-Authz extension is enabled
+   */
+  def isUCAuthzEnabled: Boolean = {
+    val v = System.getenv("UCAUTHZ")
+    v != null && v.toBoolean
   }
 
   /**
