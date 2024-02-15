@@ -736,6 +736,7 @@ builds:
 
   - name: apple-spark-2.12_3.4.0-snapshot-hive-thriftserver
     branchName: branch-3.4.0-apple
+    timeout: 240
     build:
       template: freestyle:v4:build
       steps:
@@ -746,6 +747,7 @@ builds:
 
   - name: apple-spark-2.13_3.4.0-snapshot-hive-thriftserver
     branchName: branch-3.4.0-apple
+    timeout: 240
     build:
       template: freestyle:v4:build
       steps:
