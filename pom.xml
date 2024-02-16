@@ -228,7 +228,7 @@
     <arrow.version>11.0.0</arrow.version>
     <ammonite.version>2.5.8</ammonite.version>
 
-    <uc-spark-authz.version>0.1.2</uc-spark-authz.version>
+    <uc-spark-authz.version>0.1.3</uc-spark-authz.version>
     <!-- org.fusesource.leveldbjni will be used except on arm64 platform. -->
     <leveldbjni.group>org.fusesource.leveldbjni</leveldbjni.group>
     <kubernetes-client.version>6.5.1</kubernetes-client.version>
