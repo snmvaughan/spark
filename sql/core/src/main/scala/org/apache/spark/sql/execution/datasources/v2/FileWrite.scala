@@ -18,7 +18,7 @@ package org.apache.spark.sql.execution.datasources.v2
 
 import java.util.UUID
 
-import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
@@ -31,7 +31,7 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.util.{CaseInsensitiveMap, DateTimeUtils}
 import org.apache.spark.sql.connector.write.{BatchWrite, LogicalWriteInfo, Write}
 import org.apache.spark.sql.errors.QueryCompilationErrors
-import org.apache.spark.sql.execution.datasources.{BasicWriteJobStatsTracker, DataSource, OutputWriterFactory, WriteJobDescription}
+import org.apache.spark.sql.execution.datasources.{BasicWriteJobStatsTracker, DataSource, OutputWriterFactory, PartitionTaskStats, WriteJobDescription}
 import org.apache.spark.sql.execution.metric.SQLMetric
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types.{DataType, StructType}
@@ -121,8 +121,11 @@ trait FileWrite extends Write {
       prepareWrite(sparkSession.sessionState.conf, job, caseInsensitiveOptions, schema)
     val allColumns = schema.toAttributes
     val metrics: Map[String, SQLMetric] = BasicWriteJobStatsTracker.metrics
+    val partitionMetrics: mutable.Map[String, PartitionTaskStats]
+        = BasicWriteJobStatsTracker.partitionMetrics
     val serializableHadoopConf = new SerializableConfiguration(hadoopConf)
-    val statsTracker = new BasicWriteJobStatsTracker(serializableHadoopConf, metrics)
+    val statsTracker = new BasicWriteJobStatsTracker(serializableHadoopConf, metrics,
+      partitionMetrics)
     // TODO: after partitioning is supported in V2:
     //       1. filter out partition columns in `dataColumns`.
     //       2. Don't use Seq.empty for `partitionColumns`.
