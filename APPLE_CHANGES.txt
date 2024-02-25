@@ -110,7 +110,17 @@ SPARK-46903      Support Spark History Server Log UI
 SPARK-46907      Show driver log location in Spark History Server
 SPARK-46924      Fix `Load New` button in `Master/HistoryServer` Log UI
 SPARK-46965      Check `logType` in `Utils.getLog`
-
+SPARK-47000      Use `getTotalMemorySize` in `WorkerArguments`
+SPARK-46997      Enable `spark.worker.cleanup.enabled` by default
+SPARK-47039      Add a checkstyle rule to ban `commons-lang` in Java code
+SPARK-47049      Ban non-shaded Hadoop dependencies
+SPARK-47056      Add `scalastyle` and `checkstyle` rules to ban `FileBackedOutputStream`
+MINOR            Increase hive-thriftserver pipeline timeout to 240
+SPARK-47058      Add `scalastyle` and `checkstyle` rules to ban `AtomicDoubleArray|CompoundOrdering`
+SPARK-47075      Add `derby-provided` profile
+SPARK-47076      Fix HistoryServerSuite.`incomplete apps get refreshed` test to start with empty storeDir
+SPARK-47080      Fix `HistoryServerSuite` to use `constant value` and `getNumJobsRestful`
+SPARK-47108      Set `derby.connection.requireAuthentication` to `false` explicitly in CLIs
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -219,6 +229,13 @@ SPARK-46888      Fix `Master` to reject `/workers/kill/` requests if decommissio
 SPARK-46893      Remove inline scripts from UI descriptions
 SPARK-46747      Avoid scan in getTableExistsQuery for JDBC Dialects
 SPARK-46945      Add `spark.kubernetes.legacy.useReadWriteOnceAccessMode` for old K8s clusters
+MINOR            Add Missing space in `docs/configuration.md`
+SPARK-47021      Fix `kvstore` module to have explicit `commons-lang3` test dependency
+SPARK-46400      When there are corrupted files in the local maven repo, skip this cache and try again
+SPARK-47068      Recover -1 and 0 case for spark.sql.execution.arrow.maxRecordsPerBatch
+SPARK-47072      Fix supported interval formats in error messages
+SPARK-47085      reduce the complexity of toTRowSet from n^2 to n
+SPARK-47125      Return null if Univocity never triggers parsing
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -342,4 +359,12 @@ rdar://121278298: Upgrade Boson to 0.3.27 (#1894)
 rdar://121281532 (Updates to Iceberg 1.3.0.6-apple) (#1895)
 rdar://121325971 Disable ReadWriteOncePod
 rdar://122200823 Update to Iceberg 1.3.0.7 (#1900) @Russell Spitzer
-
+rdar://122513377 Bump Boson to 0.3.28
+rdar://122553436 Use apple-1.3.0.x to run Iceberg integration tests
+rdar://122341926 Integrate UC-Spark-Authz plugin for row-level filtering and column masking
+rdar://122916402 Increase spark.kubernetes.driver.requestTimeout to 60s
+MINOR            Add xerces:xercesImpl dependency explicitly to iceberg test module
+rdar://123038681 Update to Iceberg Apple 1.3.0.8
+rdar://123049235 Update UC-Spark-Authz Plugin to 0.1.3
+rdar://123462546 Update UC-Spark-Authz Plugin to 0.1.4
+rdar://123513501 Update to Iceberg 1.3.0.9-apple
