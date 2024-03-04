@@ -121,6 +121,14 @@ SPARK-47075      Add `derby-provided` profile
 SPARK-47076      Fix HistoryServerSuite.`incomplete apps get refreshed` test to start with empty storeDir
 SPARK-47080      Fix `HistoryServerSuite` to use `constant value` and `getNumJobsRestful`
 SPARK-47108      Set `derby.connection.requireAuthentication` to `false` explicitly in CLIs
+SPARK-46067      Upgrade commons-compress to 1.25.0
+SPARK-47181      Fix `MasterSuite` to validate the number of registered workers
+SPARK-47182      Exclude `commons-(io|lang3)` transitive dependencies from `commons-compress` and `avro*`
+SPARK-47185      Increase timeout between actions in KafkaContinuousSourceSuite
+SPARK-47154      Fix `kafka-0-10-sql` to use `ResetSystemProperties` if `KafkaTestUtils` is used
+SPARK-47109      Upgrade `commons-compress` to 1.26.0
+SPARK-47207      Support `spark.driver.timeout` and `DriverTimeoutPlugin`
+SPARK-47215      Reduce the number of required threads in `MasterSuite`
 
 # From 3.5.x
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
@@ -190,6 +198,11 @@ SPARK-42388      Avoid parquet footer reads twice in vectorized reader
 SPARK-46014      Run `RocksDBStateStoreStreamingAggregationSuite` on a dedicated JVM
 SPARK-45943      Move DetermineTableStats to resolution rules
 SPARK-45943      Add `VolumeSuite` to K8s IT
+SPARK-42871      Upgrade slf4j to 2.0.7
+SPARK-43537      Upgrading the ASM dependencies used in the `tools` module to 9.4
+SPARK-43588      Upgrade ASM to 9.5
+SPARK-42352      Upgrade maven to 3.8.7
+SPARK-43394      Upgrade maven to 3.8.8
 
 # From 3.4.3
 SPARK-46006      YarnAllocator set target executor number to 0 to cancel pending allocate request when driver stop
@@ -236,6 +249,10 @@ SPARK-47068      Recover -1 and 0 case for spark.sql.execution.arrow.maxRecordsP
 SPARK-47072      Fix supported interval formats in error messages
 SPARK-47085      reduce the complexity of toTRowSet from n^2 to n
 SPARK-47125      Return null if Univocity never triggers parsing
+SPARK-47063      CAST long to timestamp has different behavior for codegen vs interpreted
+SPARK-47187      Fix hive compress output config does not work
+SPARK-47196      Fix `core` module to succeed SBT tests
+SPARK-47236      Fix `deleteRecursivelyUsingJavaIO` to skip non-existing file input
 
 # Internal Patches
 MINOR            Add rio.yml and dev scripts
@@ -368,3 +385,4 @@ rdar://123038681 Update to Iceberg Apple 1.3.0.8
 rdar://123049235 Update UC-Spark-Authz Plugin to 0.1.3
 rdar://123462546 Update UC-Spark-Authz Plugin to 0.1.4
 rdar://123513501 Update to Iceberg 1.3.0.9-apple
+rdar://123796322 Update UC-Spark-Authz Plugin to 0.1.5 (#1917)
