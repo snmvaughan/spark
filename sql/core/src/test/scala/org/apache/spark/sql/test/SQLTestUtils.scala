@@ -458,8 +458,8 @@ private[sql] trait SQLTestUtilsBase
     val schema = df.schema
     val withoutFilters = df.queryExecution.executedPlan.transform {
       case FilterExec(_, child) => child
-      case BosonFilterExec(_, _, _, child) => child
-      case BosonProjectExec(_, _, _, _, BosonFilterExec(_, _, _, child)) => child
+      case BosonFilterExec(_, _, _, child, _) => child
+      case BosonProjectExec(_, _, _, _, BosonFilterExec(_, _, _, child, _), _) => child
     }
 
     spark.internalCreateDataFrame(withoutFilters.execute(), schema)
