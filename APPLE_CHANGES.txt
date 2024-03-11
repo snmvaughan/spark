@@ -1,6 +1,9 @@
 This contains the changes after creating `v3.4.2`
 
 # From 4.0.0
+MINOR            Fix documentation typo in takeSample method
+SPARK-47146      Rename incorrect logger name
+SPARK-47305      Fix PruneFilters to tag the isStreaming flag of LocalRelation correctly when the plan has both batch and streaming
 SPARK-44661      `getMapOutputLocation` should not throw NPE
 SPARK-42730      Update Spark Standalone Mode page
 SPARK-44585      Fix warning condition in MLLib RankingMetrics ndcgAk
@@ -131,6 +134,7 @@ SPARK-47207      Support `spark.driver.timeout` and `DriverTimeoutPlugin`
 SPARK-47215      Reduce the number of required threads in `MasterSuite`
 
 # From 3.5.x
+SPARK-47146      Possible thread leak when doing sort merge join
 SPARK-42396      Upgrade `Apache Kafka` to 3.4.0
 SPARK-42536      Upgrade log4j2 to 2.20.0
 SPARK-42718      Upgrade rocksdbjni to 7.10.2
@@ -205,6 +209,8 @@ SPARK-42352      Upgrade maven to 3.8.7
 SPARK-43394      Upgrade maven to 3.8.8
 
 # From 3.4.3
+SPARK-47177      Cached SQL plan do not display final AQE plan in explain string
+SPARK-47305      Fix the compilation error related to `PropagateEmptyRelationSuite`
 SPARK-46006      YarnAllocator set target executor number to 0 to cancel pending allocate request when driver stop
 SPARK-46029      Escape the single quote, _ and % for DS V2 pushdown
 SPARK-46189      Perform comparisons and arithmetic between same types in various Pandas aggregate functions to avoid interpreted mode errors
@@ -255,6 +261,8 @@ SPARK-47196      Fix `core` module to succeed SBT tests
 SPARK-47236      Fix `deleteRecursivelyUsingJavaIO` to skip non-existing file input
 
 # Internal Patches
+rdar://124368074 Bump Boson version to 0.3.30
+rdar://124295468 Bump Iceberg to 1.3.0.11-apple
 MINOR            Add rio.yml and dev scripts
 MINOR            Adjust test cases for RIO
 MINOR            Bump to 3.4.0.1-apple-SNAPSHOT
